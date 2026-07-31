@@ -1,0 +1,32 @@
+---
+import { projets } from '../../lib/projets.js';
+
+export function getStaticPaths() {
+  return projets.map((projet) => ({
+    params: { slug: projet.slug },
+    props: { projet },
+  }));
+}
+
+const { projet } = Astro.props;
+---
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{projet.title}</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/">Accueil</a>
+        <a href="/projets">Projets</a>
+      </nav>
+    </header>
+
+    <main>
+      <h1>{projet.title}</h1>
+      <p>{projet.description}</p>
+    </main>
+  </body>
+</html>

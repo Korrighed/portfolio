@@ -1,0 +1,34 @@
+---
+import { fiches } from '../../lib/fiches.js';
+
+export const prerender = false;
+
+const { id } = Astro.params;
+const fiche = fiches.find((f) => f.id === id);
+
+if (!fiche) {
+  return new Response('Introuvable', { status: 404 });
+}
+---
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fiche.title}</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/fiches-reflexives">Fiches réflexives</a>
+        <form method="post" action="/api/logout">
+          <button type="submit">Se déconnecter</button>
+        </form>
+      </nav>
+    </header>
+
+    <main>
+      <h1>{fiche.title}</h1>
+      <a href={`/api/pdf/${fiche.id}`} target="_blank" rel="noopener">Ouvrir le PDF</a>
+    </main>
+  </body>
+</html>

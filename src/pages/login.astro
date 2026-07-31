@@ -1,0 +1,39 @@
+---
+import { isAuthenticated } from '../lib/auth.js';
+
+export const prerender = false;
+
+if (await isAuthenticated(Astro.cookies)) {
+  return Astro.redirect('/fiches-reflexives');
+}
+
+const hasError = Astro.url.searchParams.has('error');
+---
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Connexion - Espace enseignant</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/">Accueil</a>
+      </nav>
+    </header>
+
+    <main>
+      <h1>Connexion</h1>
+      {hasError && <p class="error">Identifiants incorrects.</p>}
+      <form method="post" action="/api/login">
+        <label for="username">Identifiant</label>
+        <input type="text" id="username" name="username" required autocomplete="username" />
+
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password" required autocomplete="current-password" />
+
+        <button type="submit">Se connecter</button>
+      </form>
+    </main>
+  </body>
+</html>

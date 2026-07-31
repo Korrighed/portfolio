@@ -1,0 +1,33 @@
+---
+import { fiches } from '../../lib/fiches.js';
+
+export const prerender = false;
+---
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fiches réflexives</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/">Accueil</a>
+        <form method="post" action="/api/logout">
+          <button type="submit">Se déconnecter</button>
+        </form>
+      </nav>
+    </header>
+
+    <main>
+      <h1>Fiches réflexives</h1>
+      <ul>
+        {fiches.map((fiche) => (
+          <li>
+            <a href={`/fiches-reflexives/${fiche.id}`}>{fiche.title}</a>
+          </li>
+        ))}
+      </ul>
+    </main>
+  </body>
+</html>
