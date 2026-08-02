@@ -1,65 +1,72 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Portfolio</title>
-    <link rel="stylesheet" href="/css/main.css" />
-  </head>
-  <body>
-    <header class="nav">
-      <div class="nav__inner">
-        <a class="nav__brand" href="/">Portfolio</a>
 
-        <button
-          class="nav__toggle"
-          type="button"
-          aria-controls="nav-menu"
-          aria-expanded="false"
-          aria-label="Ouvrir le menu"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/css/main.css" />
+</head>
 
-        <nav id="nav-menu" class="nav__menu">
-          <ul>
-            <li><a href="/projets/">Projets</a></li>
-            <li><a href="/login.html">Espace enseignant</a></li>
-          </ul>
-        </nav>
+<body>
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="nav__brand" href="/">Alex.dev</a>
+
+      <button class="nav__toggle" type="button" aria-controls="nav-menu" aria-expanded="false"
+        aria-label="Ouvrir le menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav id="nav-menu" class="nav__menu">
+        <ul>
+          <li><a href="/projets/">Projets</a></li>
+          <li><a href="/login.html">Espace enseignant</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section id="hero" class="hero">
+    <div class="hero-blocks">
+      <div class="hero-block hero-block-1">
+        <span class="hero-block__portfolio">Alex Portfolio</span>
       </div>
-    </header>
-
-    <section id="hero" class="hero">
-      <div class="hero__content">
-        <h1>Portfolio</h1>
-        <p>Presentation, contenu a venir (Figma)</p>
+      <div class="hero-block hero-block-2">
+        <span class="hero-block__title">Web developper</span>
+        <span class="hero-block__subtitle">Application maker</span>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <script src="/js/nav.js"></script>
+  <script src="/js/nav.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js"></script>
-    <script>
-      VANTA.DOTS({
-        el: '#hero',
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.0,
-        minWidth: 200.0,
-        scale: 1.0,
-        scaleMobile: 1.0,
-        color: 0xb4cded, // Powder Blue
-        color2: 0x344966, // Yale Blue
-        backgroundColor: 0x0d1821, // Ink Black
-        size: 6.3,
-        spacing: 34.0,
-        showLines: false,
-      });
-    </script>
-  </body>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js"></script>
+  <script>
+    VANTA.DOTS({
+      el: '#hero',
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.0,
+      minWidth: 200.0,
+      scale: 1.0,
+      scaleMobile: 1.0,
+      color: 0xb4cded, // Powder Blue
+      color2: 0x344966, // Yale Blue
+      backgroundColor: 0x0d1821, // Ink Black
+      size: 6.3,
+      spacing: 34.0,
+      showLines: false,
+    });
+  </script>
+</body>
+
 </html>
