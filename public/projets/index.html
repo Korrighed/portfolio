@@ -1,28 +1,23 @@
----
-import { projets } from '../../lib/projets.js';
----
+<!doctype html>
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Projets</title>
+    <link rel="stylesheet" href="/css/main.css" />
   </head>
   <body>
     <header>
       <nav>
         <a href="/">Accueil</a>
-        <a href="/login">Espace enseignant</a>
+        <a href="/login.html">Espace enseignant</a>
       </nav>
     </header>
 
     <main>
       <h1>Projets</h1>
       <ul>
-        {projets.map((projet) => (
-          <li>
-            <a href={`/projets/${projet.slug}`}>{projet.title}</a>
-          </li>
-        ))}
+        <li><a href="/projets/projet-exemple.html">Projet exemple</a></li>
       </ul>
     </main>
   </body>

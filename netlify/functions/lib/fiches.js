@@ -1,5 +1,5 @@
 // Metadonnees des fiches reflexives. Le fichier PDF correspondant
-// vit dans le bucket S3-compatible (cf. src/lib/storage.js), jamais dans le repo.
+// vit en local hors du repo (cf. storage.js), jamais commite.
 export const fiches = [
   {
     id: 'fiche-1',
