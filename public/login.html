@@ -1,19 +1,10 @@
----
-import { isAuthenticated } from '../lib/auth.js';
-
-export const prerender = false;
-
-if (await isAuthenticated(Astro.cookies)) {
-  return Astro.redirect('/fiches-reflexives');
-}
-
-const hasError = Astro.url.searchParams.has('error');
----
+<!doctype html>
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Connexion - Espace enseignant</title>
+    <link rel="stylesheet" href="/css/main.css" />
   </head>
   <body>
     <header>
@@ -24,7 +15,7 @@ const hasError = Astro.url.searchParams.has('error');
 
     <main>
       <h1>Connexion</h1>
-      {hasError && <p class="error">Identifiants incorrects.</p>}
+      <p class="error" id="error-msg" hidden>Identifiants incorrects.</p>
       <form method="post" action="/api/login">
         <label for="username">Identifiant</label>
         <input type="text" id="username" name="username" required autocomplete="username" />
@@ -35,5 +26,11 @@ const hasError = Astro.url.searchParams.has('error');
         <button type="submit">Se connecter</button>
       </form>
     </main>
+
+    <script>
+      if (new URLSearchParams(location.search).has('error')) {
+        document.getElementById('error-msg').hidden = false;
+      }
+    </script>
   </body>
 </html>

@@ -1,0 +1,33 @@
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+
+[functions]
+  # Les PDF sont embarques (lecture seule) dans le zip de la fonction au build.
+  # Ajouter/retirer un fichier necessite un redeploy.
+  included_files = ["storage/fiches-reflexives/**"]
+
+[[redirects]]
+  from = "/fiches-reflexives"
+  to = "/.netlify/functions/fiches-reflexives"
+  status = 200
+
+[[redirects]]
+  from = "/fiches-reflexives/:id"
+  to = "/.netlify/functions/fiche?id=:id"
+  status = 200
+
+[[redirects]]
+  from = "/api/pdf/:id"
+  to = "/.netlify/functions/pdf?id=:id"
+  status = 200
+
+[[redirects]]
+  from = "/api/login"
+  to = "/.netlify/functions/login"
+  status = 200
+
+[[redirects]]
+  from = "/api/logout"
+  to = "/.netlify/functions/logout"
+  status = 200

@@ -1,0 +1,138 @@
+:root {
+  /* Palette */
+  --color-ink-black: #0d1821;
+  --color-yale-blue: #344966;
+  --color-powder-blue: #b4cded;
+  --color-platinum: #f0f4ef;
+
+  /* Echelle d'espacement (base 8px) */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--color-platinum);
+  color: var(--color-ink-black);
+}
+
+/* Nav */
+.nav {
+  background: var(--color-platinum);
+  border-bottom: 1px solid var(--color-powder-blue);
+}
+
+.nav__inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: var(--space-sm) var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav__brand {
+  color: var(--color-ink-black);
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 1.25rem;
+}
+
+.nav__toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-xs);
+}
+
+.nav__toggle span {
+  width: 22px;
+  height: 2px;
+  background: var(--color-ink-black);
+}
+
+.nav__menu ul {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav__menu a {
+  color: var(--color-yale-blue);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav__menu a:hover {
+  color: var(--color-ink-black);
+}
+
+@media (max-width: 48rem) {
+  .nav__toggle {
+    display: flex;
+  }
+
+  .nav__menu {
+    display: none;
+    width: 100%;
+  }
+
+  .nav__menu.is-open {
+    display: block;
+  }
+
+  .nav__inner {
+    flex-wrap: wrap;
+  }
+
+  .nav__menu ul {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+  }
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--color-ink-black);
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: var(--color-platinum);
+  padding: var(--space-lg);
+}
+
+/* Contenu generique (login, fiches...) */
+main {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: var(--space-lg);
+}
+
+.error {
+  color: #b3261e;
+}
