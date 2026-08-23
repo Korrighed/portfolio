@@ -1,0 +1,109 @@
+  <section id="projets">
+    <div class="section__inner">
+      <div class="section-head">
+        <span class="section-head__eyebrow">01 — Projets</span>
+      </div>
+
+      <div class="project-grid">
+        <article class="project-card">
+          <div class="project-card__thumb">
+            <span>[ capture — vue compte / personnages ]</span>
+          </div>
+          <div class="project-card__body">
+            <div class="project-card__head">
+              <h3>GW2 Compagnon</h3>
+              <a class="project-card__link" href="https://github.com/Korrighed/Gw2_Compagnon_app">Dépôt GitHub ↗</a>
+            </div>
+            <p class="project-card__desc">Application compagnon pour Guild Wars 2 : elle interroge l'API officielle et
+              présente compte, personnages et inventaires dans des tableaux triables.</p>
+            <div class="tag-row">
+              <span class="tag">Vue 3</span>
+              <span class="tag">Pinia</span>
+              <span class="tag">AG Grid</span>
+              <span class="tag">Vite</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-card__thumb">
+            <span>[ capture — bannière live &amp; player Twitch ]</span>
+          </div>
+          <div class="project-card__body">
+            <div class="project-card__head">
+              <h3>Yozora Site</h3>
+              <a class="project-card__link" href="https://yozovtfan.netlify.app">Site en ligne ↗</a>
+            </div>
+            <p class="project-card__desc">Site de créatrice Twitch, au thème adaptable selon les besoins.</p>
+            <ul class="list-dotted">
+              <li>Statut en stream / hors stream mis à jour toutes les 3 minutes.</li>
+              <li>Clé d'API dev personnelle sécurisée par les fonctions et les secrets Netlify.</li>
+              <li>Appels passés par le serveur Netlify : un site dynamique avec des requêtes CORS en full front.</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag">Vite</span>
+              <span class="tag">Vanilla JS</span>
+              <span class="tag">Netlify Functions</span>
+              <span class="tag">API Twitch Helix</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="project-card__thumb">
+            <span>[ capture — carte du réseau ]</span>
+          </div>
+          <div class="project-card__body">
+            <div class="project-card__head">
+              <h3>Hyperloop NC</h3>
+              <span class="project-card__link project-card__link--muted">Dépôt privé</span>
+            </div>
+            <p class="project-card__desc">Réseau hyperloop fictif pour la Nouvelle-Calédonie, écrit en Angular 21 : 13
+              stations, 2 lignes, horaires et tarifs calculés côté client depuis des JSON, sans base de données.</p>
+            <ul class="list-dotted">
+              <li>Routing Angular par station, formulaires et calcul de tarif au kilomètre (Haversine + 10 %).</li>
+              <li>Bilingue FR / EN avec <code>@angular/localize</code>, un build par locale et des IDs de traduction
+                namespacés.</li>
+              <li>Tests unitaires Vitest, formatage Prettier, TypeScript strict.</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag">Angular 21</span>
+              <span class="tag">TypeScript</span>
+              <span class="tag">RxJS</span>
+              <span class="tag">Vitest</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card project-card--wide">
+          <div class="project-card--wide__meta">
+            <span class="project-card--wide__label">Projet de groupe — SAE501</span>
+            <h3>Safe Campus</h3>
+            <span class="project-card--wide__sub">Infrastructure Docker &amp; guides CI/CD</span>
+            <p class="project-card__desc">Mon périmètre, réalisé seul : toute l'infrastructure Docker de l'équipe et les
+              guides de pipelines CI/CD.</p>
+            <div class="tag-row">
+              <span class="tag">Docker Compose</span>
+              <span class="tag">PHP 8.4 / Laravel</span>
+              <span class="tag">Nuxt 4</span>
+              <span class="tag">PostgreSQL 17</span>
+              <span class="tag">CI/CD</span>
+            </div>
+          </div>
+          <ul class="list-dotted">
+            <li>Un seul <code>compose</code> orchestre quatre services et deux dépôts : back Laravel, front Nuxt,
+              PostgreSQL, Adminer.</li>
+            <li>Image PHP 8.4 sur mesure : extensions <code>pdo_pgsql</code>, gd, intl, zip et Xdebug pour le debug pas
+              à pas.</li>
+            <li>UID/GID de l'hôte injectés au build : plus de fichiers root dans les bind mounts, quel que soit le
+              poste.</li>
+            <li>Démarrage conditionné par un <code>healthcheck</code> Postgres, limites CPU/mémoire par service, volumes
+              nommés pour la base et les node_modules.</li>
+            <li>Le front démarre aussi seul, sans le back : l'équipe UI n'attend pas l'API.</li>
+            <li>Guides d'équipe : git flow <code>feature/*</code> → <code>dev</code>, format de commit imposé,
+              conventions back et front documentées.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>

@@ -10,6 +10,15 @@ Portfolio + espace fiches réflexives (accès enseignant, compte unique).
 - **bcryptjs** — hash du mot de passe du compte enseignant.
 - Stockage PDF en local, hors de `public/` (`storage/fiches-reflexives`), embarqué en lecture seule dans la fonction (`included_files` dans `netlify.toml`) et servi via une fonction protégée. Ajouter/retirer un PDF nécessite un redeploy — pour un usage plus dynamique, migrer vers Netlify Blobs.
 
+## public/index.html est généré
+
+La page d'accueil est découpée en sections dans `src/sections/*.html`, assemblées dans `src/index.template.html`
+(marqueurs `<!-- include:nom.html -->`) par `scripts/build-index.js`, qui écrit le résultat dans `public/index.html`.
+
+Ne pas éditer `public/index.html` à la main (il porte un commentaire de rappel en tête) : modifier la section
+concernée dans `src/sections/`, puis régénérer avec `npm run build`. `npm run dev` régénère automatiquement
+avant de lancer `netlify dev` (hook `predev`).
+
 ## Distribution / lancement local
 
 ```bash
@@ -20,9 +29,10 @@ node scripts/hash-password.js "mot-de-passe" # coller le hash dans .env
 
 | Commande | Usage |
 |---|---|
-| `npm run dev` | `netlify dev` — sert `public/` + exécute les fonctions localement, avec les redirects de `netlify.toml` |
+| `npm run build` | Régénère `public/index.html` depuis `src/` |
+| `npm run dev` | Régénère `public/index.html` puis `netlify dev` — sert `public/` + exécute les fonctions localement, avec les redirects de `netlify.toml` |
 
-Déploiement : push sur le repo connecté à Netlify (build = aucun, `publish = public`, `functions = netlify/functions`).
+Déploiement : push sur le repo connecté à Netlify (`command = npm run build`, `publish = public`, `functions = netlify/functions`).
 
 ## Mise en page
 
