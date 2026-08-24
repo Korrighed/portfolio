@@ -1,0 +1,108 @@
+/* Separateur entre projets et competences */
+.section-divider {
+  background: var(--color-ink-black-3);
+  padding: 2rem 0;
+}
+
+.section-divider__inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.section-divider__line {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-yale-blue) 12%, var(--color-yale-blue) 88%, transparent);
+}
+
+.section-divider__marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: var(--color-ink-black);
+  border: 1px solid var(--color-powder-blue);
+}
+
+#competences .section__inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg) 0;
+}
+
+.competences-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-md);
+  align-items: start;
+}
+
+.competences-col {
+  border-top: 1px solid var(--color-powder-blue);
+  padding-top: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.competences-col h3 {
+  margin: 0;
+  font-family: 'Inria Serif', serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.competences-col--skills {
+  grid-column: 1 / span 5;
+}
+
+.competences-col--tech {
+  grid-column: 7 / span 6;
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+.tech-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tech-group h4 {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-slate);
+}
+
+.tech-group ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  color: var(--color-slate-dark);
+}
+
+@media (max-width: 48rem) {
+
+  .competences-col--skills,
+  .competences-col--tech {
+    grid-column: 1 / -1;
+  }
+
+  .tech-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,43 @@
+.site-footer {
+  border-top: 1px solid var(--color-powder-blue);
+  background: var(--color-ink-black);
+  color: var(--color-powder-blue);
+}
+
+.site-footer__inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.site-footer__brand {
+  font-family: 'Libre Caslon Text', serif;
+  font-style: italic;
+  font-size: 1.125rem;
+  color: var(--color-platinum);
+}
+
+.site-footer__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-size: 0.9375rem;
+  flex-wrap: wrap;
+}
+
+.site-footer__links a {
+  color: var(--color-powder-blue);
+}
+
+.site-footer__links a:hover {
+  color: var(--color-platinum);
+}
+
+.site-footer .private-link:hover {
+  color: var(--color-powder-blue);
+}
