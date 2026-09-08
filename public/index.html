@@ -64,12 +64,40 @@
       </div>
     </div>
 
+    <div class="projets-bg" aria-hidden="true">
+      <svg class="projets-bg__sphere" viewBox="0 0 300 300" focusable="false">
+        <path id="sphere-line-1" d="M 20 150 A 130 130 0 1 1 280 150 A 130 130 0 1 1 20 150 Z" />
+        <path id="sphere-line-2" d="M 55 150 A 95 130 0 1 1 245 150 A 95 130 0 1 1 55 150 Z" />
+        <path id="sphere-line-3" d="M 100 150 A 50 130 0 1 1 200 150 A 50 130 0 1 1 100 150 Z" />
+        <path id="sphere-line-4" d="M 20 150 A 130 30 0 1 1 280 150 A 130 30 0 1 1 20 150 Z" />
+        <path id="sphere-line-5" d="M 45 108 A 105 22 0 1 1 255 108 A 105 22 0 1 1 45 108 Z" />
+        <path id="sphere-line-6" d="M 45 192 A 105 22 0 1 1 255 192 A 105 22 0 1 1 45 192 Z" />
+        <path id="sphere-line-7" d="M 90 72 A 60 13 0 1 1 210 72 A 60 13 0 1 1 90 72 Z" />
+        <path id="sphere-line-8" d="M 90 228 A 60 13 0 1 1 210 228 A 60 13 0 1 1 90 228 Z" />
+        <g class="projets-bg__glow">
+          <use href="#sphere-line-1" />
+          <use href="#sphere-line-2" />
+          <use href="#sphere-line-3" />
+          <use href="#sphere-line-4" />
+          <use href="#sphere-line-5" />
+          <use href="#sphere-line-6" />
+          <use href="#sphere-line-7" />
+          <use href="#sphere-line-8" />
+        </g>
+      </svg>
+    </div>
+
+    <nav class="reel-nav" aria-label="Navigation entre projets">
+      <a class="reel-nav__link" href="#reel-1"><span>01</span></a>
+      <a class="reel-nav__link" href="#reel-2"><span>02</span></a>
+      <a class="reel-nav__link" href="#reel-3"><span>03</span></a>
+      <a class="reel-nav__link" href="#reel-4"><span>04</span></a>
+      <a class="reel-nav__link" href="#reel-5"><span>05</span></a>
+    </nav>
+
     <div class="reels">
-      <section class="reel" data-reel>
+      <section class="reel" id="reel-1" data-reel>
         <div class="reel__pin">
-          <svg class="reel__line" viewBox="0 0 1000 4" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <path d="M0 2 H1000" />
-          </svg>
           <div class="reel__box">
             <span class="reel__idx">01 / 05</span>
             <h3>Vitrine créateur Twitch</h3>
@@ -94,11 +122,8 @@
         </div>
       </section>
 
-      <section class="reel" data-reel>
+      <section class="reel" id="reel-2" data-reel>
         <div class="reel__pin">
-          <svg class="reel__line" viewBox="0 0 1000 4" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <path d="M0 2 H1000" />
-          </svg>
           <div class="reel__box">
             <span class="reel__idx">02 / 05</span>
             <h3>GW2 Compagnon</h3>
@@ -122,11 +147,8 @@
         </div>
       </section>
 
-      <section class="reel" data-reel>
+      <section class="reel" id="reel-3" data-reel>
         <div class="reel__pin">
-          <svg class="reel__line" viewBox="0 0 1000 4" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <path d="M0 2 H1000" />
-          </svg>
           <div class="reel__box">
             <span class="reel__idx">03 / 05</span>
             <h3>Hyperloop NC</h3>
@@ -151,11 +173,8 @@
         </div>
       </section>
 
-      <section class="reel" data-reel>
+      <section class="reel" id="reel-4" data-reel>
         <div class="reel__pin">
-          <svg class="reel__line" viewBox="0 0 1000 4" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <path d="M0 2 H1000" />
-          </svg>
           <div class="reel__box">
             <span class="reel__idx">04 / 05</span>
             <h3>Dice Roller</h3>
@@ -181,11 +200,8 @@
         </div>
       </section>
 
-      <section class="reel" data-reel>
+      <section class="reel" id="reel-5" data-reel>
         <div class="reel__pin">
-          <svg class="reel__line" viewBox="0 0 1000 4" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-            <path d="M0 2 H1000" />
-          </svg>
           <div class="reel__box">
             <span class="reel__idx">05 / 05</span>
             <h3>Safe Campus</h3>
@@ -201,12 +217,8 @@
             <div class="step reel__action" data-step="4">
               <ul class="list-dotted">
                 <li>Back et front en stacks Docker indépendantes (un <code>docker-compose.yml</code> par dépôt), reliées par un réseau partagé pour la communication SSR.</li>
-                <li>Panel d'administration Filament ; médias stockés sur le disque <code>public</code> Laravel, exposés via <code>storage:link</code>.</li>
-                <li>Migrations qui seedent les données structurelles (taxonomie, compte de démo) ; seeders contacts/médias séparés pour ne pas polluer les tests (<code>RefreshDatabase</code>).</li>
                 <li>Image PHP 8.4 sur mesure : <code>pdo_pgsql</code>, gd, intl, zip, Xdebug pour le débug pas à pas.</li>
                 <li>Build front multi-stage : seul <code>.output/</code> atterrit dans l'image de prod, ni <code>node_modules</code> ni sources.</li>
-                <li>Config dev et prod séparées ; <code>APP_DEBUG=false</code> obligatoire en prod.</li>
-                <li>Front : pas de <code>&lt;style&gt;</code> dans les <code>.vue</code>, CSS centralisé en BEM + variables.</li>
               </ul>
               <div class="reel__links">
                 <a class="reel__link" href="https://github.com/S-T-L/Safe-Campus-front" target="_blank" rel="noopener">Front ↗</a>
@@ -316,8 +328,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
-  <script src="/js/projets-scroll.js"></script>
-  <script type="module" src="/js/projets-bg.js"></script>
+  <script type="module" src="/js/projets-scroll.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js"></script>

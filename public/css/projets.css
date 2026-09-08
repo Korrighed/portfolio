@@ -1,5 +1,111 @@
 #projets {
+  position: relative;
+  overflow: hidden;
   background: var(--color-ink-black-3);
+}
+
+/* Fond commun : une sphere filaire dont le trace (stroke-dasharray/offset via
+   svg.createDrawable) est pilote par projets-scroll.js a partir du progress
+   GSAP de chaque projet : elle se redessine a chaque reel. Reste "collee" en
+   arriere-plan pendant tout le defilement grace au sticky trick (hauteur
+   100vh + margin-bottom negatif pour ne pas pousser le contenu). */
+.projets-bg {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  margin-bottom: calc(-100vh);
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.projets-bg__sphere {
+  width: min(110vh, 110vw);
+  height: min(110vh, 110vw);
+  opacity: 0.35;
+}
+
+.projets-bg__sphere path {
+  fill: none;
+  stroke: var(--color-powder-blue);
+  stroke-width: 1.25;
+}
+
+/* Petit trait lumineux qui defile en continu le long de chaque ligne,
+   independant du scroll (cf. les arcs animes sur animejs.com). */
+.projets-bg__glow use {
+  fill: none;
+  stroke: var(--color-platinum);
+  stroke-width: 2;
+  stroke-dasharray: 14 130;
+  filter: drop-shadow(0 0 6px var(--color-powder-blue));
+  animation: sphere-glow-travel 7s linear infinite;
+}
+
+.projets-bg__glow use:nth-child(2) { animation-delay: -1s; }
+.projets-bg__glow use:nth-child(3) { animation-delay: -2s; }
+.projets-bg__glow use:nth-child(4) { animation-delay: -3s; }
+.projets-bg__glow use:nth-child(5) { animation-delay: -4s; }
+.projets-bg__glow use:nth-child(6) { animation-delay: -5s; }
+.projets-bg__glow use:nth-child(7) { animation-delay: -6s; }
+.projets-bg__glow use:nth-child(8) { animation-delay: -3.5s; }
+
+@keyframes sphere-glow-travel {
+  to {
+    stroke-dashoffset: -1440;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .projets-bg__glow {
+    display: none;
+  }
+}
+
+/* Nav laterale : reste centree verticalement tant que #projets defile
+   (meme sticky trick, sans le margin negatif car elle n'a pas besoin de
+   hauteur pleine page). */
+.reel-nav {
+  position: sticky;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.reel-nav__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(180, 205, 237, 0.5);
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--color-powder-blue);
+  transition: background 200ms, color 200ms, border-color 200ms;
+}
+
+.reel-nav__link:hover,
+.reel-nav__link.is-active {
+  background: var(--color-powder-blue);
+  color: var(--color-ink-black);
+  border-color: var(--color-powder-blue);
+}
+
+@media (max-width: 48rem) {
+  .reel-nav {
+    display: none;
+  }
 }
 
 .section__inner--head {
@@ -56,32 +162,16 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: var(--color-ink-black-2);
-}
-
-.reel__line {
-  position: absolute;
-  left: var(--space-lg);
-  right: var(--space-lg);
-  bottom: var(--space-lg);
-  width: calc(100% - var(--space-lg) * 2);
-  height: 4px;
-  pointer-events: none;
-}
-
-.reel__line path {
-  fill: none;
-  stroke: var(--color-powder-blue);
-  stroke-width: 4;
-  opacity: 0.6;
+  background: transparent;
 }
 
 .reel__box {
   position: relative;
-  max-width: 50rem;
+  z-index: 1;
+  width: 80%;
+  max-width: 90rem;
   max-height: 88vh;
   overflow-y: auto;
-  width: 100%;
   padding: var(--space-xl) var(--space-lg);
   display: flex;
   flex-direction: column;
@@ -115,7 +205,7 @@
 
 .reel__synopsis {
   margin: 0;
-  max-width: 40rem;
+  max-width: 56rem;
   font-size: 1.125rem;
   line-height: 1.6;
   color: var(--color-powder-blue);
@@ -125,7 +215,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
-  max-width: 42rem;
+  max-width: 60rem;
 }
 
 .reel .list-dotted {
