@@ -30,19 +30,13 @@
   line-height: 5rem;
 }
 
-.hero-block__title {
-  font-size: 3rem;
-  font-weight: 700;
-  font-family: 'Inria Serif', serif;
-}
-
 .hero-block__subtitle {
   font-size: 1.8rem;
   font-weight: 400;
 }
 
 .hero-block__portfolio {
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-style: italic;
 }
 
@@ -50,7 +44,7 @@
   position: absolute;
   top: 31px;
   left: 190px;
-  width: 30%;
+  width: 42%;
   height: 18%;
   align-items: flex-end;
   justify-content: flex-start;
@@ -71,16 +65,12 @@
     line-height: 2rem;
   }
 
-  .hero-block__title {
-    font-size: 1.75rem;
-  }
-
   .hero-block__subtitle {
     font-size: 1.1rem;
   }
 
   .hero-block__portfolio {
-    font-size: 2rem;
+    font-size: 1.85rem;
   }
 
   .hero-block-1 {

@@ -1,11 +1,13 @@
 #projets {
-  background: linear-gradient(180deg, var(--color-ink-black) 0, var(--color-ink-black-2) 14rem, var(--color-ink-black-2) calc(100% - 16rem), var(--color-ink-black-3) 100%);
+  background: var(--color-ink-black-3);
 }
 
-#projets .section__inner {
+.section__inner--head {
   max-width: 72rem;
   margin: 0 auto;
-  padding: var(--space-xl) var(--space-lg) var(--space-xl);
+  padding: var(--space-xl) var(--space-lg) 0;
+  position: relative;
+  z-index: 1;
 }
 
 #projets .section-head {
@@ -20,7 +22,7 @@
   color: var(--color-platinum);
 }
 
-#projets:target .section__inner {
+#projets:target .section__inner--head {
   animation: section-arrive 700ms ease-out;
 }
 
@@ -36,154 +38,154 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  #projets:target .section__inner {
-    animation: none;
-  }
+/* Scrollytelling : chaque projet est un ecran plein page. projets-scroll.js
+   (GSAP ScrollTrigger) epingle .reel__pin pendant que .reel defile, et revele
+   ses etapes (nom / periode / stack / action) l'une apres l'autre. Une fois
+   les 4 etapes revelees, le scroll libere la scene et enchaine sur le projet
+   suivant. Sans JS ou en prefers-reduced-motion, chaque .reel reste un simple
+   ecran de 100vh empile normalement, sans pin ni reveal. */
+.reel {
+  position: relative;
 }
 
-.project-list-h {
+.reel__pin {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--color-ink-black-2);
+}
+
+.reel__line {
+  position: absolute;
+  left: var(--space-lg);
+  right: var(--space-lg);
+  bottom: var(--space-lg);
+  width: calc(100% - var(--space-lg) * 2);
+  height: 4px;
+  pointer-events: none;
+}
+
+.reel__line path {
+  fill: none;
+  stroke: var(--color-powder-blue);
+  stroke-width: 4;
+  opacity: 0.6;
+}
+
+.reel__box {
+  position: relative;
+  max-width: 50rem;
+  max-height: 88vh;
+  overflow-y: auto;
+  width: 100%;
+  padding: var(--space-xl) var(--space-lg);
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
 }
 
-.project-card-h {
-  display: grid;
-  grid-template-columns: 15rem 1fr;
-  background: #fff;
-  border: 1px solid var(--color-powder-blue);
-  border-radius: 10px;
-  overflow: hidden;
-  transition: transform 220ms cubic-bezier(.2, .7, .3, 1), box-shadow 220ms;
-}
-
-.project-card-h:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 30px -20px rgba(13, 24, 33, 0.6);
-}
-
-.project-card-h__thumb {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: repeating-linear-gradient(135deg, #e4ecf6 0 8px, var(--color-platinum) 8px 16px);
-  border-right: 1px solid var(--color-powder-blue);
-  padding: var(--space-md);
-  text-align: center;
-}
-
-.project-card-h__thumb span {
+.reel__idx {
   font-family: ui-monospace, monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  color: var(--color-slate);
+  font-size: 0.8125rem;
+  letter-spacing: 0.14em;
+  color: var(--color-powder-blue);
 }
 
-.project-card-h__body {
-  padding: var(--space-md) var(--space-lg);
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.project-card-h__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-sm);
-}
-
-.project-card-h__head h3 {
+.reel__box h3 {
   margin: 0;
   font-family: 'Inria Serif', serif;
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.05;
+  color: var(--color-platinum);
 }
 
-.project-card-h__label {
+.reel__sub {
   display: block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-slate);
-  margin-bottom: 0.25rem;
-}
-
-.project-card-h__sub {
   font-family: system-ui, sans-serif;
   font-weight: 400;
-  font-size: 0.9375rem;
-  color: var(--color-yale-blue);
+  font-size: 1.125rem;
+  color: var(--color-powder-blue);
+  margin-top: var(--space-xs);
 }
 
-.project-card-h__link-group {
+.reel__synopsis {
+  margin: 0;
+  max-width: 40rem;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--color-powder-blue);
+}
+
+.reel__action {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: 42rem;
+}
+
+.reel .list-dotted {
+  color: var(--color-platinum);
+  font-size: 0.9375rem;
+}
+
+.reel .list-dotted li::before {
+  background: var(--color-powder-blue);
+}
+
+.reel .list-dotted code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.8125em;
+  padding: 0.15em 0.35em;
+  background: rgba(240, 244, 239, 0.12);
+  border: 1px solid rgba(180, 205, 237, 0.4);
+  color: var(--color-powder-blue);
+}
+
+.reel__links {
   display: flex;
   gap: var(--space-sm);
 }
 
-.project-card-h__link {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--color-yale-blue);
+.reel__link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-platinum);
+  border-bottom: 1px solid var(--color-powder-blue);
   white-space: nowrap;
 }
 
-.project-card-h__link:hover {
-  color: var(--color-ink-black);
+.reel__link:hover {
+  color: var(--color-powder-blue);
 }
 
-.project-card-h__link--muted {
-  color: var(--color-slate);
-}
-
-.project-card-h__desc {
-  margin: 0;
-  font-size: 0.9375rem;
-  line-height: 1.65;
-  color: var(--color-slate-dark);
-  max-width: 46rem;
-}
-
-.list-dotted--grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem 1.5rem;
-}
-
-.tag-row {
+.tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: auto;
-  padding-top: 0.5rem;
 }
 
 .tag {
   font-family: ui-monospace, monospace;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   padding: 0.25rem 0.5rem;
-  background: var(--color-platinum);
-  border: 1px solid var(--color-powder-blue);
-  color: var(--color-yale-blue);
+  background: rgba(240, 244, 239, 0.08);
+  border: 1px solid rgba(180, 205, 237, 0.5);
+  color: var(--color-powder-blue);
 }
 
 @media (max-width: 48rem) {
-  .project-card-h {
-    grid-template-columns: 1fr;
+  .reel__box {
+    padding: var(--space-lg) var(--space-md);
   }
+}
 
-  .project-card-h__thumb {
-    border-right: none;
-    border-bottom: 1px solid var(--color-powder-blue);
-  }
-
-  .project-card-h__body {
-    padding: var(--space-md);
-  }
-
-  .list-dotted--grid {
-    grid-template-columns: 1fr;
+@media (prefers-reduced-motion: reduce) {
+  #projets:target .section__inner--head {
+    animation: none;
   }
 }

@@ -1,141 +1,161 @@
   <section id="projets">
-    <div class="section__inner">
+    <div class="section__inner section__inner--head">
       <div class="section-head">
         <span class="section-head__eyebrow">01 — Projets</span>
       </div>
+    </div>
 
-      <div class="project-list-h">
-        <article class="project-card-h">
-          <div class="project-card-h__thumb">
-            <span>[ capture — bannière live &amp; player Twitch ]</span>
-          </div>
-          <div class="project-card-h__body">
-            <div class="project-card-h__head">
-              <h3>Yozora Site</h3>
-              <a class="project-card-h__link" href="https://yozoravtfan.netlify.app/" target="_blank" rel="noopener">Site en ligne ↗</a>
-            </div>
-            <p class="project-card-h__desc">Site de créatrice Twitch, au thème adaptable selon les besoins.</p>
-            <ul class="list-dotted">
-              <li>Statut en stream / hors stream mis à jour toutes les 3 minutes.</li>
-              <li>Clé d'API dev personnelle sécurisée par les fonctions et les secrets Netlify.</li>
-              <li>Appels passés par le serveur Netlify : un site dynamique avec des requêtes CORS en full front.</li>
-            </ul>
-            <div class="tag-row">
+    <div class="reels">
+      <section class="reel" data-reel>
+        <div class="reel__pin">
+          <svg class="reel__line" viewBox="0 0 1000 4" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path d="M0 2 H1000" />
+          </svg>
+          <div class="reel__box">
+            <span class="reel__idx">01 / 05</span>
+            <h3>Vitrine créateur Twitch</h3>
+            <p class="step reel__sub" data-step="1">— gestion des secrets via Netlify</p>
+            <div class="step tags" data-step="2">
               <span class="tag">Vite</span>
               <span class="tag">Vanilla JS</span>
               <span class="tag">Netlify Functions</span>
               <span class="tag">API Twitch Helix</span>
             </div>
-          </div>
-        </article>
-
-        <article class="project-card-h">
-          <div class="project-card-h__thumb">
-            <span>[ capture — vue compte / personnages ]</span>
-          </div>
-          <div class="project-card-h__body">
-            <div class="project-card-h__head">
-              <h3>GW2 Compagnon</h3>
-              <a class="project-card-h__link" href="https://github.com/Korrighed/Gw2_Compagnon_app" target="_blank" rel="noopener">Dépôt GitHub ↗</a>
+            <p class="step reel__synopsis" data-step="3">Projet personnel — [période à préciser]. Site vitrine pensé modulable : le thème repose sur des variables CSS (<code>:root</code>) pour s'adapter à n'importe quel contexte, avec un statut (en stream / hors stream) et une bannière qui se mettent à jour seuls, sans intervention manuelle.</p>
+            <div class="step reel__action" data-step="4">
+              <ul class="list-dotted">
+                <li>Thème entièrement piloté par variables CSS <code>:root</code> : personnalisable sans toucher au reste du code.</li>
+                <li>Statut en stream / hors stream mis à jour toutes les 3 minutes.</li>
+                <li>Clé API Twitch dev sécurisée côté fonctions Netlify, jamais exposée au client.</li>
+                <li>Environnement local qui reproduit la prod : Vite et Netlify Functions lancés en parallèle.</li>
+              </ul>
+              <a class="reel__link" href="https://yozoravtfan.netlify.app/" target="_blank" rel="noopener">Site en ligne ↗</a>
             </div>
-            <p class="project-card-h__desc">Application compagnon pour Guild Wars 2 : elle interroge l'API officielle et
-              présente compte, personnages et inventaires dans des tableaux triables.</p>
-            <div class="tag-row">
+          </div>
+        </div>
+      </section>
+
+      <section class="reel" data-reel>
+        <div class="reel__pin">
+          <svg class="reel__line" viewBox="0 0 1000 4" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path d="M0 2 H1000" />
+          </svg>
+          <div class="reel__box">
+            <span class="reel__idx">02 / 05</span>
+            <h3>GW2 Compagnon</h3>
+            <p class="step reel__sub" data-step="1">— lazy loading &amp; traitement de données API</p>
+            <div class="step tags" data-step="2">
               <span class="tag">Vue 3</span>
               <span class="tag">Pinia</span>
               <span class="tag">AG Grid</span>
               <span class="tag">Vite</span>
             </div>
-          </div>
-        </article>
-
-        <article class="project-card-h">
-          <div class="project-card-h__thumb">
-            <span>[ capture — carte du réseau ]</span>
-          </div>
-          <div class="project-card-h__body">
-            <div class="project-card-h__head">
-              <h3>Hyperloop NC</h3>
-              <a class="project-card-h__link" href="https://github.com/Korrighed/hyperloopNc" target="_blank" rel="noopener">Dépôt GitHub ↗</a>
+            <p class="step reel__synopsis" data-step="3">Projet personnel — [période à préciser]. Agacement de devoir changer de personnage en jeu pour consulter chaque inventaire : l'app centralise les infos de compte via l'API officielle Guild Wars 2, en lecture seule.</p>
+            <div class="step reel__action" data-step="4">
+              <ul class="list-dotted">
+                <li>Authentification par clé API ArenaNet en lecture seule : aucune écriture possible sur le compte.</li>
+                <li>Affiche aujourd'hui noms de personnages et contenu des inventaires, dans des tableaux triables (AG Grid).</li>
+                <li>Périmètre volontairement limité pendant la phase d'apprentissage, pensé pour évoluer.</li>
+              </ul>
+              <a class="reel__link" href="https://github.com/Korrighed/Gw2_Compagnon_app" target="_blank" rel="noopener">Dépôt GitHub ↗</a>
             </div>
-            <p class="project-card-h__desc">Réseau hyperloop fictif pour la Nouvelle-Calédonie, écrit en Angular 21 : 13
-              stations, 2 lignes, horaires et tarifs calculés côté client depuis des JSON, sans base de données.</p>
-            <ul class="list-dotted">
-              <li>Routing Angular par station, formulaires et calcul de tarif au kilomètre (Haversine + 10 %).</li>
-              <li>Bilingue FR / EN avec <code>@angular/localize</code>, un build par locale et des IDs de traduction
-                namespacés.</li>
-              <li>Tests unitaires Vitest, formatage Prettier, TypeScript strict.</li>
-            </ul>
-            <div class="tag-row">
+          </div>
+        </div>
+      </section>
+
+      <section class="reel" data-reel>
+        <div class="reel__pin">
+          <svg class="reel__line" viewBox="0 0 1000 4" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path d="M0 2 H1000" />
+          </svg>
+          <div class="reel__box">
+            <span class="reel__idx">03 / 05</span>
+            <h3>Hyperloop NC</h3>
+            <p class="step reel__sub" data-step="1">— Angular</p>
+            <div class="step tags" data-step="2">
               <span class="tag">Angular 21</span>
               <span class="tag">TypeScript</span>
               <span class="tag">RxJS</span>
               <span class="tag">Vitest</span>
             </div>
-          </div>
-        </article>
-
-        <article class="project-card-h">
-          <div class="project-card-h__thumb">
-            <span>[ capture — lancer de dés 3D ]</span>
-          </div>
-          <div class="project-card-h__body">
-            <div class="project-card-h__head">
-              <h3>Dice Roller</h3>
-              <a class="project-card-h__link" href="https://lance-des.netlify.app/" target="_blank" rel="noopener">Site en ligne ↗</a>
+            <p class="step reel__synopsis" data-step="3">Projet personnel — [période à préciser]. Exercice Angular : concevoir un réseau de transport fictif de bout en bout (routing, formulaires, calcul de tarifs, traduction) sans back-end, uniquement des données JSON côté client.</p>
+            <div class="step reel__action" data-step="4">
+              <ul class="list-dotted">
+                <li>13 stations, 2 lignes, tarif au kilomètre calculé côté client (Haversine + 10 %), sans base de données.</li>
+                <li>Trilingue FR / EN / JA via <code>@angular/localize</code> : un build et un port de dev par langue (4200 / 4201 / 4202).</li>
+                <li>Extraction i18n outillée (<code>extract-i18n</code>) et fichiers de traduction XLF par langue.</li>
+                <li>Tests unitaires Vitest, TypeScript strict.</li>
+              </ul>
+              <a class="reel__link" href="https://github.com/Korrighed/hyperloopNc" target="_blank" rel="noopener">Dépôt GitHub ↗</a>
             </div>
-            <p class="project-card-h__desc">Lanceur de dés 3D pour jeux de rôle sur table (D&amp;D et assimilés) : dés
-              polyédriques (D4 à D100) animés en physique temps réel, avec modificateurs de jet et historique des lancers
-              conservé en local.</p>
-            <div class="tag-row">
+          </div>
+        </div>
+      </section>
+
+      <section class="reel" data-reel>
+        <div class="reel__pin">
+          <svg class="reel__line" viewBox="0 0 1000 4" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path d="M0 2 H1000" />
+          </svg>
+          <div class="reel__box">
+            <span class="reel__idx">04 / 05</span>
+            <h3>Dice Roller</h3>
+            <p class="step reel__sub" data-step="1">— Three.js &amp; animations 3D navigateur</p>
+            <div class="step tags" data-step="2">
               <span class="tag">React 19</span>
               <span class="tag">TypeScript</span>
               <span class="tag">Three.js</span>
               <span class="tag">React Three Fiber</span>
               <span class="tag">Vite</span>
             </div>
-          </div>
-        </article>
-
-        <article class="project-card-h">
-          <div class="project-card-h__thumb">
-            <span>[ schéma — infrastructure Docker ]</span>
-          </div>
-          <div class="project-card-h__body">
-            <div class="project-card-h__head">
-              <div>
-                <span class="project-card-h__label">Projet de groupe — SAE501</span>
-                <h3>Safe Campus <span class="project-card-h__sub">— infrastructure Docker &amp; guides CI/CD</span></h3>
-              </div>
-              <div class="project-card-h__link-group">
-                <a class="project-card-h__link" href="https://github.com/S-T-L/Safe-Campus-front" target="_blank" rel="noopener">Front ↗</a>
-                <a class="project-card-h__link" href="https://github.com/S-T-L/Safe-Campus-back" target="_blank" rel="noopener">Back ↗</a>
-              </div>
+            <p class="step reel__synopsis" data-step="3">Projet personnel — [période à préciser]. Les lanceurs de dés numériques classiques se contentent d'un nombre aléatoire abstrait : celui-ci simule un vrai lancer physique en 3D, avec détection de la face qui atterrit vers le haut.</p>
+            <div class="step reel__action" data-step="4">
+              <ul class="list-dotted">
+                <li>Dés polyédriques D4, D6, D8, D10, D12, D20, D100 animés en physique temps réel.</li>
+                <li>Détection de la face qui atterrit vers le haut ("face-up detection").</li>
+                <li>Modificateurs de jet et historique des lancers conservés en local.</li>
+                <li>Architecture 3D déclarative (React Three Fiber) plutôt que Three.js impératif.</li>
+              </ul>
+              <a class="reel__link" href="https://lance-des.netlify.app/" target="_blank" rel="noopener">Site en ligne ↗</a>
             </div>
-            <p class="project-card-h__desc">Mon périmètre, réalisé seul : toute l'infrastructure Docker de l'équipe et les
-              guides de pipelines CI/CD.</p>
-            <ul class="list-dotted list-dotted--grid">
-              <li>Un seul <code>compose</code> orchestre quatre services et deux dépôts : back Laravel, front Nuxt,
-                PostgreSQL, Adminer.</li>
-              <li>Image PHP 8.4 sur mesure : extensions <code>pdo_pgsql</code>, gd, intl, zip et Xdebug pour le debug pas
-                à pas.</li>
-              <li>UID/GID de l'hôte injectés au build : plus de fichiers root dans les bind mounts, quel que soit le
-                poste.</li>
-              <li>Démarrage conditionné par un <code>healthcheck</code> Postgres, limites CPU/mémoire par service, volumes
-                nommés pour la base et les node_modules.</li>
-              <li>Le front démarre aussi seul, sans le back : l'équipe UI n'attend pas l'API.</li>
-              <li>Guides d'équipe : git flow <code>feature/*</code> → <code>dev</code>, format de commit imposé,
-                conventions back et front documentées.</li>
-            </ul>
-            <div class="tag-row">
+          </div>
+        </div>
+      </section>
+
+      <section class="reel" data-reel>
+        <div class="reel__pin">
+          <svg class="reel__line" viewBox="0 0 1000 4" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <path d="M0 2 H1000" />
+          </svg>
+          <div class="reel__box">
+            <span class="reel__idx">05 / 05</span>
+            <h3>Safe Campus</h3>
+            <p class="step reel__sub" data-step="1">— dockerisation et pipeline CI/CD</p>
+            <div class="step tags" data-step="2">
               <span class="tag">Docker Compose</span>
               <span class="tag">PHP 8.4 / Laravel</span>
+              <span class="tag">Filament</span>
               <span class="tag">Nuxt 4</span>
               <span class="tag">PostgreSQL 17</span>
-              <span class="tag">CI/CD</span>
+            </div>
+            <p class="step reel__synopsis" data-step="3">Projet de groupe — SAE501, [période à préciser]. Mon périmètre, réalisé seul : une API Laravel + panel d'administration Filament connectée à un front Nuxt, avec un environnement Docker qui démarre en une commande, quel que soit le poste.</p>
+            <div class="step reel__action" data-step="4">
+              <ul class="list-dotted">
+                <li>Back et front en stacks Docker indépendantes (un <code>docker-compose.yml</code> par dépôt), reliées par un réseau partagé pour la communication SSR.</li>
+                <li>Panel d'administration Filament ; médias stockés sur le disque <code>public</code> Laravel, exposés via <code>storage:link</code>.</li>
+                <li>Migrations qui seedent les données structurelles (taxonomie, compte de démo) ; seeders contacts/médias séparés pour ne pas polluer les tests (<code>RefreshDatabase</code>).</li>
+                <li>Image PHP 8.4 sur mesure : <code>pdo_pgsql</code>, gd, intl, zip, Xdebug pour le débug pas à pas.</li>
+                <li>Build front multi-stage : seul <code>.output/</code> atterrit dans l'image de prod, ni <code>node_modules</code> ni sources.</li>
+                <li>Config dev et prod séparées ; <code>APP_DEBUG=false</code> obligatoire en prod.</li>
+                <li>Front : pas de <code>&lt;style&gt;</code> dans les <code>.vue</code>, CSS centralisé en BEM + variables.</li>
+              </ul>
+              <div class="reel__links">
+                <a class="reel__link" href="https://github.com/S-T-L/Safe-Campus-front" target="_blank" rel="noopener">Front ↗</a>
+                <a class="reel__link" href="https://github.com/S-T-L/Safe-Campus-back" target="_blank" rel="noopener">Back ↗</a>
+              </div>
             </div>
           </div>
-        </article>
-      </div>
+        </div>
+      </section>
     </div>
   </section>
