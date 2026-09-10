@@ -91,6 +91,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: var(--space-xl);
   overflow: hidden;
   background: transparent;
 }
@@ -98,14 +99,33 @@
 .reel__box {
   position: relative;
   z-index: 1;
-  width: 80%;
-  max-width: 90rem;
+  width: 55%;
+  max-width: 56rem;
   max-height: 88vh;
   overflow-y: auto;
   padding: var(--space-xl) var(--space-lg);
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
+}
+
+/* Emplacement reserve pour un mini-preview (gif/video) du projet, entre la
+   carte et le menu lateral. Pour l'instant simple cadre place-holder, mm
+   couleur de fond que la section (juste un contour pour le reperer). */
+.reel__preview {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: min(22vw, 22rem);
+  aspect-ratio: 4 / 5;
+  background: var(--color-ink-black-3);
+  border: 1px solid rgba(180, 205, 237, 0.25);
+}
+
+@media (max-width: 64rem) {
+  .reel__preview {
+    display: none;
+  }
 }
 
 /* Indicateur de progression : la barre EST la vague (sinusoide redessinee
