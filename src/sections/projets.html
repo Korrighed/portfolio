@@ -1,10 +1,4 @@
   <section id="projets">
-    <div class="section__inner section__inner--head">
-      <div class="section-head">
-        <span class="section-head__eyebrow">01 — Projets</span>
-      </div>
-    </div>
-
     <div class="projets-bg" aria-hidden="true">
       <svg class="projets-bg__sphere" viewBox="0 0 300 300" focusable="false">
         <path id="sphere-line-1" d="M 20 150 A 130 130 0 1 1 280 150 A 130 130 0 1 1 20 150 Z" />
@@ -25,18 +19,7 @@
           <use href="#sphere-line-7" />
           <use href="#sphere-line-8" />
         </g>
-        <!-- Option C (comparaison) : arc de progression de la carte en cours,
-             surligne par-dessus la sphere. -->
-        <circle class="projets-bg__progress-arc" cx="150" cy="150" r="140" />
       </svg>
-    </div>
-
-    <!-- Option B (comparaison) : barre verticale de progression, bord gauche
-         de l'ecran, remplissage = avancement dans la carte en cours. -->
-    <div class="projets-progress" aria-hidden="true">
-      <div class="projets-progress__track">
-        <div class="projets-progress__fill"></div>
-      </div>
     </div>
 
     <div class="reels">
@@ -63,6 +46,9 @@
               <a class="reel__link" href="https://yozoravtfan.netlify.app/" target="_blank" rel="noopener">Site en ligne ↗</a>
             </div>
           </div>
+          <div class="reel__progress" aria-hidden="true">
+            <div class="reel__progress-fill"></div>
+          </div>
         </div>
       </section>
 
@@ -87,6 +73,9 @@
               </ul>
               <a class="reel__link" href="https://github.com/Korrighed/Gw2_Compagnon_app" target="_blank" rel="noopener">Dépôt GitHub ↗</a>
             </div>
+          </div>
+          <div class="reel__progress" aria-hidden="true">
+            <div class="reel__progress-fill"></div>
           </div>
         </div>
       </section>
@@ -114,6 +103,9 @@
               <a class="reel__link" href="https://github.com/Korrighed/hyperloopNc" target="_blank" rel="noopener">Dépôt GitHub ↗</a>
             </div>
           </div>
+          <div class="reel__progress" aria-hidden="true">
+            <div class="reel__progress-fill"></div>
+          </div>
         </div>
       </section>
 
@@ -140,6 +132,9 @@
               </ul>
               <a class="reel__link" href="https://lance-des.netlify.app/" target="_blank" rel="noopener">Site en ligne ↗</a>
             </div>
+          </div>
+          <div class="reel__progress" aria-hidden="true">
+            <div class="reel__progress-fill"></div>
           </div>
         </div>
       </section>
@@ -170,47 +165,18 @@
               </div>
             </div>
           </div>
+          <div class="reel__progress" aria-hidden="true">
+            <div class="reel__progress-fill"></div>
+          </div>
         </div>
       </section>
     </div>
   </section>
 
-  <!-- Option A (comparaison) : anneau SVG par lien, se remplit avec la
-       progression de la carte correspondante. -->
   <nav class="reel-nav" aria-label="Navigation entre projets">
-    <a class="reel-nav__link" href="#reel-1">
-      <svg class="reel-nav__ring" viewBox="0 0 24 24" aria-hidden="true">
-        <circle class="reel-nav__ring-track" cx="12" cy="12" r="9" />
-        <circle class="reel-nav__ring-fill" cx="12" cy="12" r="9" />
-      </svg>
-      <span class="reel-nav__label">Vitrine créateur Twitch</span>
-    </a>
-    <a class="reel-nav__link" href="#reel-2">
-      <svg class="reel-nav__ring" viewBox="0 0 24 24" aria-hidden="true">
-        <circle class="reel-nav__ring-track" cx="12" cy="12" r="9" />
-        <circle class="reel-nav__ring-fill" cx="12" cy="12" r="9" />
-      </svg>
-      <span class="reel-nav__label">GW2 Compagnon</span>
-    </a>
-    <a class="reel-nav__link" href="#reel-3">
-      <svg class="reel-nav__ring" viewBox="0 0 24 24" aria-hidden="true">
-        <circle class="reel-nav__ring-track" cx="12" cy="12" r="9" />
-        <circle class="reel-nav__ring-fill" cx="12" cy="12" r="9" />
-      </svg>
-      <span class="reel-nav__label">Hyperloop NC</span>
-    </a>
-    <a class="reel-nav__link" href="#reel-4">
-      <svg class="reel-nav__ring" viewBox="0 0 24 24" aria-hidden="true">
-        <circle class="reel-nav__ring-track" cx="12" cy="12" r="9" />
-        <circle class="reel-nav__ring-fill" cx="12" cy="12" r="9" />
-      </svg>
-      <span class="reel-nav__label">Dice Roller</span>
-    </a>
-    <a class="reel-nav__link" href="#reel-5">
-      <svg class="reel-nav__ring" viewBox="0 0 24 24" aria-hidden="true">
-        <circle class="reel-nav__ring-track" cx="12" cy="12" r="9" />
-        <circle class="reel-nav__ring-fill" cx="12" cy="12" r="9" />
-      </svg>
-      <span class="reel-nav__label">Safe Campus</span>
-    </a>
+    <a class="reel-nav__link" href="#reel-1">Vitrine créateur Twitch</a>
+    <a class="reel-nav__link" href="#reel-2">GW2 Compagnon</a>
+    <a class="reel-nav__link" href="#reel-3">Hyperloop NC</a>
+    <a class="reel-nav__link" href="#reel-4">Dice Roller</a>
+    <a class="reel-nav__link" href="#reel-5">Safe Campus</a>
   </nav>

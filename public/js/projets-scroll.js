@@ -24,20 +24,6 @@ if (sphereEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) 
   });
 }
 
-// Option C (comparaison) : arc surligne sur la sphere, se dessine avec la
-// progression de la carte en cours (meme technique que sphereAnim).
-const progressArcEl = document.querySelector('.projets-bg__progress-arc');
-const progressArcAnim = progressArcEl
-  ? animate(svg.createDrawable(progressArcEl), {
-      draw: ['0 0', '0 1'],
-      autoplay: false,
-    })
-  : null;
-
-// Option B (comparaison) : remplissage direct (pas besoin d'anime.js ici,
-// scrub GSAP fournit deja le lissage) de la barre verticale fixe.
-const progressBarFill = document.querySelector('.projets-progress__fill');
-
 const STEP_GAP = 0.3;
 const STEP_DURATION = 1;
 
@@ -50,15 +36,9 @@ document.querySelectorAll('.reel').forEach((reel) => {
     (a, b) => Number(a.dataset.step) - Number(b.dataset.step),
   );
 
-  // Option A (comparaison) : anneau du lien de nav correspondant, se
-  // dessine avec la progression de cette carte.
-  const ringEl = navLink?.querySelector('.reel-nav__ring-fill');
-  const ringAnim = ringEl
-    ? animate(svg.createDrawable(ringEl), {
-        draw: ['0 0', '0 1'],
-        autoplay: false,
-      })
-    : null;
+  // Barre de progression sous la carte : remplissage horizontal avec
+  // l'avancement des etapes du projet en cours.
+  const progressFill = pin.querySelector('.reel__progress-fill');
 
   gsap.set(steps, { opacity: 0, y: 24 });
 
@@ -73,10 +53,7 @@ document.querySelectorAll('.reel').forEach((reel) => {
       onUpdate: (self) => {
         // La sphere se redessine (0 -> complete) sur le scroll de chaque projet.
         sphereAnim?.seek(sphereAnim.duration * self.progress);
-        // Les 3 indicateurs a comparer, pilotes par le meme progress.
-        progressArcAnim?.seek(progressArcAnim.duration * self.progress);
-        ringAnim?.seek(ringAnim.duration * self.progress);
-        if (progressBarFill) progressBarFill.style.height = `${self.progress * 100}%`;
+        if (progressFill) progressFill.style.width = `${self.progress * 100}%`;
       },
     },
   });
@@ -119,15 +96,15 @@ if (heroCta && firstReel) {
 // bien trop tot (le menu ne restait visible que pendant le 1er projet).
 const projetsSection = document.querySelector('#projets');
 const reelNav = document.querySelector('.reel-nav');
-const progressBar = document.querySelector('.projets-progress');
-if (projetsSection && (reelNav || progressBar)) {
+const projetsBg = document.querySelector('.projets-bg');
+if (projetsSection && (reelNav || projetsBg)) {
   ScrollTrigger.create({
     trigger: projetsSection,
     start: 'top top',
     end: 'bottom bottom',
     onToggle: (self) => {
       reelNav?.classList.toggle('is-visible', self.isActive);
-      progressBar?.classList.toggle('is-visible', self.isActive);
+      projetsBg?.classList.toggle('is-visible', self.isActive);
     },
   });
 }

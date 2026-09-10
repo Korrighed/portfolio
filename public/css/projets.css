@@ -6,20 +6,26 @@
 
 /* Fond commun : une sphere filaire dont le trace (stroke-dasharray/offset via
    svg.createDrawable) est pilote par projets-scroll.js a partir du progress
-   GSAP de chaque projet : elle se redessine a chaque reel. Reste "collee" en
-   arriere-plan pendant tout le defilement grace au sticky trick (hauteur
-   100vh + margin-bottom negatif pour ne pas pousser le contenu). */
+   GSAP de chaque projet : elle se redessine a chaque reel. Position fixed
+   (comme .reel-nav) plutot que sticky : sticky ne tient pas dans #projets
+   une fois les pin-spacers GSAP en place (le fond partait en scroll normal,
+   invisible des la 1ere carte). Visibilite pilotee par projets-scroll.js
+   (.is-visible) tant que #projets est a l'ecran, meme trigger que .reel-nav. */
 .projets-bg {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  margin-bottom: calc(-100vh);
+  position: fixed;
+  inset: 0;
   z-index: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.projets-bg.is-visible {
+  opacity: 1;
 }
 
 .projets-bg__sphere {
@@ -65,57 +71,6 @@
   }
 }
 
-/* --- Option C (comparaison) : arc de progression surligne sur la sphere.
-   Circonference (r=140) precalculee pour stroke-dasharray ; le dashoffset
-   va de la circonference (vide) a 0 (plein), pilote en JS via anime.js. */
-.projets-bg__progress-arc {
-  fill: none;
-  stroke: var(--color-platinum);
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  transform: rotate(-90deg);
-  transform-origin: 150px 150px;
-  stroke-dasharray: 879.6;
-  stroke-dashoffset: 879.6;
-  filter: drop-shadow(0 0 8px var(--color-powder-blue));
-}
-
-/* --- Option B (comparaison) : barre verticale fixee au bord gauche de
-   l'ecran, se remplit du bas vers le haut avec la progression de la carte
-   en cours. Visibilite alignee sur .reel-nav (memes conditions). */
-.projets-progress {
-  position: fixed;
-  top: 50%;
-  left: var(--space-md);
-  transform: translateY(-50%);
-  z-index: 2;
-  height: min(40vh, 24rem);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 300ms ease;
-}
-
-.projets-progress.is-visible {
-  opacity: 1;
-}
-
-.projets-progress__track {
-  position: relative;
-  width: 2px;
-  height: 100%;
-  background: rgba(180, 205, 237, 0.2);
-}
-
-.projets-progress__fill {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 0%;
-  background: var(--color-powder-blue);
-  box-shadow: 0 0 8px var(--color-powder-blue);
-}
-
 /* Nav laterale : position fixed (hors du flux de #projets, dont l'overflow
    hidden et le pin GSAP cassaient le sticky). Visibilite pilotee par
    projets-scroll.js (.is-visible) tant que #projets est a l'ecran. */
@@ -140,9 +95,7 @@
 }
 
 .reel-nav__link {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
+  display: block;
   max-width: 14rem;
   padding-right: var(--space-xs);
   border-right: 2px solid transparent;
@@ -151,14 +104,11 @@
   letter-spacing: 0.02em;
   text-align: right;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--color-powder-blue);
   opacity: 0.55;
   transition: opacity 200ms, border-color 200ms, color 200ms;
-}
-
-.reel-nav__label {
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .reel-nav__link:hover,
@@ -168,71 +118,9 @@
   border-color: var(--color-powder-blue);
 }
 
-/* --- Option A (comparaison) : anneau SVG par lien, rempli via
-   stroke-dashoffset (r=9 -> circonference ~56.55) pilote par anime.js. */
-.reel-nav__ring {
-  flex: none;
-  width: 1.125rem;
-  height: 1.125rem;
-  transform: rotate(-90deg);
-}
-
-.reel-nav__ring-track,
-.reel-nav__ring-fill {
-  fill: none;
-  stroke-width: 2;
-}
-
-.reel-nav__ring-track {
-  stroke: rgba(180, 205, 237, 0.25);
-}
-
-.reel-nav__ring-fill {
-  stroke: var(--color-platinum);
-  stroke-linecap: round;
-  stroke-dasharray: 56.55;
-  stroke-dashoffset: 56.55;
-}
-
 @media (max-width: 48rem) {
   .reel-nav {
     display: none;
-  }
-}
-
-.section__inner--head {
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: var(--space-xl) var(--space-lg) 0;
-  position: relative;
-  z-index: 1;
-}
-
-#projets .section-head {
-  border-top: 2px solid var(--color-powder-blue);
-}
-
-#projets .section-head__eyebrow {
-  color: var(--color-powder-blue);
-}
-
-#projets .section-head__title {
-  color: var(--color-platinum);
-}
-
-#projets:target .section__inner--head {
-  animation: section-arrive 700ms ease-out;
-}
-
-@keyframes section-arrive {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -268,6 +156,26 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
+}
+
+/* Indicateur de progression : barre horizontale sous la carte, se remplit
+   de gauche a droite avec l'avancement des etapes du projet en cours. */
+.reel__progress {
+  position: absolute;
+  z-index: 1;
+  bottom: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(80%, 90rem);
+  height: 2px;
+  background: rgba(180, 205, 237, 0.2);
+}
+
+.reel__progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--color-powder-blue);
+  box-shadow: 0 0 8px var(--color-powder-blue);
 }
 
 .reel__idx {
@@ -363,11 +271,5 @@
 @media (max-width: 48rem) {
   .reel__box {
     padding: var(--space-lg) var(--space-md);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #projets:target .section__inner--head {
-    animation: none;
   }
 }
