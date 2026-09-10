@@ -65,40 +65,50 @@
   }
 }
 
-/* Nav laterale : reste centree verticalement tant que #projets defile
-   (meme sticky trick, sans le margin negatif car elle n'a pas besoin de
-   hauteur pleine page). */
+/* Nav laterale : position fixed (hors du flux de #projets, dont l'overflow
+   hidden et le pin GSAP cassaient le sticky). Visibilite pilotee par
+   projets-scroll.js (.is-visible) tant que #projets est a l'ecran. */
 .reel-nav {
-  position: sticky;
+  position: fixed;
   top: 50%;
+  right: var(--space-lg);
   transform: translateY(-50%);
   z-index: 2;
-  width: fit-content;
-  margin-left: auto;
-  margin-right: var(--space-lg);
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   gap: var(--space-sm);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+.reel-nav.is-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .reel-nav__link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 999px;
-  border: 1px solid rgba(180, 205, 237, 0.5);
+  display: block;
+  max-width: 12rem;
+  padding-right: var(--space-xs);
+  border-right: 2px solid transparent;
   font-family: ui-monospace, monospace;
   font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--color-powder-blue);
-  transition: background 200ms, color 200ms, border-color 200ms;
+  opacity: 0.55;
+  transition: opacity 200ms, border-color 200ms, color 200ms;
 }
 
 .reel-nav__link:hover,
 .reel-nav__link.is-active {
-  background: var(--color-powder-blue);
-  color: var(--color-ink-black);
+  opacity: 1;
+  color: var(--color-platinum);
   border-color: var(--color-powder-blue);
 }
 

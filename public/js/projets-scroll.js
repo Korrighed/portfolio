@@ -25,7 +25,7 @@ document.querySelectorAll('.reel').forEach((reel) => {
     scrollTrigger: {
       trigger: reel,
       start: 'top top',
-      end: () => '+=' + window.innerHeight * (steps.length + 0.5),
+      end: () => '+=' + window.innerHeight * (steps.length * 1.5),
       scrub: 1,
       pin,
       onToggle: (self) => navLink?.classList.toggle('is-active', self.isActive),
@@ -35,6 +35,21 @@ document.querySelectorAll('.reel').forEach((reel) => {
   });
 
   steps.forEach((step) => {
-    tl.to(step, { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, '+=0.2');
+    tl.to(step, { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, '+=0.6');
   });
 });
+
+// Cree apres les triggers de pin ci-dessus : #projets n'a sa hauteur finale
+// (pin-spacers des reels inclus) qu'une fois ceux-ci en place. Cree avant,
+// "bottom bottom" se calculait sur la hauteur non-pinnee et se declenchait
+// bien trop tot (le menu ne restait visible que pendant le 1er projet).
+const projetsSection = document.querySelector('#projets');
+const reelNav = document.querySelector('.reel-nav');
+if (projetsSection && reelNav) {
+  ScrollTrigger.create({
+    trigger: projetsSection,
+    start: 'top top',
+    end: 'bottom bottom',
+    onToggle: (self) => reelNav.classList.toggle('is-visible', self.isActive),
+  });
+}
