@@ -1,6 +1,6 @@
 import { animate, svg } from 'https://cdn.jsdelivr.net/npm/animejs@4.5.0/+esm';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const spherePaths = document.querySelectorAll('.projets-bg__sphere path');
 const sphereAnim = spherePaths.length
@@ -11,6 +11,11 @@ const sphereAnim = spherePaths.length
       autoplay: false,
     })
   : null;
+
+const STEP_GAP = 0.3;
+const STEP_DURATION = 1;
+
+const reelTriggers = new Map();
 
 document.querySelectorAll('.reel').forEach((reel) => {
   const pin = reel.querySelector('.reel__pin');
@@ -25,7 +30,7 @@ document.querySelectorAll('.reel').forEach((reel) => {
     scrollTrigger: {
       trigger: reel,
       start: 'top top',
-      end: () => '+=' + window.innerHeight * (steps.length * 1.5),
+      end: () => '+=' + window.innerHeight * steps.length,
       scrub: 1,
       pin,
       onToggle: (self) => navLink?.classList.toggle('is-active', self.isActive),
@@ -35,9 +40,36 @@ document.querySelectorAll('.reel').forEach((reel) => {
   });
 
   steps.forEach((step) => {
-    tl.to(step, { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, '+=0.6');
+    tl.to(step, { opacity: 1, y: 0, duration: STEP_DURATION, ease: 'power2.out' }, `+=${STEP_GAP}`);
   });
+
+  reelTriggers.set(reel.id, { trigger: tl.scrollTrigger, stepCount: steps.length });
 });
+
+// CTA hero "Projets" : au lieu d'atterrir sur la carte n°1 encore vierge
+// (etape 1 pas revelee) et sans le menu (son ScrollTrigger pas encore
+// actif), on defile jusqu'au point ou l'etape 1 de la carte n°1 est deja
+// revelee - chaque etape occupe 1/steps.length du timeline (gap + duree
+// fixes), donc l'etape 1 finit a 1/steps.length. Le trajet est anime
+// (ScrollToPlugin, ease douce) plutot qu'un saut sec : le dessin de la
+// sphere et le reveal de l'etape 1 se jouent pendant la transition.
+const heroCta = document.querySelector('.hero__scroll');
+const firstReel = document.querySelector('.reel');
+if (heroCta && firstReel) {
+  heroCta.addEventListener('click', (event) => {
+    const data = reelTriggers.get(firstReel.id);
+    if (!data) return;
+    event.preventDefault();
+    const { trigger, stepCount } = data;
+    const progress = 1 / stepCount;
+    const target = trigger.start + (trigger.end - trigger.start) * progress;
+    gsap.to(window, {
+      duration: 1.2,
+      ease: 'power2.inOut',
+      scrollTo: { y: target, autoKill: false },
+    });
+  });
+}
 
 // Cree apres les triggers de pin ci-dessus : #projets n'a sa hauteur finale
 // (pin-spacers des reels inclus) qu'une fois ceux-ci en place. Cree avant,
