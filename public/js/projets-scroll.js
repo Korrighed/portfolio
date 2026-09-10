@@ -1,28 +1,4 @@
-import { animate, svg } from 'https://cdn.jsdelivr.net/npm/animejs@4.5.0/+esm';
-
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
-
-const spherePaths = document.querySelectorAll('.projets-bg__sphere path');
-const sphereAnim = spherePaths.length
-  ? animate(svg.createDrawable(spherePaths), {
-      draw: ['0 0', '0 1'],
-      ease: 'inOut(3)',
-      duration: 1000,
-      autoplay: false,
-    })
-  : null;
-
-// Animation constante : la sphere tourne lentement en continu, independante
-// du scroll (360deg boucle sans a-coup visuel : rotate(360) == rotate(0)).
-const sphereEl = document.querySelector('.projets-bg__sphere');
-if (sphereEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  animate(sphereEl, {
-    rotate: 360,
-    duration: 90000,
-    loop: true,
-    ease: 'linear',
-  });
-}
 
 const STEP_GAP = 0.3;
 const STEP_DURATION = 1;
@@ -51,8 +27,6 @@ document.querySelectorAll('.reel').forEach((reel) => {
       pin,
       onToggle: (self) => navLink?.classList.toggle('is-active', self.isActive),
       onUpdate: (self) => {
-        // La sphere se redessine (0 -> complete) sur le scroll de chaque projet.
-        sphereAnim?.seek(sphereAnim.duration * self.progress);
         if (progressFill) progressFill.style.width = `${self.progress * 100}%`;
       },
     },
@@ -70,8 +44,8 @@ document.querySelectorAll('.reel').forEach((reel) => {
 // actif), on defile jusqu'au point ou l'etape 1 de la carte n°1 est deja
 // revelee - chaque etape occupe 1/steps.length du timeline (gap + duree
 // fixes), donc l'etape 1 finit a 1/steps.length. Le trajet est anime
-// (ScrollToPlugin, ease douce) plutot qu'un saut sec : le dessin de la
-// sphere et le reveal de l'etape 1 se jouent pendant la transition.
+// (ScrollToPlugin, ease douce) plutot qu'un saut sec : le reveal de
+// l'etape 1 se joue pendant la transition.
 const heroCta = document.querySelector('.hero__scroll');
 const firstReel = document.querySelector('.reel');
 if (heroCta && firstReel) {
@@ -96,15 +70,11 @@ if (heroCta && firstReel) {
 // bien trop tot (le menu ne restait visible que pendant le 1er projet).
 const projetsSection = document.querySelector('#projets');
 const reelNav = document.querySelector('.reel-nav');
-const projetsBg = document.querySelector('.projets-bg');
-if (projetsSection && (reelNav || projetsBg)) {
+if (projetsSection && reelNav) {
   ScrollTrigger.create({
     trigger: projetsSection,
     start: 'top top',
     end: 'bottom bottom',
-    onToggle: (self) => {
-      reelNav?.classList.toggle('is-visible', self.isActive);
-      projetsBg?.classList.toggle('is-visible', self.isActive);
-    },
+    onToggle: (self) => reelNav.classList.toggle('is-visible', self.isActive),
   });
 }
