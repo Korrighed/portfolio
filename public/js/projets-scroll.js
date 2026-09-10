@@ -12,6 +12,32 @@ const sphereAnim = spherePaths.length
     })
   : null;
 
+// Animation constante : la sphere tourne lentement en continu, independante
+// du scroll (360deg boucle sans a-coup visuel : rotate(360) == rotate(0)).
+const sphereEl = document.querySelector('.projets-bg__sphere');
+if (sphereEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  animate(sphereEl, {
+    rotate: 360,
+    duration: 90000,
+    loop: true,
+    ease: 'linear',
+  });
+}
+
+// Option C (comparaison) : arc surligne sur la sphere, se dessine avec la
+// progression de la carte en cours (meme technique que sphereAnim).
+const progressArcEl = document.querySelector('.projets-bg__progress-arc');
+const progressArcAnim = progressArcEl
+  ? animate(svg.createDrawable(progressArcEl), {
+      draw: ['0 0', '0 1'],
+      autoplay: false,
+    })
+  : null;
+
+// Option B (comparaison) : remplissage direct (pas besoin d'anime.js ici,
+// scrub GSAP fournit deja le lissage) de la barre verticale fixe.
+const progressBarFill = document.querySelector('.projets-progress__fill');
+
 const STEP_GAP = 0.3;
 const STEP_DURATION = 1;
 
@@ -24,6 +50,16 @@ document.querySelectorAll('.reel').forEach((reel) => {
     (a, b) => Number(a.dataset.step) - Number(b.dataset.step),
   );
 
+  // Option A (comparaison) : anneau du lien de nav correspondant, se
+  // dessine avec la progression de cette carte.
+  const ringEl = navLink?.querySelector('.reel-nav__ring-fill');
+  const ringAnim = ringEl
+    ? animate(svg.createDrawable(ringEl), {
+        draw: ['0 0', '0 1'],
+        autoplay: false,
+      })
+    : null;
+
   gsap.set(steps, { opacity: 0, y: 24 });
 
   const tl = gsap.timeline({
@@ -34,8 +70,14 @@ document.querySelectorAll('.reel').forEach((reel) => {
       scrub: 1,
       pin,
       onToggle: (self) => navLink?.classList.toggle('is-active', self.isActive),
-      // La sphere se redessine (0 -> complete) sur le scroll de chaque projet.
-      onUpdate: (self) => sphereAnim?.seek(sphereAnim.duration * self.progress),
+      onUpdate: (self) => {
+        // La sphere se redessine (0 -> complete) sur le scroll de chaque projet.
+        sphereAnim?.seek(sphereAnim.duration * self.progress);
+        // Les 3 indicateurs a comparer, pilotes par le meme progress.
+        progressArcAnim?.seek(progressArcAnim.duration * self.progress);
+        ringAnim?.seek(ringAnim.duration * self.progress);
+        if (progressBarFill) progressBarFill.style.height = `${self.progress * 100}%`;
+      },
     },
   });
 
@@ -77,11 +119,15 @@ if (heroCta && firstReel) {
 // bien trop tot (le menu ne restait visible que pendant le 1er projet).
 const projetsSection = document.querySelector('#projets');
 const reelNav = document.querySelector('.reel-nav');
-if (projetsSection && reelNav) {
+const progressBar = document.querySelector('.projets-progress');
+if (projetsSection && (reelNav || progressBar)) {
   ScrollTrigger.create({
     trigger: projetsSection,
     start: 'top top',
     end: 'bottom bottom',
-    onToggle: (self) => reelNav.classList.toggle('is-visible', self.isActive),
+    onToggle: (self) => {
+      reelNav?.classList.toggle('is-visible', self.isActive);
+      progressBar?.classList.toggle('is-visible', self.isActive);
+    },
   });
 }

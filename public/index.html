@@ -84,7 +84,18 @@
           <use href="#sphere-line-7" />
           <use href="#sphere-line-8" />
         </g>
+        <!-- Option C (comparaison) : arc de progression de la carte en cours,
+             surligne par-dessus la sphere. -->
+        <circle class="projets-bg__progress-arc" cx="150" cy="150" r="140" />
       </svg>
+    </div>
+
+    <!-- Option B (comparaison) : barre verticale de progression, bord gauche
+         de l'ecran, remplissage = avancement dans la carte en cours. -->
+    <div class="projets-progress" aria-hidden="true">
+      <div class="projets-progress__track">
+        <div class="projets-progress__fill"></div>
+      </div>
     </div>
 
     <div class="reels">
@@ -223,12 +234,44 @@
     </div>
   </section>
 
+  <!-- Option A (comparaison) : anneau SVG par lien, se remplit avec la
+       progression de la carte correspondante. -->
   <nav class="reel-nav" aria-label="Navigation entre projets">
-    <a class="reel-nav__link" href="#reel-1">Vitrine créateur Twitch</a>
-    <a class="reel-nav__link" href="#reel-2">GW2 Compagnon</a>
-    <a class="reel-nav__link" href="#reel-3">Hyperloop NC</a>
-    <a class="reel-nav__link" href="#reel-4">Dice Roller</a>
-    <a class="reel-nav__link" href="#reel-5">Safe Campus</a>
+    <a class="reel-nav__link" href="#reel-1">
+      <svg class="reel-nav__ring" viewBox="0 0 24 24" aria-hidden="true">
+        <circle class="reel-nav__ring-track" cx="12" cy="12" r="9" />
+        <circle class="reel-nav__ring-fill" cx="12" cy="12" r="9" />
+      </svg>
+      <span class="reel-nav__label">Vitrine créateur Twitch</span>
+    </a>
+    <a class="reel-nav__link" href="#reel-2">
+      <svg class="reel-nav__ring" viewBox="0 0 24 24" aria-hidden="true">
+        <circle class="reel-nav__ring-track" cx="12" cy="12" r="9" />
+        <circle class="reel-nav__ring-fill" cx="12" cy="12" r="9" />
+      </svg>
+      <span class="reel-nav__label">GW2 Compagnon</span>
+    </a>
+    <a class="reel-nav__link" href="#reel-3">
+      <svg class="reel-nav__ring" viewBox="0 0 24 24" aria-hidden="true">
+        <circle class="reel-nav__ring-track" cx="12" cy="12" r="9" />
+        <circle class="reel-nav__ring-fill" cx="12" cy="12" r="9" />
+      </svg>
+      <span class="reel-nav__label">Hyperloop NC</span>
+    </a>
+    <a class="reel-nav__link" href="#reel-4">
+      <svg class="reel-nav__ring" viewBox="0 0 24 24" aria-hidden="true">
+        <circle class="reel-nav__ring-track" cx="12" cy="12" r="9" />
+        <circle class="reel-nav__ring-fill" cx="12" cy="12" r="9" />
+      </svg>
+      <span class="reel-nav__label">Dice Roller</span>
+    </a>
+    <a class="reel-nav__link" href="#reel-5">
+      <svg class="reel-nav__ring" viewBox="0 0 24 24" aria-hidden="true">
+        <circle class="reel-nav__ring-track" cx="12" cy="12" r="9" />
+        <circle class="reel-nav__ring-fill" cx="12" cy="12" r="9" />
+      </svg>
+      <span class="reel-nav__label">Safe Campus</span>
+    </a>
   </nav>
 
   <section id="competences">
