@@ -4,67 +4,6 @@
   background: var(--color-ink-black-3);
 }
 
-/* Fond commun : une sphere filaire dont le trace (stroke-dasharray/offset via
-   svg.createDrawable) est pilote par projets-scroll.js a partir du progress
-   GSAP de chaque projet : elle se redessine a chaque reel. Reste "collee" en
-   arriere-plan pendant tout le defilement grace au sticky trick (hauteur
-   100vh + margin-bottom negatif pour ne pas pousser le contenu). */
-.projets-bg {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  margin-bottom: calc(-100vh);
-  z-index: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.projets-bg__sphere {
-  width: min(110vh, 110vw);
-  height: min(110vh, 110vw);
-  opacity: 0.35;
-}
-
-.projets-bg__sphere path {
-  fill: none;
-  stroke: var(--color-powder-blue);
-  stroke-width: 1.25;
-}
-
-/* Petit trait lumineux qui defile en continu le long de chaque ligne,
-   independant du scroll (cf. les arcs animes sur animejs.com). */
-.projets-bg__glow use {
-  fill: none;
-  stroke: var(--color-platinum);
-  stroke-width: 2;
-  stroke-dasharray: 14 130;
-  filter: drop-shadow(0 0 6px var(--color-powder-blue));
-  animation: sphere-glow-travel 7s linear infinite;
-}
-
-.projets-bg__glow use:nth-child(2) { animation-delay: -1s; }
-.projets-bg__glow use:nth-child(3) { animation-delay: -2s; }
-.projets-bg__glow use:nth-child(4) { animation-delay: -3s; }
-.projets-bg__glow use:nth-child(5) { animation-delay: -4s; }
-.projets-bg__glow use:nth-child(6) { animation-delay: -5s; }
-.projets-bg__glow use:nth-child(7) { animation-delay: -6s; }
-.projets-bg__glow use:nth-child(8) { animation-delay: -3.5s; }
-
-@keyframes sphere-glow-travel {
-  to {
-    stroke-dashoffset: -1440;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .projets-bg__glow {
-    display: none;
-  }
-}
-
 /* Nav laterale : position fixed (hors du flux de #projets, dont l'overflow
    hidden et le pin GSAP cassaient le sticky). Visibilite pilotee par
    projets-scroll.js (.is-visible) tant que #projets est a l'ecran. */
@@ -90,7 +29,7 @@
 
 .reel-nav__link {
   display: block;
-  max-width: 12rem;
+  max-width: 14rem;
   padding-right: var(--space-xs);
   border-right: 2px solid transparent;
   font-family: ui-monospace, monospace;
@@ -112,45 +51,26 @@
   border-color: var(--color-powder-blue);
 }
 
+/* CTA "Me contacter" : dernier lien du menu, distinct des projets (toujours
+   pleine opacite, separe par un trait, couleur platinum). */
+.reel-nav__link--cta {
+  margin-top: var(--space-xs);
+  padding-top: var(--space-xs);
+  border-top: 1px solid rgba(180, 205, 237, 0.3);
+  font-weight: 600;
+  color: var(--color-platinum);
+  opacity: 0.85;
+}
+
+.reel-nav__link--cta:hover {
+  opacity: 1;
+  color: var(--color-powder-blue);
+  border-color: var(--color-powder-blue);
+}
+
 @media (max-width: 48rem) {
   .reel-nav {
     display: none;
-  }
-}
-
-.section__inner--head {
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: var(--space-xl) var(--space-lg) 0;
-  position: relative;
-  z-index: 1;
-}
-
-#projets .section-head {
-  border-top: 2px solid var(--color-powder-blue);
-}
-
-#projets .section-head__eyebrow {
-  color: var(--color-powder-blue);
-}
-
-#projets .section-head__title {
-  color: var(--color-platinum);
-}
-
-#projets:target .section__inner--head {
-  animation: section-arrive 700ms ease-out;
-}
-
-@keyframes section-arrive {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -186,6 +106,44 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
+}
+
+/* Indicateur de progression : la barre EST la vague (sinusoide redessinee
+   en continu, requestAnimationFrame, cf. projets-scroll.js). Un trace
+   "track" en fond (toujours visible, discret) et un trace "fill" clippe
+   sur la largeur = avancement des etapes du projet en cours - les deux
+   partagent le meme "d" anime, seul le clip change avec le scroll. */
+.reel__progress {
+  position: absolute;
+  z-index: 1;
+  bottom: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(80%, 90rem);
+  height: 24px;
+}
+
+.reel__progress-wave {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.reel__progress-wave-track {
+  fill: none;
+  stroke: rgba(180, 205, 237, 0.25);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.reel__progress-wave-fill {
+  fill: none;
+  stroke: var(--color-powder-blue);
+  stroke-width: 2;
+  stroke-linecap: round;
 }
 
 .reel__idx {
@@ -281,11 +239,5 @@
 @media (max-width: 48rem) {
   .reel__box {
     padding: var(--space-lg) var(--space-md);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #projets:target .section__inner--head {
-    animation: none;
   }
 }
