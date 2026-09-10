@@ -51,6 +51,23 @@
   border-color: var(--color-powder-blue);
 }
 
+/* CTA "Me contacter" : dernier lien du menu, distinct des projets (toujours
+   pleine opacite, separe par un trait, couleur platinum). */
+.reel-nav__link--cta {
+  margin-top: var(--space-xs);
+  padding-top: var(--space-xs);
+  border-top: 1px solid rgba(180, 205, 237, 0.3);
+  font-weight: 600;
+  color: var(--color-platinum);
+  opacity: 0.85;
+}
+
+.reel-nav__link--cta:hover {
+  opacity: 1;
+  color: var(--color-powder-blue);
+  border-color: var(--color-powder-blue);
+}
+
 @media (max-width: 48rem) {
   .reel-nav {
     display: none;
@@ -91,8 +108,11 @@
   gap: var(--space-md);
 }
 
-/* Indicateur de progression : barre horizontale sous la carte, se remplit
-   de gauche a droite avec l'avancement des etapes du projet en cours. */
+/* Indicateur de progression : la barre EST la vague (sinusoide redessinee
+   en continu, requestAnimationFrame, cf. projets-scroll.js). Un trace
+   "track" en fond (toujours visible, discret) et un trace "fill" clippe
+   sur la largeur = avancement des etapes du projet en cours - les deux
+   partagent le meme "d" anime, seul le clip change avec le scroll. */
 .reel__progress {
   position: absolute;
   z-index: 1;
@@ -100,15 +120,30 @@
   left: 50%;
   transform: translateX(-50%);
   width: min(80%, 90rem);
-  height: 2px;
-  background: rgba(180, 205, 237, 0.2);
+  height: 24px;
 }
 
-.reel__progress-fill {
+.reel__progress-wave {
+  position: absolute;
+  inset: 0;
+  width: 100%;
   height: 100%;
-  width: 0%;
-  background: var(--color-powder-blue);
-  box-shadow: 0 0 8px var(--color-powder-blue);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.reel__progress-wave-track {
+  fill: none;
+  stroke: rgba(180, 205, 237, 0.25);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.reel__progress-wave-fill {
+  fill: none;
+  stroke: var(--color-powder-blue);
+  stroke-width: 2;
+  stroke-linecap: round;
 }
 
 .reel__idx {
