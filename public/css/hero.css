@@ -38,6 +38,12 @@
 .hero-block__portfolio {
   font-size: 3.5rem;
   font-style: italic;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-block__name {
+  align-self: flex-end;
 }
 
 .hero-block-1 {
