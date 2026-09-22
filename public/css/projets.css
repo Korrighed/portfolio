@@ -261,3 +261,30 @@
     padding: var(--space-lg) var(--space-md);
   }
 }
+
+/* Ecrans bas (portables 13"-14", ~700-800px de hauteur) : le contenu de
+   .reel__box depasse 88vh et fait apparaitre sa scrollbar interne. On
+   resserre gap/padding/typo pour que la carte tienne sans scroll. */
+@media (max-height: 800px) {
+  .reel__box {
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+  }
+
+  .reel__box h3 {
+    font-size: clamp(1.75rem, 4.5vw, 3rem);
+  }
+
+  .reel__sub {
+    font-size: 1rem;
+  }
+
+  .reel__synopsis {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .reel__action {
+    gap: var(--space-xs);
+  }
+}
