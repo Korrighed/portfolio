@@ -10,19 +10,14 @@
   functions = "netlify/functions"
   autoLaunch = false
 
-[functions]
-  # Les PDF sont embarques (lecture seule) dans le zip de la fonction au build.
-  # Ajouter/retirer un fichier necessite un redeploy.
-  included_files = ["storage/fiches-reflexives/**"]
-
 [[redirects]]
   from = "/fiches-reflexives"
-  to = "/.netlify/functions/fiches-reflexives"
+  to = "/.netlify/functions/fiche-list"
   status = 200
 
 [[redirects]]
   from = "/fiches-reflexives/:id"
-  to = "/.netlify/functions/fiche?id=:id"
+  to = "/.netlify/functions/fiche-detail?id=:id"
   status = 200
 
 [[redirects]]

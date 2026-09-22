@@ -1,20 +1,24 @@
-import { readFile, stat } from 'node:fs/promises';
-import path from 'node:path';
+import { connectLambda, getStore } from '@netlify/blobs';
 
-const STORAGE_DIR = path.resolve(
-  process.cwd(),
-  process.env.PDF_STORAGE_DIR || 'storage/fiches-reflexives'
-);
+const STORE_NAME = process.env.PDF_BLOB_STORE || 'fiches-reflexives';
+
+function getPdfStore(event) {
+  // Signature "Lambda compatibility mode" (netlify/functions classiques) :
+  // le contexte Blobs n'est pas configure automatiquement, il faut l'attacher
+  // a l'event de la requete courante avant tout appel a getStore().
+  connectLambda(event);
+  return getStore(STORE_NAME);
+}
 
 // Les fonctions Netlify classiques repondent en un seul payload (pas de stream),
-// donc on lit le fichier entier en memoire avant de l'encoder en base64.
-export async function getPdfBuffer(filename) {
-  const filePath = path.join(STORAGE_DIR, filename);
+// donc on lit le blob entier en memoire avant de l'encoder en base64.
+export async function getPdfBuffer(event, filename) {
+  const store = getPdfStore(event);
+  const arrayBuffer = await store.get(filename, { type: 'arrayBuffer' });
 
-  if (path.relative(STORAGE_DIR, filePath).startsWith('..')) {
-    throw new Error('Chemin de fichier invalide.');
+  if (!arrayBuffer) {
+    throw new Error(`PDF introuvable dans le store Blobs "${STORE_NAME}": ${filename}`);
   }
 
-  await stat(filePath);
-  return readFile(filePath);
+  return Buffer.from(arrayBuffer);
 }

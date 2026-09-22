@@ -9,16 +9,12 @@
 }
 
 .hero-blocks {
-  --hero-block-margin: 0.9rem;
-  /* gap / 3 */
-
   position: absolute;
   inset: 0;
   z-index: 2;
 }
 
 .hero-block {
-  /* border: 3px solid red; */
   color: var(--color-platinum);
   display: flex;
   flex-direction: column;

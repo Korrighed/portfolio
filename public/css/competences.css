@@ -50,7 +50,7 @@
 
 .competences-col h3 {
   margin: 0;
-  font-family: 'Inria Serif', serif;
+  font-family: var(--font-display-family);
   font-weight: 700;
   font-size: 1.25rem;
 }

@@ -1,3 +1,9 @@
+if (typeof gsap === 'undefined') {
+  // CDN gsap absent/en echec : pas de scrollytelling possible, on laisse
+  // le fallback CSS (chaque .reel en ecran plein page empile normalement).
+  throw new Error('gsap non charge, projets-scroll.js desactive.');
+}
+
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 // La barre de progression EST une onde sinusoidale (meme principe que la
@@ -93,15 +99,24 @@ document.querySelectorAll('.reel').forEach((reel, index) => {
 
 // Boucle d'animation de l'onde, demarree une fois toutes les cartes creees
 // (wavePaths contient alors track + fill de chaque carte, meme "d" partage).
+// prefers-reduced-motion : on dessine l'onde une seule fois (etat statique,
+// la barre de progression reste utile) au lieu de la boucle rAF continue.
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 if (wavePaths.length) {
-  let waveOffset = 0;
-  const animateWave = () => {
-    waveOffset += WAVE_SPEED;
-    const d = buildWaveD(waveOffset);
+  if (prefersReducedMotion) {
+    const d = buildWaveD(0);
     wavePaths.forEach((path) => path.setAttribute('d', d));
+  } else {
+    let waveOffset = 0;
+    const animateWave = () => {
+      waveOffset += WAVE_SPEED;
+      const d = buildWaveD(waveOffset);
+      wavePaths.forEach((path) => path.setAttribute('d', d));
+      requestAnimationFrame(animateWave);
+    };
     requestAnimationFrame(animateWave);
-  };
-  requestAnimationFrame(animateWave);
+  }
 }
 
 // CTA hero "Projets" : au lieu d'atterrir sur la carte n°1 encore vierge

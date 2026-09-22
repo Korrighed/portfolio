@@ -61,3 +61,21 @@ export async function isAuthenticated(cookieHeader) {
     return false;
   }
 }
+
+// 'redirect' (defaut) pour les pages HTML, '401' pour les endpoints fetch (ex. PDF).
+function unauthorizedResponse(onFail) {
+  if (onFail === '401') {
+    return { statusCode: 401, body: 'Non autorise' };
+  }
+  return { statusCode: 302, headers: { Location: '/login.html' }, body: '' };
+}
+
+export function withAuth(handler, { onFail = 'redirect' } = {}) {
+  return async (event, context) => {
+    const authed = await isAuthenticated(event.headers.cookie);
+    if (!authed) {
+      return unauthorizedResponse(onFail);
+    }
+    return handler(event, context);
+  };
+}

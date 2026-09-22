@@ -1,5 +1,13 @@
 @font-face {
   font-family: 'Libre Caslon Text';
+  src: url('/fonts/LibreCaslonText-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Libre Caslon Text';
   src: url('/fonts/LibreCaslonText-Italic.ttf') format('truetype');
   font-style: italic;
   font-weight: 400;
@@ -25,7 +33,6 @@
 :root {
   /* Palette */
   --color-ink-black: #0d1821;
-  --color-ink-black-2: #1a2f45;
   --color-ink-black-3: #0b141c;
   --color-yale-blue: #344966;
   --color-powder-blue: #b4cded;
@@ -40,6 +47,11 @@
   --space-md: 1.5rem;
   --space-lg: 2.5rem;
   --space-xl: 4rem;
+
+  /* Typo partagee (eviter la duplication entre main.css/cv.css/competences.css/projets.css) */
+  --font-mono: ui-monospace, monospace;
+  --font-display-family: 'Inria Serif', serif;
+  --font-display: 700 2.25rem/1.15 var(--font-display-family);
 }
 
 * {
@@ -88,8 +100,9 @@ main {
   margin-bottom: var(--space-lg);
 }
 
-.section-head__eyebrow {
-  grid-column: 1 / span 3;
+/* Typo "eyebrow" (label court, majuscules, tracking large) - partagee avec
+   .cv__label (cv.css) via cette classe utilitaire. */
+.text-eyebrow {
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.18em;
@@ -97,13 +110,14 @@ main {
   color: var(--color-yale-blue);
 }
 
+.section-head__eyebrow {
+  grid-column: 1 / span 3;
+}
+
 .section-head__title {
   grid-column: 4 / span 7;
   margin: 0;
-  font-family: 'Inria Serif', serif;
-  font-weight: 700;
-  font-size: 2.25rem;
-  line-height: 1.15;
+  font: var(--font-display);
 }
 
 @media (max-width: 48rem) {
@@ -148,7 +162,7 @@ main {
 }
 
 .list-dotted code {
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 0.8125em;
   padding: 0.15em 0.35em;
   background: var(--color-platinum);
