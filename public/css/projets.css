@@ -32,7 +32,7 @@
   max-width: 14rem;
   padding-right: var(--space-xs);
   border-right: 2px solid transparent;
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.02em;
   text-align: right;
@@ -56,7 +56,7 @@
 .reel-nav__link--cta {
   margin-top: var(--space-xs);
   padding-top: var(--space-xs);
-  border-top: 1px solid rgba(180, 205, 237, 0.3);
+  border-top: 1px solid color-mix(in srgb, var(--color-powder-blue) 30%, transparent);
   font-weight: 600;
   color: var(--color-platinum);
   opacity: 0.85;
@@ -119,7 +119,7 @@
   width: min(22vw, 22rem);
   aspect-ratio: 4 / 5;
   background: var(--color-ink-black-3);
-  border: 1px solid rgba(180, 205, 237, 0.25);
+  border: 1px solid color-mix(in srgb, var(--color-powder-blue) 25%, transparent);
 }
 
 @media (max-width: 64rem) {
@@ -154,7 +154,7 @@
 
 .reel__progress-wave-track {
   fill: none;
-  stroke: rgba(180, 205, 237, 0.25);
+  stroke: color-mix(in srgb, var(--color-powder-blue) 25%, transparent);
   stroke-width: 2;
   stroke-linecap: round;
 }
@@ -167,7 +167,7 @@
 }
 
 .reel__idx {
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 0.8125rem;
   letter-spacing: 0.14em;
   color: var(--color-powder-blue);
@@ -175,7 +175,7 @@
 
 .reel__box h3 {
   margin: 0;
-  font-family: 'Inria Serif', serif;
+  font-family: var(--font-display-family);
   font-weight: 700;
   font-size: clamp(2.5rem, 6vw, 4.5rem);
   line-height: 1.05;
@@ -216,11 +216,11 @@
 }
 
 .reel .list-dotted code {
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 0.8125em;
   padding: 0.15em 0.35em;
-  background: rgba(240, 244, 239, 0.12);
-  border: 1px solid rgba(180, 205, 237, 0.4);
+  background: color-mix(in srgb, var(--color-platinum) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-powder-blue) 40%, transparent);
   color: var(--color-powder-blue);
 }
 
@@ -248,11 +248,11 @@
 }
 
 .tag {
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   padding: 0.25rem 0.5rem;
-  background: rgba(240, 244, 239, 0.08);
-  border: 1px solid rgba(180, 205, 237, 0.5);
+  background: color-mix(in srgb, var(--color-platinum) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-powder-blue) 50%, transparent);
   color: var(--color-powder-blue);
 }
 
@@ -286,5 +286,13 @@
 
   .reel__action {
     gap: var(--space-xs);
+  }
+}
+
+/* Les deux media queries ci-dessus ne ciblent chacune qu'un axe de padding ;
+   celle-ci fixe le resultat quand les deux matchent (mobile paysage). */
+@media (max-width: 48rem) and (max-height: 800px) {
+  .reel__box {
+    padding: var(--space-md) var(--space-md);
   }
 }

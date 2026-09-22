@@ -15,11 +15,6 @@
 
 .cv__label {
   grid-column: 1 / span 3;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-yale-blue);
 }
 
 .cv__text {
@@ -31,10 +26,7 @@
 
 .cv__text h2 {
   margin: 0;
-  font-family: 'Inria Serif', serif;
-  font-weight: 700;
-  font-size: 2.25rem;
-  line-height: 1.15;
+  font: var(--font-display);
 }
 
 .cv__text p {
