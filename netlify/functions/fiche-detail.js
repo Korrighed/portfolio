@@ -1,30 +1,17 @@
-import { isAuthenticated } from './lib/auth.js';
-import { fiches } from './lib/fiches.js';
+import { withAuth } from './lib/auth.js';
+import { findFiche } from './lib/fiche-repository.js';
 import { renderPage } from './lib/page.js';
 
-export const handler = async (event) => {
-  const authed = await isAuthenticated(event.headers.cookie);
-  if (!authed) {
-    return { statusCode: 302, headers: { Location: '/login.html' }, body: '' };
-  }
-
-  const id = event.queryStringParameters?.id;
-  const fiche = fiches.find((f) => f.id === id);
+export const handler = withAuth(async (event) => {
+  const fiche = findFiche(event);
   if (!fiche) {
     return { statusCode: 404, body: 'Introuvable' };
   }
 
   const body = renderPage({
     title: fiche.title,
+    nav: [{ href: '/fiches-reflexives', label: 'Fiches réflexives' }],
     body: `
-    <header>
-      <nav>
-        <a href="/fiches-reflexives">Fiches réflexives</a>
-        <form method="post" action="/api/logout">
-          <button type="submit">Se déconnecter</button>
-        </form>
-      </nav>
-    </header>
     <main>
       <h1>${fiche.title}</h1>
       <a href="/api/pdf/${fiche.id}" target="_blank" rel="noopener">Ouvrir le PDF</a>
@@ -36,4 +23,4 @@ export const handler = async (event) => {
     headers: { 'Content-Type': 'text/html; charset=utf-8' },
     body,
   };
-};
+}, { onFail: 'redirect' });

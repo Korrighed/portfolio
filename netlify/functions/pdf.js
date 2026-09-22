@@ -1,23 +1,20 @@
-import { isAuthenticated } from './lib/auth.js';
-import { fiches } from './lib/fiches.js';
+import { withAuth } from './lib/auth.js';
+import { findFiche } from './lib/fiche-repository.js';
 import { getPdfBuffer } from './lib/storage.js';
 
-export const handler = async (event) => {
-  const authed = await isAuthenticated(event.headers.cookie);
-  if (!authed) {
-    return { statusCode: 401, body: 'Non autorise' };
-  }
-
-  const id = event.queryStringParameters?.id;
-  const fiche = fiches.find((f) => f.id === id);
+export const handler = withAuth(async (event) => {
+  const fiche = findFiche(event);
   if (!fiche) {
     return { statusCode: 404, body: 'Introuvable' };
   }
 
   let buffer;
   try {
-    buffer = await getPdfBuffer(fiche.file);
-  } catch {
+    buffer = await getPdfBuffer(event, fiche.file);
+  } catch (err) {
+    // On logge le detail cote serveur uniquement : la reponse HTTP reste
+    // generique pour ne pas exposer de details internes (store, chemin...).
+    console.error(`Echec de lecture du PDF "${fiche.file}" (fiche ${fiche.id}):`, err);
     return { statusCode: 404, body: 'Introuvable' };
   }
 
@@ -30,4 +27,4 @@ export const handler = async (event) => {
     body: buffer.toString('base64'),
     isBase64Encoded: true,
   };
-};
+}, { onFail: '401' });

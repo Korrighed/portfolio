@@ -8,7 +8,7 @@ Portfolio + espace fiches réflexives (accès enseignant, compte unique).
 - **Netlify Functions** (`netlify/functions/`) — logique protégée : vérification de session, pages fiches réflexives, service du PDF. Node pur, pas de dépendance à un framework web.
 - **iron-session** — cookie de session signé/chiffré, pas de base de données.
 - **bcryptjs** — hash du mot de passe du compte enseignant.
-- Stockage PDF en local, hors de `public/` (`storage/fiches-reflexives`), embarqué en lecture seule dans la fonction (`included_files` dans `netlify.toml`) et servi via une fonction protégée. Ajouter/retirer un PDF nécessite un redeploy — pour un usage plus dynamique, migrer vers Netlify Blobs.
+- Stockage PDF dans **Netlify Blobs** (store `fiches-reflexives`, cf. `netlify/functions/lib/storage.js`), servi via une fonction protégée. Upload/retrait d'un PDF se fait via `netlify blobs:set` / `netlify blobs:delete`, pas de redeploy nécessaire.
 
 ## public/index.html est généré
 
