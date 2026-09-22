@@ -3,6 +3,13 @@
   publish = "public"
   functions = "netlify/functions"
 
+[dev]
+  command = "npx vite"
+  targetPort = 5173
+  publish = "public"
+  functions = "netlify/functions"
+  autoLaunch = false
+
 [functions]
   # Les PDF sont embarques (lecture seule) dans le zip de la fonction au build.
   # Ajouter/retirer un fichier necessite un redeploy.
