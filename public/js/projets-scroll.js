@@ -13,9 +13,9 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 // largeur = avancement de ses etapes, par-dessus un trace "track" discret.
 const WAVE_WIDTH = 300;
 const WAVE_HEIGHT = 24;
-const WAVE_AMPLITUDE = 7;
+const WAVE_AMPLITUDE = 8;
 const WAVE_FREQUENCY = 0.06;
-const WAVE_SPEED = 0.05;
+const WAVE_SPEED = 0.03;
 
 const svgNS = 'http://www.w3.org/2000/svg';
 const wavePaths = [];
