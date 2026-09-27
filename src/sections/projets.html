@@ -13,14 +13,17 @@
               <span class="tag">API Twitch Helix</span>
             </div>
             <p class="step reel__synopsis" data-step="3">Projet personnel — [période à préciser]. Site vitrine pensé modulable : le thème repose sur des variables CSS (<code>:root</code>) pour s'adapter à n'importe quel contexte, avec un statut (en stream / hors stream) et une bannière qui se mettent à jour seuls, sans intervention manuelle.</p>
-            <div class="step reel__action" data-step="4">
-              <ul class="list-dotted">
+            <div class="reel__action">
+              <ul class="step list-dotted" data-step="4">
                 <li>Thème entièrement piloté par variables CSS <code>:root</code> : personnalisable sans toucher au reste du code.</li>
                 <li>Statut en stream / hors stream mis à jour toutes les 3 minutes.</li>
                 <li>Clé API Twitch dev sécurisée côté fonctions Netlify, jamais exposée au client.</li>
                 <li>Environnement local qui reproduit la prod : Vite et Netlify Functions lancés en parallèle.</li>
               </ul>
-              <a class="reel__link" href="https://yozoravtfan.netlify.app/" target="_blank" rel="noopener">Site en ligne ↗</a>
+              <div class="step reel__links" data-step="5">
+                <a class="reel__link" href="https://github.com/Korrighed/Yozora_Site" target="_blank" rel="noopener">GitHub ↗</a>
+                <a class="reel__link" href="https://yozoravtfan.netlify.app/" target="_blank" rel="noopener">Site ↗</a>
+              </div>
             </div>
           </div>
           <div class="reel__preview" aria-hidden="true"></div>
@@ -41,13 +44,16 @@
               <span class="tag">Vite</span>
             </div>
             <p class="step reel__synopsis" data-step="3">Projet personnel — [période à préciser]. Agacement de devoir changer de personnage en jeu pour consulter chaque inventaire : l'app centralise les infos de compte via l'API officielle Guild Wars 2, en lecture seule.</p>
-            <div class="step reel__action" data-step="4">
-              <ul class="list-dotted">
+            <div class="reel__action">
+              <ul class="step list-dotted" data-step="4">
                 <li>Authentification par clé API ArenaNet en lecture seule : aucune écriture possible sur le compte.</li>
                 <li>Affiche aujourd'hui noms de personnages et contenu des inventaires, dans des tableaux triables (AG Grid).</li>
                 <li>Périmètre volontairement limité pendant la phase d'apprentissage, pensé pour évoluer.</li>
               </ul>
-              <a class="reel__link" href="https://github.com/Korrighed/Gw2_Compagnon_app" target="_blank" rel="noopener">Dépôt GitHub ↗</a>
+              <div class="step reel__links" data-step="5">
+                <a class="reel__link" href="https://github.com/Korrighed/Gw2_Compagnon_app" target="_blank" rel="noopener">GitHub ↗</a>
+                <a class="reel__link" href="https://korrighed.github.io/Gw2_Compagnon_app/" target="_blank" rel="noopener">Site ↗</a>
+              </div>
             </div>
           </div>
           <div class="reel__preview" aria-hidden="true"></div>
@@ -68,14 +74,17 @@
               <span class="tag">Vitest</span>
             </div>
             <p class="step reel__synopsis" data-step="3">Projet personnel — [période à préciser]. Exercice Angular : concevoir un réseau de transport fictif de bout en bout (routing, formulaires, calcul de tarifs, traduction) sans back-end, uniquement des données JSON côté client.</p>
-            <div class="step reel__action" data-step="4">
-              <ul class="list-dotted">
+            <div class="reel__action">
+              <ul class="step list-dotted" data-step="4">
                 <li>13 stations, 2 lignes, tarif au kilomètre calculé côté client (Haversine + 10 %), sans base de données.</li>
                 <li>Trilingue FR / EN / JA via <code>@angular/localize</code> : un build et un port de dev par langue (4200 / 4201 / 4202).</li>
                 <li>Extraction i18n outillée (<code>extract-i18n</code>) et fichiers de traduction XLF par langue.</li>
                 <li>Tests unitaires Vitest, TypeScript strict.</li>
               </ul>
-              <a class="reel__link" href="https://github.com/Korrighed/hyperloopNc" target="_blank" rel="noopener">Dépôt GitHub ↗</a>
+              <div class="step reel__links" data-step="5">
+                <a class="reel__link" href="https://github.com/Korrighed/hyperloopNc" target="_blank" rel="noopener">GitHub ↗</a>
+                <a class="reel__link" href="https://hyperloop-nc.netlify.app/" target="_blank" rel="noopener">Site ↗</a>
+              </div>
             </div>
           </div>
           <div class="reel__preview" aria-hidden="true"></div>
@@ -97,14 +106,17 @@
               <span class="tag">Vite</span>
             </div>
             <p class="step reel__synopsis" data-step="3">Projet personnel — [période à préciser]. Les lanceurs de dés numériques classiques se contentent d'un nombre aléatoire abstrait : celui-ci simule un vrai lancer physique en 3D, avec détection de la face qui atterrit vers le haut.</p>
-            <div class="step reel__action" data-step="4">
-              <ul class="list-dotted">
+            <div class="reel__action">
+              <ul class="step list-dotted" data-step="4">
                 <li>Dés polyédriques D4, D6, D8, D10, D12, D20, D100 animés en physique temps réel.</li>
                 <li>Détection de la face qui atterrit vers le haut ("face-up detection").</li>
                 <li>Modificateurs de jet et historique des lancers conservés en local.</li>
                 <li>Architecture 3D déclarative (React Three Fiber) plutôt que Three.js impératif.</li>
               </ul>
-              <a class="reel__link" href="https://lance-des.netlify.app/" target="_blank" rel="noopener">Site en ligne ↗</a>
+              <div class="step reel__links" data-step="5">
+                <a class="reel__link" href="https://github.com/Korrighed/dice-roller" target="_blank" rel="noopener">GitHub ↗</a>
+                <a class="reel__link" href="https://lance-des.netlify.app/" target="_blank" rel="noopener">Site ↗</a>
+              </div>
             </div>
           </div>
           <div class="reel__preview" aria-hidden="true"></div>
@@ -126,13 +138,13 @@
               <span class="tag">PostgreSQL 17</span>
             </div>
             <p class="step reel__synopsis" data-step="3">Projet de groupe — SAE501, [période à préciser]. Mon périmètre, réalisé seul : une API Laravel + panel d'administration Filament connectée à un front Nuxt, avec un environnement Docker qui démarre en une commande, quel que soit le poste.</p>
-            <div class="step reel__action" data-step="4">
-              <ul class="list-dotted">
+            <div class="reel__action">
+              <ul class="step list-dotted" data-step="4">
                 <li>Back et front en stacks Docker indépendantes (un <code>docker-compose.yml</code> par dépôt), reliées par un réseau partagé pour la communication SSR.</li>
                 <li>Image PHP 8.4 sur mesure : <code>pdo_pgsql</code>, gd, intl, zip, Xdebug pour le débug pas à pas.</li>
                 <li>Build front multi-stage : seul <code>.output/</code> atterrit dans l'image de prod, ni <code>node_modules</code> ni sources.</li>
               </ul>
-              <div class="reel__links">
+              <div class="step reel__links" data-step="5">
                 <a class="reel__link" href="https://github.com/S-T-L/Safe-Campus-front" target="_blank" rel="noopener">Front ↗</a>
                 <a class="reel__link" href="https://github.com/S-T-L/Safe-Campus-back" target="_blank" rel="noopener">Back ↗</a>
               </div>

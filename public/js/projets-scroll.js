@@ -13,9 +13,9 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 // largeur = avancement de ses etapes, par-dessus un trace "track" discret.
 const WAVE_WIDTH = 300;
 const WAVE_HEIGHT = 24;
-const WAVE_AMPLITUDE = 7;
+const WAVE_AMPLITUDE = 8;
 const WAVE_FREQUENCY = 0.06;
-const WAVE_SPEED = 0.05;
+const WAVE_SPEED = 0.03;
 
 const svgNS = 'http://www.w3.org/2000/svg';
 const wavePaths = [];
@@ -61,6 +61,11 @@ function createProgressWave(bar, clipId) {
 const STEP_GAP = 0.3;
 const STEP_DURATION = 1;
 
+// Longueur de scroll d'une carte, en hauteurs de viewport. Volontairement
+// decouple du nombre d'etapes : passer de 4 a 5 etapes (points cles et liens
+// separes) ne doit pas rallonger la section, seulement resserrer les reveals.
+const REEL_VIEWPORTS = 4;
+
 const reelTriggers = new Map();
 
 document.querySelectorAll('.reel').forEach((reel, index) => {
@@ -80,7 +85,7 @@ document.querySelectorAll('.reel').forEach((reel, index) => {
     scrollTrigger: {
       trigger: reel,
       start: 'top top',
-      end: () => '+=' + window.innerHeight * steps.length,
+      end: () => '+=' + window.innerHeight * REEL_VIEWPORTS,
       scrub: 1,
       pin,
       onToggle: (self) => navLink?.classList.toggle('is-active', self.isActive),
@@ -119,30 +124,50 @@ if (wavePaths.length) {
   }
 }
 
-// CTA hero "Projets" : au lieu d'atterrir sur la carte n°1 encore vierge
-// (etape 1 pas revelee) et sans le menu (son ScrollTrigger pas encore
-// actif), on defile jusqu'au point ou l'etape 1 de la carte n°1 est deja
-// revelee - chaque etape occupe 1/steps.length du timeline (gap + duree
-// fixes), donc l'etape 1 finit a 1/steps.length. Le trajet est anime
-// (ScrollToPlugin, ease douce) plutot qu'un saut sec : le reveal de
-// l'etape 1 se joue pendant la transition.
+// Defile vers une progression donnee d'une carte, au lieu du saut d'ancre brut
+// qui atterrit sur `top top` (progress 0 = carte vierge, aucune etape revelee,
+// l'utilisateur doit scroller pour voir quoi que ce soit). start/end sont relus
+// a chaque appel : les pin-spacers des cartes precedentes decalent les
+// positions, une valeur mise en cache serait fausse d'un viewport ou plus sur
+// les dernieres cartes.
+function scrollToReelProgress(reelId, progress, duration = 1.2) {
+  const data = reelTriggers.get(reelId);
+  if (!data) return false;
+  const target = data.trigger.start + (data.trigger.end - data.trigger.start) * progress;
+  gsap.to(window, {
+    duration,
+    ease: 'power2.inOut',
+    scrollTo: { y: target, autoKill: false },
+  });
+  return true;
+}
+
+// CTA hero "Projets" : atterrit sur la carte n°1 avec son etape 1 deja
+// revelee, le reveal se jouant pendant la transition.
 const heroCta = document.querySelector('.hero__scroll');
 const firstReel = document.querySelector('.reel');
 if (heroCta && firstReel) {
   heroCta.addEventListener('click', (event) => {
-    const data = reelTriggers.get(firstReel.id);
-    if (!data) return;
-    event.preventDefault();
-    const { trigger, stepCount } = data;
-    const progress = 1 / stepCount;
-    const target = trigger.start + (trigger.end - trigger.start) * progress;
-    gsap.to(window, {
-      duration: 1.2,
-      ease: 'power2.inOut',
-      scrollTo: { y: target, autoKill: false },
-    });
+    const { stepCount } = reelTriggers.get(firstReel.id) ?? {};
+    if (stepCount && scrollToReelProgress(firstReel.id, 1 / stepCount)) {
+      event.preventDefault();
+    }
   });
 }
+
+// Menu lateral : on vise la fin du timeline, donc la carte entierement
+// revelee, liens GitHub et Site compris. Le reveal des etapes se joue pendant
+// le trajet ScrollToPlugin : l'utilisateur voit tout apparaitre et n'a rien a
+// scroller pour lire la carte ou atteindre les liens.
+// href="#reel-N" est conserve : sans JS, ou si le CDN gsap tombe (garde en
+// tete de fichier), le saut d'ancre natif reste le comportement de repli.
+document.querySelectorAll('.reel-nav__link').forEach((link) => {
+  const reelId = link.getAttribute('href')?.slice(1);
+  if (!reelId || !reelTriggers.has(reelId)) return;
+  link.addEventListener('click', (event) => {
+    if (scrollToReelProgress(reelId, 1)) event.preventDefault();
+  });
+});
 
 // Cree apres les triggers de pin ci-dessus : #projets n'a sa hauteur finale
 // (pin-spacers des reels inclus) qu'une fois ceux-ci en place. Cree avant,
