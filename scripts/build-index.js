@@ -7,11 +7,16 @@ const templatePath = join(root, 'src', 'index.template.html');
 const sectionsDir = join(root, 'src', 'sections');
 const outPath = join(root, 'public', 'index.html');
 
+// Sous Windows (core.autocrlf), les sources de src/ sont en CRLF dans la copie
+// de travail. Le depot stocke du LF : on genere du LF pour que git ne voie
+// pas public/index.html comme modifie a chaque build.
+const toLf = (text) => text.replace(/\r\n/g, '\n');
+
 export function buildIndex() {
-  const template = readFileSync(templatePath, 'utf8');
+  const template = toLf(readFileSync(templatePath, 'utf8'));
 
   const html = template.replace(/<!-- include:(.+?) -->/g, (_match, file) =>
-    readFileSync(join(sectionsDir, file.trim()), 'utf8').trimEnd(),
+    toLf(readFileSync(join(sectionsDir, file.trim()), 'utf8')).trimEnd(),
   );
 
   writeFileSync(outPath, html);
