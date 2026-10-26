@@ -30,7 +30,9 @@ node scripts/hash-password.js "mot-de-passe" # coller le hash dans .env
 | Commande | Usage |
 |---|---|
 | `npm run build` | Régénère `public/index.html` depuis `src/` |
-| `npm run dev` | Régénère `public/index.html` puis `netlify dev` — sert `public/` + exécute les fonctions localement, avec les redirects de `netlify.toml` |
+| `npm run dev` | Régénère `public/index.html` puis `netlify dev` — lance Vite (HMR, port 5173 strict) et exécute les fonctions localement, avec les redirects de `netlify.toml`. Un seul `npm run dev` à la fois : un second échoue avec « Port 5173 is already in use » |
+
+Démarrage lent : `netlify dev` interroge l'API Netlify au lancement. Avec une session expirée (`netlify status`), compter environ 9 s de plus. Relancer `netlify login`, ou démarrer sans réseau avec `npm run dev -- --offline`.
 
 Déploiement : push sur le repo connecté à Netlify (`command = npm run build`, `publish = public`, `functions = netlify/functions`).
 
