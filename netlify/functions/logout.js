@@ -9,7 +9,7 @@ export const handler = async (event) => {
     statusCode: 302,
     headers: {
       Location: '/',
-      'Set-Cookie': destroySessionCookieHeader(),
+      'Set-Cookie': destroySessionCookieHeader(event),
     },
     body: '',
   };

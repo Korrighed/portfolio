@@ -22,18 +22,28 @@ export function verifyCredentials(username, password) {
   return bcrypt.compareSync(password, expectedHash);
 }
 
-export async function createSessionCookieHeader() {
+// CONTEXT est une variable de build Netlify, pas du runtime des fonctions :
+// on se fie donc au protocole de la requete. En local (http://localhost) le
+// cookie reste sans Secure, sinon le navigateur le refuserait.
+function secureAttribute(event) {
+  const forwarded = event?.headers?.['x-forwarded-proto'];
+  const isHttps = forwarded
+    ? forwarded.split(',')[0].trim() === 'https'
+    : Boolean(event?.rawUrl?.startsWith('https:'));
+  return isHttps ? '; Secure' : '';
+}
+
+export async function createSessionCookieHeader(event) {
   const seal = await sealData(
     { authenticated: true },
     { password: getSessionSecret(), ttl: TTL_SECONDS }
   );
 
-  const secure = process.env.CONTEXT === 'production' ? '; Secure' : '';
-  return `${SESSION_COOKIE}=${seal}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${TTL_SECONDS}${secure}`;
+  return `${SESSION_COOKIE}=${seal}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${TTL_SECONDS}${secureAttribute(event)}`;
 }
 
-export function destroySessionCookieHeader() {
-  return `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`;
+export function destroySessionCookieHeader(event) {
+  return `${SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secureAttribute(event)}`;
 }
 
 function parseCookies(cookieHeader) {
@@ -73,9 +83,13 @@ function unauthorizedResponse(onFail) {
 export function withAuth(handler, { onFail = 'redirect' } = {}) {
   return async (event, context) => {
     const authed = await isAuthenticated(event.headers.cookie);
-    if (!authed) {
-      return unauthorizedResponse(onFail);
-    }
-    return handler(event, context);
+    const response = authed ? await handler(event, context) : unauthorizedResponse(onFail);
+
+    // Les [[headers]] de netlify.toml ne s'appliquent pas aux reponses des
+    // fonctions : le cache prive est donc pose ici, pour pages et PDF.
+    return {
+      ...response,
+      headers: { ...response.headers, 'Cache-Control': 'private, no-store' },
+    };
   };
 }

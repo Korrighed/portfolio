@@ -91,7 +91,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-xl);
+  gap: var(--space-lg);
+  /* Colonne reservee au menu lateral (.reel-nav, position fixed a droite) :
+     ni la carte ni l'apercu ne passent dessous. Libelle le plus long ~10.5rem. */
+  padding: 0 calc(var(--space-lg) + 11rem + var(--space-md)) 0 var(--space-lg);
   overflow: hidden;
   background: transparent;
 }
@@ -99,7 +102,8 @@
 .reel__box {
   position: relative;
   z-index: 1;
-  width: 55%;
+  flex: 1 1 0;
+  min-width: 0;
   max-width: 56rem;
   max-height: 88vh;
   overflow-y: auto;
@@ -109,22 +113,37 @@
   gap: var(--space-md);
 }
 
-/* Emplacement reserve pour un mini-preview (gif/video) du projet, entre la
-   carte et le menu lateral. Pour l'instant simple cadre place-holder, mm
-   couleur de fond que la section (juste un contour pour le reperer). */
+/* Emplacement du mini-preview (gif/video) du projet, entre la carte et la
+   colonne du menu lateral. Format 16:9 : captures d'ecran de sites. */
 .reel__preview {
   position: relative;
   z-index: 1;
   flex: none;
-  width: min(22vw, 22rem);
-  aspect-ratio: 4 / 5;
+  width: min(26vw, 26rem);
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
   background: var(--color-ink-black-3);
   border: 1px solid color-mix(in srgb, var(--color-powder-blue) 25%, transparent);
 }
 
+.reel__preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Sous 64rem l'apercu est masque : la carte remplit la place laissee libre. */
 @media (max-width: 64rem) {
   .reel__preview {
     display: none;
+  }
+}
+
+/* Menu lateral masque : plus de colonne a reserver. */
+@media (max-width: 48rem) {
+  .reel__pin {
+    padding: 0;
   }
 }
 
