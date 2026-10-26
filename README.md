@@ -34,15 +34,12 @@ node scripts/hash-password.js "mot-de-passe" # coller le hash dans .env
 
 Déploiement : push sur le repo connecté à Netlify (`command = npm run build`, `publish = public`, `functions = netlify/functions`).
 
-## Mise en page
+## Documentation
 
-Principe directeur : grille suisse (International Typographic Style) — colonnes et modules réguliers, marges/gouttières fixes, alignement strict des blocs, hiérarchie posée par l'échelle plutôt que par la décoration. L'espacement entre les blocs découle des mêmes unités que la grille : une échelle fixe type `xs/sm/md/lg/xl` (base 4px/8px), pas de valeurs arbitraires par composant.
-
-## Palette de couleurs
-
-| Nom | Hex | Usage suggéré |
-|---|---|---|
-| Ink Black | `#0d1821` | fond très sombre / texte sur fond clair |
-| Yale Blue | `#344966` | couleur de marque, accents, éléments interactifs |
-| Powder Blue | `#b4cded` | fond secondaire, éléments doux |
-| Platinum | `#f0f4ef` | fond clair principal |
+| Document | Contenu |
+|---|---|
+| [`docs/PRD.md`](docs/PRD.md) | Produit : objectifs, user stories, exigences |
+| [`docs/TRD.md`](docs/TRD.md) | Architecture, exigences techniques, décisions, dette |
+| [`docs/APP-FLOW.md`](docs/APP-FLOW.md) | Parcours en schémas |
+| [`docs/DESIGN-BRIEF.md`](docs/DESIGN-BRIEF.md) | Direction artistique : grille suisse, palette, typographie, composants |
+| [`docs/reports/`](docs/reports/) | Rapports de constats |
