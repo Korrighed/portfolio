@@ -73,7 +73,7 @@ Points sous le seuil (texte ≥ 4.5:1) :
 | Ressource | Format | Poids max | Chemin |
 |---|---|---|---|
 | Fond du hero | Canvas Vanta « dots » : points Powder Blue / Yale Blue sur Ink Black, taille 6.3, espacement 34 | — | script inline de `src/index.template.html` |
-| Aperçu de projet | Vidéo ou gif, ratio 4:5, largeur `min(22vw, 22rem)` | à fixer (voir PRD, Questions ouvertes) | emplacement `.reel__preview` ; chemin à décider |
+| Aperçu de projet | Vidéo ou gif, ratio 16:9 (captures de site), largeur `min(26vw, 26rem)`, `object-fit: cover` | gif Twitch : 1,7 Mo ; budget à fixer (voir PRD, Questions ouvertes) | `public/video/` ; emplacement `.reel__preview` |
 | Polices | TTF | — | `public/fonts/` |
 | Icônes | Aucune ; carré creux CSS pour le lien Espace enseignant, flèche `↗` en texte | — | — |
 
@@ -100,7 +100,8 @@ Les états de focus ne sont pas stylés : le navigateur applique son contour par
 | Point de rupture | Comportement |
 |---|---|
 | `max-width: 48rem` | Burger ; grilles 12 colonnes passent à 1 colonne ; menu latéral masqué ; hero recalé (tailles réduites) ; padding des cartes réduit |
-| `max-width: 64rem` | Emplacement d'aperçu masqué |
+| `min-width: 48rem` | Colonne de droite réservée au menu latéral (`2.5rem + 11rem + 1.5rem`) : ni la carte ni l'aperçu ne passent dessous |
+| `max-width: 64rem` | Emplacement d'aperçu masqué ; la carte remplit la largeur disponible |
 | `max-height: 800px` | Cartes compactées (espaces, titre et texte réduits) pour tenir sans défilement interne |
 | `max-width: 48rem` et `max-height: 800px` | Padding des cartes recalé (mobile paysage) |
 | Hauteur d'une carte | `100vh` (pas `dvh` : à vérifier sur mobile avec barre d'adresse) |

@@ -83,7 +83,7 @@ Statut : **livré** ou **à livrer**.
 | NF-01 | Sécurité | Cookie de session `HttpOnly`, `SameSite=Lax`, durée 8 h, `Secure` sur tout déploiement HTTPS (production, deploy-previews, branch deploys) | livré (à vérifier sur un deploy-preview) |
 | NF-02 | Robustesse | Aucune entrée malformée (cookie mal encodé, corps de POST sans champ) ne produit un code 500 | à livrer |
 | NF-03 | Sécurité | Les tentatives de connexion sont limitées (seuil à fixer, voir Questions ouvertes) | à livrer |
-| NF-04 | Sécurité | Toutes les routes portent `X-Content-Type-Options`, `Referrer-Policy`, une protection anti-cadrage et une CSP ; pages protégées et PDF portent `Cache-Control: private, no-store` | partiel : en-têtes et cache livrés, CSP à valider dans un navigateur |
+| NF-04 | Sécurité | Toutes les routes portent `X-Content-Type-Options`, `Referrer-Policy`, une protection anti-cadrage et une CSP ; pages protégées et PDF portent `Cache-Control: private, no-store` | livré (CSP validée dans Chrome : 0 violation, hero Vanta, GSAP et login fonctionnels) |
 | NF-05 | Sécurité | Chaque script CDN a une version exacte et un attribut `integrity` | à livrer |
 | NF-06 | Performance | Les médias de démo se chargent en différé et ne bloquent pas le premier affichage ; budget de poids par média à fixer | à livrer |
 | NF-07 | Accessibilité | Texte ≥ 4.5:1, éléments d'interface ≥ 3:1 ; focus visible partout ; une étape non révélée n'est pas atteignable au clavier | partiel (voir `DESIGN-BRIEF.md`) |
