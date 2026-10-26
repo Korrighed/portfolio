@@ -17,7 +17,7 @@ export const handler = async (event) => {
       statusCode: 302,
       headers: {
         Location: '/fiches-reflexives',
-        'Set-Cookie': await createSessionCookieHeader(),
+        'Set-Cookie': await createSessionCookieHeader(event),
       },
       body: '',
     };

@@ -80,10 +80,10 @@ Statut : **livré** ou **à livrer**.
 
 | ID | Catégorie | Exigence mesurable | Statut |
 |---|---|---|---|
-| NF-01 | Sécurité | Cookie de session `HttpOnly`, `SameSite=Lax`, durée 8 h, `Secure` sur tout déploiement HTTPS (production, deploy-previews, branch deploys) | partiel |
+| NF-01 | Sécurité | Cookie de session `HttpOnly`, `SameSite=Lax`, durée 8 h, `Secure` sur tout déploiement HTTPS (production, deploy-previews, branch deploys) | livré (à vérifier sur un deploy-preview) |
 | NF-02 | Robustesse | Aucune entrée malformée (cookie mal encodé, corps de POST sans champ) ne produit un code 500 | à livrer |
 | NF-03 | Sécurité | Les tentatives de connexion sont limitées (seuil à fixer, voir Questions ouvertes) | à livrer |
-| NF-04 | Sécurité | Toutes les routes portent `X-Content-Type-Options`, `Referrer-Policy`, une protection anti-cadrage et une CSP ; pages protégées et PDF portent `Cache-Control: private, no-store` | à livrer |
+| NF-04 | Sécurité | Toutes les routes portent `X-Content-Type-Options`, `Referrer-Policy`, une protection anti-cadrage et une CSP ; pages protégées et PDF portent `Cache-Control: private, no-store` | partiel : en-têtes et cache livrés, CSP à valider dans un navigateur |
 | NF-05 | Sécurité | Chaque script CDN a une version exacte et un attribut `integrity` | à livrer |
 | NF-06 | Performance | Les médias de démo se chargent en différé et ne bloquent pas le premier affichage ; budget de poids par média à fixer | à livrer |
 | NF-07 | Accessibilité | Texte ≥ 4.5:1, éléments d'interface ≥ 3:1 ; focus visible partout ; une étape non révélée n'est pas atteignable au clavier | partiel (voir `DESIGN-BRIEF.md`) |
@@ -91,7 +91,7 @@ Statut : **livré** ou **à livrer**.
 | NF-09 | Référencement | `title` et `meta description` propres, Open Graph, favicon ; `noindex` sur login, fiches et API | à livrer |
 | NF-10 | Dégradation | Si GSAP ou Vanta ne se charge pas, le contenu reste lisible | partiel (garde GSAP présente, pas de garde Vanta) |
 | NF-11 | Confidentialité | Aucun PDF de fiche dans le dépôt ni sous `public/` ; accès uniquement par la fonction protégée | livré |
-| NF-12 | Démarrage local | `npm run dev` rend la main en moins de 15 s sur le poste d'Alex, connexion Netlify valide ou non | à livrer |
+| NF-12 | Démarrage local | `npm run dev` rend la main en moins de 15 s sur le poste d'Alex, connexion Netlify valide ou non | partiel : `npx` retiré ; reste environ 9 s de démarrage du CLI avec session expirée |
 
 ## 8. Contraintes
 
