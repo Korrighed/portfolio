@@ -4,7 +4,7 @@
   functions = "netlify/functions"
 
 [dev]
-  command = "npx vite"
+  command = "vite"
   targetPort = 5173
   publish = "public"
   functions = "netlify/functions"
