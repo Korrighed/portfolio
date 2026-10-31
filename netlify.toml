@@ -9,7 +9,8 @@
 # Pages et assets statiques. Les reponses des fonctions n'heritent pas de ces
 # en-tetes (cf. Cache-Control dans netlify/functions/lib/auth.js).
 # 'unsafe-inline' en script-src : init Vanta inline dans l'accueil et script
-# d'erreur de login.html. jsdelivr heberge GSAP, Three.js et Vanta.
+# d'erreur de login.html, et script de la section Projets (classe js). jsdelivr
+# heberge Three.js et Vanta.
 [[headers]]
   for = "/*"
   [headers.values]
