@@ -58,11 +58,11 @@ Statut : **livré** ou **à livrer**.
 | ID | Exigence | User story | Critère d'acceptation | Statut |
 |---|---|---|---|---|
 | F-01 | Barre de navigation : ancres Projets, Compétences, CV, lien Espace enseignant ; menu repliable sous 48rem | US-04, US-07 | AC-01 : Étant donné un écran < 48rem, quand je touche le bouton de menu, alors les liens s'affichent et `aria-expanded` vaut `true` | livré |
-| F-02 | Hero avec bouton « Projets » menant à la carte 1, première étape déjà révélée | US-01 | AC-02 : Quand je clique le bouton, alors la page défile vers la carte 1 et la première étape apparaît pendant le trajet | livré |
-| F-03 | Section Projets : 5 cartes plein écran épinglées ; les étapes (sous-titre, tags, synopsis, points clés, liens) se révèlent au défilement | US-01, US-03 | AC-03 : Étant donné une carte épinglée, quand je défile, alors les 5 étapes apparaissent dans l'ordre puis la carte se libère | livré |
-| F-04 | Menu latéral des projets, visible tant que la section est à l'écran ; clic = carte entièrement révélée ; dernier lien « Me contacter » vers le pied de page | US-01, US-06 | AC-04 : Quand je clique un titre, alors la carte s'affiche avec ses liens sans défilement manuel supplémentaire | livré |
-| F-05 | Chaque carte affiche un aperçu média (vidéo ou gif) dans l'emplacement réservé | US-02 | AC-05 : Étant donné la carte d'un projet, quand elle est visible, alors son média se lit en boucle, muet, sans bloquer le défilement | à livrer |
-| F-06 | Barre de progression en onde animée par carte | US-01 | AC-06 : La largeur remplie suit l'avancement des étapes | livré |
+| F-02 | Hero avec bouton « Projets » menant au projet 1 (ancre `#projets`, défilement lisse du navigateur) | US-01 | AC-02 : Quand je clique le bouton, alors la page défile jusqu'à la scène du projet 1 | livré |
+| F-03 | Section Projets : une scène plein écran par projet ; le contenu ne bouge pas, les informations (titre, tags, aperçu, résumé, points clés, liens) apparaissent sur place selon la progression du défilement dans le projet ; aucune bibliothèque d'animation | US-01, US-03 | AC-03 : Étant donné une scène épinglée, quand je défile, alors les informations apparaissent dans l'ordre de lecture, puis la scène se libère. Sur mobile, l'aperçu apparaît avant le titre | livré (branche `feature/projets-scenes`) |
+| F-04 | Menu des projets : fixe à gauche dès 48rem, visible tant que la section est à l'écran, projet en cours marqué ; clic = scène entièrement révélée ; « Suite : … » en pied de scène mène au début du projet suivant ; dernier lien « Me contacter » vers le pied de page | US-01, US-06 | AC-04 : Quand je clique un titre, alors la scène s'affiche avec ses liens sans défilement manuel supplémentaire | livré (branche `feature/projets-scenes`) |
+| F-05 | Chaque scène affiche un aperçu média dans un cadre de navigateur dont la barre d'adresse est le lien du site | US-02 | AC-05 : Étant donné la scène d'un projet, quand elle est visible, alors son aperçu est affiché et chargé en différé | partiel : GIF Twitch ; captures JPG provisoires pour GW2, Hyperloop, Dice Roller ; Safe Campus sans aperçu |
+| F-06 | Le fond de la section est l'indicateur de progression du projet : un cercle de points lumineux part de l'aperçu et grandit avec le défilement, remis à zéro à chaque projet | US-01 | AC-06 : À 0 % seul l'aperçu est entouré de points ternes ; à 100 % tout l'écran est allumé ; rien ne descend dans la scène | livré (branche `feature/projets-scenes`) |
 | F-07 | Section Compétences : liste de compétences et technologies groupées Front / Back / Outils | US-04 | AC-07 : Les trois groupes s'affichent ; sous 48rem ils s'empilent | livré |
 | F-08 | Section CV avec lien de téléchargement PDF | US-05 | AC-08 : Quand je clique le lien, alors le PDF se télécharge (pas de 404) | à livrer (fichier absent) |
 | F-09 | Pied de page : email, GitHub, lien Espace enseignant | US-06 | AC-09 : Les trois liens sont présents et fonctionnent | livré |
@@ -72,8 +72,8 @@ Statut : **livré** ou **à livrer**.
 | F-13 | Service du PDF réservé aux sessions valides | US-08 | AC-13 : Sans session, `GET /api/pdf/:id` renvoie 401 | livré |
 | F-14 | Déconnexion : `POST /api/logout` détruit le cookie et renvoie à `/` | US-09 | AC-14 : Après déconnexion, `/fiches-reflexives` redirige vers le login | livré |
 | F-15 | Aucun texte provisoire visible (« [période à préciser] ») | US-01 | AC-15 : Aucune occurrence de `[` suivi de « période » dans `public/index.html` | à livrer |
-| F-16 | Sous `prefers-reduced-motion`, aucun épinglage ni révélation progressive : le contenu des cartes est lisible d'emblée | US-11 | AC-16 : Étant donné la préférence activée, alors les 5 étapes de chaque carte sont visibles sans défilement épinglé | à livrer |
-| F-17 | Substitut mobile au menu latéral pour atteindre un projet | US-10 | AC-17 : Étant donné un écran < 48rem, alors un moyen visible permet de sauter à un projet | à livrer |
+| F-16 | Sous `prefers-reduced-motion`, aucun épinglage ni révélation progressive : le contenu des scènes est lisible d'emblée. Même repli si la scène ne tient pas dans l'écran (petit mobile, paysage, zoom) | US-11 | AC-16 : Étant donné la préférence activée, ou un écran trop bas, alors tout le contenu de chaque projet est visible sans scène épinglée | livré (branche `feature/projets-scenes`) |
+| F-17 | Sous 48rem : barre de section « Projets \| projet en cours » au-dessus du projet, et menu en vue latérale (moitié de l'écran, pleine hauteur, fond plein, reste assombri) | US-10 | AC-17 : Étant donné un écran < 48rem, alors un bouton visible ouvre la liste des projets ; un clic sur un projet ferme la vue et défile ; `Esc` la ferme | livré (branche `feature/projets-scenes`) |
 | F-18 | Ajout d'une fiche : PDF déposé dans le store Blobs puis entrée ajoutée à la liste des fiches | US-12 | AC-18 : Après dépôt et déploiement, la fiche apparaît dans la liste et son PDF s'ouvre | livré (procédure à documenter) |
 
 ## 7. Exigences non fonctionnelles
@@ -83,13 +83,13 @@ Statut : **livré** ou **à livrer**.
 | NF-01 | Sécurité | Cookie de session `HttpOnly`, `SameSite=Lax`, durée 8 h, `Secure` sur tout déploiement HTTPS (production, deploy-previews, branch deploys) | livré (à vérifier sur un deploy-preview) |
 | NF-02 | Robustesse | Aucune entrée malformée (cookie mal encodé, corps de POST sans champ) ne produit un code 500 | à livrer |
 | NF-03 | Sécurité | Les tentatives de connexion sont limitées (seuil à fixer, voir Questions ouvertes) | à livrer |
-| NF-04 | Sécurité | Toutes les routes portent `X-Content-Type-Options`, `Referrer-Policy`, une protection anti-cadrage et une CSP ; pages protégées et PDF portent `Cache-Control: private, no-store` | livré (CSP validée dans Chrome : 0 violation, hero Vanta, GSAP et login fonctionnels) |
+| NF-04 | Sécurité | Toutes les routes portent `X-Content-Type-Options`, `Referrer-Policy`, une protection anti-cadrage et une CSP ; pages protégées et PDF portent `Cache-Control: private, no-store` | livré (CSP validée dans Chrome : 0 violation, hero Vanta, GSAP et login fonctionnels ; à revalider après le retrait de GSAP, aucune nouvelle origine n'est utilisée) |
 | NF-05 | Sécurité | Chaque script CDN a une version exacte et un attribut `integrity` | à livrer |
 | NF-06 | Performance | Les médias de démo se chargent en différé et ne bloquent pas le premier affichage ; budget de poids par média à fixer | à livrer |
-| NF-07 | Accessibilité | Texte ≥ 4.5:1, éléments d'interface ≥ 3:1 ; focus visible partout ; une étape non révélée n'est pas atteignable au clavier | partiel (voir `DESIGN-BRIEF.md`) |
+| NF-07 | Accessibilité | Texte ≥ 4.5:1, éléments d'interface ≥ 3:1 ; focus visible partout ; une information non révélée n'est pas atteignable au clavier (`inert`) | partiel (section Projets traitée, voir `DESIGN-BRIEF.md`) |
 | NF-08 | Compatibilité | Utilisable sur desktop et mobile ; ruptures à 48rem et 64rem ; navigateurs récents (usage de `color-mix`) | livré |
 | NF-09 | Référencement | `title` et `meta description` propres, Open Graph, favicon ; `noindex` sur login, fiches et API | à livrer |
-| NF-10 | Dégradation | Si GSAP ou Vanta ne se charge pas, le contenu reste lisible | partiel (garde GSAP présente, pas de garde Vanta) |
+| NF-10 | Dégradation | Si Vanta ne se charge pas, le contenu reste lisible ; la section Projets ne dépend d'aucun CDN et reste lisible sans JavaScript | partiel (section Projets traitée ; pas de garde Vanta) |
 | NF-11 | Confidentialité | Aucun PDF de fiche dans le dépôt ni sous `public/` ; accès uniquement par la fonction protégée | livré |
 | NF-12 | Démarrage local | `npm run dev` rend la main en moins de 15 s sur le poste d'Alex, connexion Netlify valide ou non | partiel : `npx` retiré ; reste environ 9 s de démarrage du CLI avec session expirée |
 
@@ -113,15 +113,16 @@ flowchart LR
 
 | Version | Contenu (IDs) |
 |---|---|
-| Livré | F-01 à F-04, F-06, F-07, F-09 à F-14, F-18 ; NF-08, NF-11 |
-| V1 mise en ligne | F-05, F-08, F-15, F-16, F-17 ; NF-01 à NF-07, NF-09, NF-10, NF-12 |
+| Livré | F-01, F-02, F-07, F-09 à F-14, F-18 ; NF-08, NF-11 |
+| Livré sur `feature/projets-scenes`, à merger après validation | F-03, F-04, F-06, F-16, F-17 |
+| V1 mise en ligne | F-05 (aperçus définitifs), F-08, F-15 ; NF-01 à NF-07, NF-09, NF-10, NF-12 |
 | Futur | Aucun élément décidé |
 
 ## 10. Questions ouvertes
 
 - Médias de démo : quel format (mp4, webm, gif), quelle durée maximale, quel poids maximal par fichier ? Recommandation : webm/mp4 muet en boucle sous 2 Mo, gif exclu.
 - Où stocker ces médias : dans le dépôt (`public/media/`) ou hors dépôt ? Recommandation : dans le dépôt tant que le total reste modeste.
-- Sous 64rem l'emplacement d'aperçu est masqué : où montrer le média sur mobile et tablette ?
+- Aperçus : les captures de GW2, Hyperloop et Dice Roller sont provisoires (`public/img/projets/`, celle d'Hyperloop contient le badge Netlify). Safe Campus n'a pas de site en ligne : quelle URL ou quelle capture ? Les remplacer en gardant les noms de fichier suffit.
 - `public/projets/` (gabarits vides, non liés) : je les classe hors périmètre et à supprimer avant la V1. À confirmer.
 - CV : quand le fichier sera prêt, le dépose-t-on dans `public/` (versionné) ou dans Blobs ?
 - Limite de tentatives de connexion : quel seuil, et quel mécanisme (Netlify n'offre pas de limiteur dédié aux Functions classiques, à vérifier) ?
