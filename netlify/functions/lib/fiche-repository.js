@@ -50,8 +50,8 @@ export const fiches = [
     links: [],
   },
   {
-    id: 'yozora',
-    file: 'fiche-yozora.pdf',
+    id: 'twitch',
+    file: 'fiche-twitch.pdf',
     title: 'Site yozoravtfan.netlify.app',
     subtitle: 'Sécurité, CI/CD et communication API',
     date: '2026-05-18',

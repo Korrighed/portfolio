@@ -11,7 +11,6 @@ export function clientKey(event) {
   return ip.replace(/[^0-9a-zA-Z.]/g, '_');
 }
 
-// Renvoie le store, ou null si Blobs n'est pas disponible.
 export function openAttemptsStore(event) {
   try {
     connectLambda(event);

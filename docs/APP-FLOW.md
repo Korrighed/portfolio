@@ -14,6 +14,8 @@ flowchart TD
   Liste["Fiches /fiches-reflexives"]
   Fiche["Détail /fiches-reflexives/:id (redirige vers la liste)"]
   Pdf["PDF /api/pdf/:id"]
+  Legal["Mentions légales /mentions-legales.html"]
+  Accueil -->|Pied de page| Legal
   Accueil -->|Espace enseignant| Login
   Login -->|code valide| Liste
   Login -->|code faux| Login
@@ -29,7 +31,8 @@ flowchart TD
 | Scène projet (dans l'accueil) | Un projet par écran : titre, tags, aperçu, résumé, points clés, liens | Bouton « Projets » du hero, menu des projets |
 | Vue latérale des projets (mobile) | Liste des projets sur la moitié de l'écran | Bouton de la barre de section |
 | Connexion `/login.html` | Code d'accès de l'enseignant | Lien « Espace enseignant » |
-| Fiches, fiche, PDF | Espace enseignant protégé | Connexion réussie |
+| Fiches, fiche, PDF | Espace enseignant protégé : en-tête et pied de page clairs, scène sombre, bouton PDF en tête de chaque fiche | Connexion réussie |
+| Mentions légales `/mentions-legales.html` | Éditeur, hébergeur, données personnelles | Pied de page de l'accueil et de l'espace enseignant |
 
 ## 2. Parcours utilisateur
 
@@ -44,6 +47,7 @@ flowchart LR
   E --> F["Questions fréquentes"]
   F --> H["Pied de page"]
   C -->|menu des projets| E
+  E -->|Accueil| B
   E -->|QA| F
 ```
 

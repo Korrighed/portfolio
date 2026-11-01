@@ -17,7 +17,7 @@ La page protégée `/fiches-reflexives` reprend la scène à onglets de la FAQ, 
 | 3 | Où vivent les métadonnées | `netlify/functions/lib/fiche-repository.js`, rendues côté serveur sur la page protégée | Les titres et compétences ne sont servis qu'avec une session valide |
 | 4 | Page de détail `/fiches-reflexives/:id` | Redirige vers `/fiches-reflexives` (le panneau remplace la page) | Un seul écran |
 | 5 | Fiche de test `fiche-1` | Remplacée par les trois fiches réelles | Données fournies par Alex |
-| 6 | PDF | Un lien « Ouvrir la fiche (PDF) » par fiche vers `/api/pdf/:id` ; noms de fichiers dans Blobs : `fiche-affmar.pdf`, `fiche-hotfix-ci-cd.pdf`, `fiche-yozora.pdf` | Convention de `fiche-1.pdf` ; à déposer par Alex (voir Questions ouvertes) |
+| 6 | PDF | Un lien « Ouvrir la fiche (PDF) » par fiche vers `/api/pdf/:id` ; noms de fichiers dans Blobs : `fiche-affmar.pdf`, `fiche-hotfix-ci-cd.pdf`, `fiche-twitch.pdf` (la troisième fiche, d'abord nommée `yozora`, est devenue `twitch` le 2026-11-01, tâche T501) | Convention de `fiche-1.pdf` ; à déposer par Alex (voir Questions ouvertes) |
 | 7 | Page de connexion | Inchangée dans ce lot | Hors périmètre |
 
 ## 3. Phases

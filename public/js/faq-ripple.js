@@ -9,12 +9,12 @@ if (section && canvas) {
   const ctx = canvas.getContext('2d');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  const GAP = 34; // espacement des points
+  const GAP = 34;
   const DOT = 1.6; // rayon d'un point au repos
   const GROW = 1.6; // rayon supplementaire au pic de l'onde
   const IDLE_ALPHA = 0.1;
   const PEAK_ALPHA = 0.42;
-  const RING = 40; // largeur de l'anneau
+  const RING = 40;
   const MASK_PAD = 16; // marge autour des textes sans point
   const CHANGE_MS = 1900;
   const ENTRY_MS = 3000;

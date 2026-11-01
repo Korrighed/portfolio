@@ -155,7 +155,6 @@
   white-space: nowrap;
 }
 
-/* Panneau de reponse */
 .faq__plate {
   grid-column: 1 / -1;
   padding: var(--space-md) 0;

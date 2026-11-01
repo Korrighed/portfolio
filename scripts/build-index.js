@@ -18,7 +18,7 @@ const escapeHtml = (text) =>
 
 const pad = (n) => String(n).padStart(2, '0');
 
-// Boutons des questions (marqueur <!-- faq:tabs -->). Les roles ARIA sont poses par faq.js.
+// Les roles ARIA des onglets sont poses par faq.js.
 export function renderFaqTabs(items) {
   return items
     .map(
@@ -28,7 +28,6 @@ export function renderFaqTabs(items) {
     .join('\n');
 }
 
-// Panneaux de reponse (marqueur <!-- faq:panels -->).
 export function renderFaqPanels(items) {
   return items
     .map(
@@ -38,7 +37,6 @@ export function renderFaqPanels(items) {
     .join('\n');
 }
 
-// Donnees structurees schema.org FAQPage (marqueur <!-- faq:jsonld -->).
 export function renderFaqJsonLd(items) {
   const data = {
     '@context': 'https://schema.org',

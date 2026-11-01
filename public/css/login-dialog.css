@@ -102,3 +102,17 @@
     }
   }
 }
+
+/* Logo de l'IUT : l'image porte son propre fond clair */
+.login__iut {
+  align-self: flex-start;
+  display: inline-flex;
+  padding: 0;
+  background: var(--color-platinum);
+}
+
+.login__iut img {
+  display: block;
+  width: auto;
+  height: 3.75rem;
+}

@@ -288,7 +288,11 @@ if (section && canvas) {
   // Menu : on atterrit sur le projet entierement revele (fin de scene).
   function goTo(target) {
     let top;
-    if (target === 'faq') {
+    if (target === 'hero') {
+      const hero = document.querySelector('#hero');
+      if (!hero) return;
+      top = hero.getBoundingClientRect().top + window.scrollY;
+    } else if (target === 'faq') {
       const faq = document.querySelector('#faq');
       if (!faq) return;
       top = faq.getBoundingClientRect().top + window.scrollY;
@@ -359,6 +363,11 @@ if (section && canvas) {
       if (sheet.contains(element)) closeSheet({ restoreFocus: false });
       goTo(element.getAttribute('data-goto'));
     });
+  });
+
+  // « Espace enseignant » dans la vue laterale : on ferme la vue, login-dialog.js ouvre la fenetre de connexion.
+  sheet.querySelectorAll('a:not([data-goto])').forEach((link) => {
+    link.addEventListener('click', () => closeSheet({ restoreFocus: false }));
   });
 
   measureFlow();
