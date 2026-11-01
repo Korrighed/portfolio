@@ -104,7 +104,7 @@ sequenceDiagram
 | T-06 | `Cache-Control: private, no-store` sur `fiche-list`, `fiche-detail`, `pdf` | NF-04, NF-11 | `curl -I` avec cookie valide |
 | T-07 | `Secure` posé dès que la connexion est HTTPS (ne plus dépendre de `CONTEXT === 'production'`), y compris sur le cookie de déconnexion | NF-01 | Test sur un deploy-preview |
 | T-08 | Scripts CDN : version exacte conservée, ajout de `integrity` et `crossorigin="anonymous"` | NF-05 | Inspection de `index.template.html` ; console sans erreur SRI |
-| T-09 | Médias : `<img loading="lazy" decoding="async" width height>` dans `.frame__shot` ; GIF Twitch de 1,7 Mo, captures JPG de 45 à 155 Ko ; passage à webm/mp4 à décider (PRD, Questions ouvertes) | F-05, NF-06 | Onglet Réseau : aucun aperçu chargé avant d'approcher de la scène |
+| T-09 | Médias : GIF Twitch (`<img loading="lazy">`) ; autres projets en `<video muted loop playsinline preload="none" poster>` MP4 H.264 sans piste audio (0,1 à 1,1 Mo, `media-src 'self'`). `projets-scroll.js` ne joue que la vidéo du projet actif, section visible et onglet affiché, précharge la suivante, ne démarre rien sous `prefers-reduced-motion` ; bouton Pause / Lecture (WCAG 2.2.2) | F-05, NF-06 | Onglet Réseau : aucune vidéo chargée avant d'approcher de la section ; une seule vidéo en lecture |
 | T-10 | Sous `prefers-reduced-motion` ou sans JS : pas de `sticky`, pas de masquage des informations (les règles sont sous `@media (prefers-reduced-motion: no-preference)` et la classe `js`) ; le fond de points est dessiné une fois, sans boucle | F-16 | Émulation de la préférence : toutes les informations visibles par projet, aucun pin |
 | T-11 | Une information non révélée est `inert` (JS) et `visibility: hidden` (CSS) ; en mode lecture normale (`is-flow`), plus rien n'est masqué | NF-07 | Parcours Tab : aucun lien invisible focalisé |
 | T-16 | Une scène épinglée fait un écran : `measureFlow()` mesure `grid.scrollHeight` contre `clientHeight` et pose `is-flow` si le contenu est plus haut (petit mobile, paysage, zoom) | F-16 | À 700×340 : les 5 projets sont en lecture normale, tout visible, aucun défilement horizontal |
@@ -154,6 +154,7 @@ sequenceDiagram
 | 2026-09-22 | PDF dans Netlify Blobs (65c0cef) | Stockage local `storage/` | Pas de redéploiement pour un PDF |
 | 2026-10-26 | PRD = état cible ; pas de `DATA-MODEL` ; `APP-FLOW` réduit à des schémas ; direction artistique déplacée dans `DESIGN-BRIEF` | PRD de l'existant ; document de données | Demande d'Alex ; pas de base de données |
 | 2026-10-31 | Section Projets : scènes épinglées en CSS `sticky`, informations qui émergent sur place, fond de points en canvas 2D comme indicateur ; GSAP retiré | Garder GSAP (pin + scrub) ; cartes empilées sans pin ; carrousel horizontal ; vague de progression globale ; indicateur qui descend dans la scène | Alex : le lecteur ne doit pas se décaler dans un projet, le fond sert d'indicateur par projet ; moins de dépendances et plus de bug de pin ; maquette validée par Alex (artefact « Portfolio Dossier ») |
+| 2026-11-01 | Aperçus des projets en MP4 H.264 muet (bureau + mobile en incrustation) lus uniquement pour le projet actif | GIF (3 à 10 fois plus lourds) ; WebM en plus (non nécessaire) ; lecture permanente de toutes les vidéos | Poids, CPU, accessibilité |
 
 ## 10. Dette et risques connus
 
@@ -167,7 +168,7 @@ sequenceDiagram
 | `npm run dev` lent (voir ci-dessous) | Moyenne | Faible | Perte de temps à chaque session |
 | Aucun test, lint ni CI | Moyenne | Moyen | Régressions non détectées |
 | Fond de points en canvas : boucle `requestAnimationFrame` (~800 points) non mesurée sur appareil modeste | Faible | Faible | Saccades possibles ; la boucle est pausée hors de la section et onglet masqué |
-| Aperçus provisoires (`public/img/projets/`), Safe Campus sans aperçu | Faible | Faible | Rendu final dépend de captures propres d'Alex |
+| Vidéos non lisibles sans MP4/H.264 (navigateurs libres) | Faible | Faible | L'affiche JPG reste affichée |
 | Hero positionné en pixels absolus (`hero.css`) | Faible | Moyen | Mise en page fragile entre 48rem et grands écrans (à vérifier au navigateur) |
 | `main` toujours sur le scaffold Astro, 27 commits de retard | Faible | Faible | Confusion sur la branche de référence |
 | Dossier `storage/` et règles `.astro/`, `dist/` dans `.gitignore` obsolètes | Faible | Faible | Bruit |

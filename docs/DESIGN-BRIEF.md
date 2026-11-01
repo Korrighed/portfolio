@@ -82,7 +82,7 @@ Points sous le seuil (texte ≥ 4.5:1) :
 | Ressource | Format | Poids max | Chemin |
 |---|---|---|---|
 | Fond du hero | Canvas Vanta « dots » : points Powder Blue / Yale Blue sur Ink Black, taille 6.3, espacement 34 | — | script inline de `src/index.template.html` |
-| Aperçu de projet | Image ou gif dans un cadre de navigateur (`.frame`), ratio 16:9 en colonne large, `object-fit: cover` ; sur mobile le cadre prend la hauteur libre | gif Twitch : 1,7 Mo ; JPG 45 à 155 Ko ; budget à fixer (voir PRD, Questions ouvertes) | `public/video/twitch.gif`, `public/img/projets/*.jpg` (provisoires) |
+| Aperçu de projet | GIF (Twitch) ou vidéo MP4 muette en boucle (GW2, Hyperloop, Dice Roller, Safe Campus : bureau 1280×720 avec le mobile en incrustation) dans un cadre de navigateur (`.frame`), ratio 16:9 en colonne large, `object-fit: cover` ; en colonne unique la vidéo passe en `contain` (l'incrustation mobile n'est pas coupée). Bouton Pause / Lecture dans la barre du cadre | GIF Twitch : 1,7 Mo ; MP4 de 0,1 à 1,1 Mo ; affiche JPG de 60 à 130 Ko | `public/video/twitch.gif`, `public/video/{gw2,hyperloop,dice,safecampus}.mp4`, `public/img/projets/*.jpg` (affiches) |
 | Fond de la section Projets | Canvas 2D `#projets-bg`, points espacés de 34 px, Powder Blue qui glisse vers un bleu plus profond d'un projet à l'autre | — | Dessiné par `public/js/projets-scroll.js` |
 | Polices | TTF | — | `public/fonts/` |
 | Icônes | Aucune ; carré creux CSS pour le lien Espace enseignant, flèche `↗` en texte | — | — |

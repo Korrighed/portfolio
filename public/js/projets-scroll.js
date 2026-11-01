@@ -204,6 +204,37 @@ if (section && canvas) {
     );
   }
 
+  // ---------- Apercus animes ----------
+  // Une seule video joue : celle du projet actif, quand la section est a l'ecran.
+  // Sous reduced-motion rien ne demarre seul ; le bouton lance ou met en pause (choix du visiteur).
+  const videos = projects.map((project) => project.querySelector('.frame__video'));
+  const toggles = projects.map((project) => project.querySelector('.frame__toggle'));
+
+  function isWanted(video) {
+    return video.dataset.user ? video.dataset.user === 'play' : !reduceMotion.matches;
+  }
+
+  function syncVideos(inView) {
+    videos.forEach((video, index) => {
+      if (!video) return;
+      if (inView && (index === active || index === active + 1)) video.preload = 'auto';
+      const run = inView && !document.hidden && index === active && isWanted(video);
+      if (run && video.paused) video.play().catch(() => {});
+      else if (!run && !video.paused) video.pause();
+      const label = isWanted(video) ? 'Pause' : 'Lecture';
+      if (toggles[index] && toggles[index].textContent !== label) toggles[index].textContent = label;
+    });
+  }
+
+  toggles.forEach((button, index) => {
+    if (!button || !videos[index]) return;
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      videos[index].dataset.user = isWanted(videos[index]) ? 'pause' : 'play';
+      scheduleUpdate();
+    });
+  });
+
   let queued = false;
 
   function update() {
@@ -220,6 +251,7 @@ if (section && canvas) {
       setActive(current);
     }
     updateRippleCenter(current);
+    syncVideos(inView);
 
     if (inView && !document.hidden) startLoop();
     else stopLoop();
