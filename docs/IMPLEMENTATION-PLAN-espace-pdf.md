@@ -17,7 +17,7 @@ Mettre l'espace enseignant en état d'être distribué sur Netlify : PDF dépos�
 | 3 | Distribution | Site `kaporfolio` déjà relié à `Korrighed/portfolio` ; variables `SESSION_SECRET`, `AUTH_CODE`, `PDF_BLOB_STORE`, `NODE_VERSION` posées ; déploiement par push | Constaté avec le CLI |
 | 4 | Lien PDF | Grand bouton plein sous le sous-titre de chaque fiche | « L'attraction principale de la page » |
 | 5 | En-tête et pied de page | Clairs, mêmes styles que la barre de l'accueil (`nav.css`, `footer.css` + `site-footer--light`) | Demande d'Alex ; une seule source de style |
-| 6 | Hero | Deux blocs en position absolue, placés par quatre classes (`hero-pos-desktop-1/2`, `hero-pos-mobile-1/2`) en % du hero | Alex veut replacer le texte lui-même ; valeurs par défaut = placement d'origine |
+| 6 | Hero | Deux blocs en position absolue, placés par quatre classes (`hero-pos-desktop-1/2`, `hero-pos-mobile-1/2`) en % du hero | Alex veut replacer le texte lui-même ; valeurs choisies par Alex le 2026-11-01 |
 | 7 | Mentions légales | Page statique, contact par GitHub, aucune adresse email | NF-13 |
 | 8 | Logo IUT | `LogoIUT.png` avant la mention « Espace enseignant » (page des fiches et fenêtre de connexion) | Demande d'Alex |
 
@@ -46,7 +46,7 @@ Hors tâche : envoi des trois PDF dans le store Blobs `fiches-reflexives` (`netl
 | Syntaxe | `node --check` sur chaque fichier JS modifié ; accolades CSS équilibrées | passé |
 | Blobs | `blobs:list` puis `blobs:get` et comparaison SHA-256 des trois PDF | identiques |
 | Espace enseignant | Edge, 1920 à 320 px et 844×390 : débordement horizontal, en-tête, bouton PDF, pied de page | aucun débordement ; tient dans l'écran à 1280×720 et 1024×768 ; défilement normal sur mobile |
-| Hero | Edge, 11 tailles : texte hors écran, chevauchement, proximité du bouton | aucun problème ; à 1440×900 le texte est à 4 px au plus du placement d'origine |
+| Hero | Edge, 11 tailles : texte hors écran, chevauchement, proximité du bouton | aucun texte hors écran, chevauchement ni proximité du bouton, avec les valeurs d'Alex |
 | Menus | Edge, 390 px et 1280 px : « Accueil » ramène au hero ; « Espace enseignant » ferme la vue et ouvre la fenêtre | conforme |
 | Mentions légales | Edge, 1280 et 390 px | 200, cinq sections, aucun `@` ni `mailto:` |
 | Fenêtre de connexion | Edge avec le logo | s'ouvre, focus dans le champ, erreur, Échap, fond |
@@ -55,7 +55,7 @@ Hors tâche : envoi des trois PDF dans le store Blobs `fiches-reflexives` (`netl
 
 | Risque | Probabilité | Impact | Parade |
 |---|---|---|---|
-| Position absolue du hero : un texte peut sortir de l'écran ou chevaucher le bouton si Alex déplace trop | Moyenne | Faible | Valeurs par défaut vérifiées sur 11 tailles ; nombres en % commentés dans `hero.css` |
+| Position absolue du hero : un texte peut sortir de l'écran ou chevaucher le bouton si Alex déplace trop | Moyenne | Faible | Valeurs choisies par Alex vérifiées sur 11 tailles ; nombres en % commentés dans `hero.css` |
 | Adresse de Netlify, Inc. dans les mentions légales non confirmée | Moyenne | Faible | Alex vérifie sur netlify.com |
 | Adresse IP enregistrée par le compteur de connexion jamais purgée | Moyenne | Faible | Mentionnée dans les mentions légales ; purge à prévoir dans un lot séparé |
 | `text-wrap: balance` non pris en charge partout | Faible | Faible | Repli : retour à la ligne normal |

@@ -61,25 +61,25 @@
    ========================================================================== */
 @media (min-width: 48rem) {
   .hero-pos-desktop-1 {
-    top: 5.2%;
-    left: 13.7%;
+    top: 16.2%;
+    left: 21.7%;
   }
 
   .hero-pos-desktop-2 {
-    top: 34.9%;
-    right: 15.6%;
+    top: 40%;
+    right: 22%;
   }
 }
 
 @media (max-width: 47.9375rem) {
   .hero-pos-mobile-1 {
-    top: 29.3%;
+    top: 10%;
     left: 5.9%;
   }
 
   .hero-pos-mobile-2 {
-    top: 52.9%;
-    right: 5.9%;
+    top: 46%;
+    right: 8.9%;
   }
 }
 
