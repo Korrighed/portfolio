@@ -1,0 +1,118 @@
+/* Fenetre de connexion enseignant (sombre, comme les fiches) */
+.login {
+  width: min(92vw, 26rem);
+  max-height: 92vh;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--color-powder-blue) 28%, transparent);
+  background: var(--color-ink-black);
+  color: var(--color-platinum);
+}
+
+.login::backdrop {
+  background: rgb(8 17 26 / 72%);
+}
+
+.login__form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+}
+
+.login .text-eyebrow {
+  color: var(--color-powder-blue);
+}
+
+.login__title {
+  margin: 0;
+  font: 700 2rem / 1.1 var(--font-display-family);
+}
+
+.login__label {
+  font-size: 0.875rem;
+  color: var(--color-powder-blue);
+}
+
+.login__input {
+  min-height: 44px;
+  padding: 0 var(--space-sm);
+  background: var(--color-ink-black-3);
+  border: 1px solid color-mix(in srgb, var(--color-powder-blue) 40%, transparent);
+  color: var(--color-platinum);
+  font: inherit;
+}
+
+.login__submit {
+  min-height: 44px;
+  background: var(--color-powder-blue);
+  border: 0;
+  color: var(--color-ink-black);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login__submit:hover {
+  background: var(--color-platinum);
+}
+
+.login__submit:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.login__error {
+  margin: 0;
+  color: #ffb4ab;
+}
+
+.login__close {
+  position: absolute;
+  top: var(--space-xs);
+  right: var(--space-xs);
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: 0;
+  color: var(--color-powder-blue);
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.login__close:hover {
+  color: var(--color-platinum);
+}
+
+.login :focus-visible {
+  outline: 2px solid var(--color-powder-blue);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .login[open] {
+    animation: login-in 250ms ease;
+  }
+
+  @keyframes login-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+}
+
+/* Logo de l'IUT : l'image porte son propre fond clair */
+.login__iut {
+  align-self: flex-start;
+  display: inline-flex;
+  padding: 0;
+  background: var(--color-platinum);
+}
+
+.login__iut img {
+  display: block;
+  width: auto;
+  height: 3.75rem;
+}

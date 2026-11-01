@@ -1,0 +1,12 @@
+  <dialog id="login-dialog" class="login" aria-labelledby="login-title">
+    <form class="login__form" method="post" action="/api/login">
+      <button class="login__close" type="button" aria-label="Fermer" data-login-close><span aria-hidden="true">×</span></button>
+      <span class="login__iut"><img src="/img/logo/LogoIUT.png" alt="IUT, Université de la Nouvelle-Calédonie" width="375" height="181" /></span>
+      <span class="text-eyebrow">Espace enseignant</span>
+      <h2 id="login-title" class="login__title">Connexion</h2>
+      <p class="login__error" id="login-error" role="alert" hidden>Code incorrect.</p>
+      <label class="login__label" for="login-code">Code d'accès</label>
+      <input class="login__input" type="password" id="login-code" name="code" required autocomplete="current-password" />
+      <button class="login__submit" type="submit">Se connecter</button>
+    </form>
+  </dialog>

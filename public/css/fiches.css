@@ -1,0 +1,305 @@
+/* Espace enseignant : fiches reflexives. Reprend la scene a onglets de la FAQ (faq.css)
+   en version sombre (.faq--dark), entre un en-tete et un pied de page clairs.
+   Chargee apres nav.css, footer.css et faq.css. */
+body.espace {
+  display: flex;
+  flex-direction: column;
+  min-height: var(--vh-screen);
+  background: var(--color-ink-black);
+  color: var(--color-platinum);
+}
+
+/* main.css limite <main> a 48rem : la scene prend toute la largeur et toute la hauteur
+   libre entre l'en-tete et le pied de page */
+.espace__main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.espace .faq {
+  flex: 1;
+  min-height: 0;
+}
+
+/* En-tete clair : meme marque que l'accueil ; les liens restent visibles sur mobile (pas de menu replie) */
+.espace .nav__inner {
+  flex-wrap: nowrap;
+  gap: var(--space-sm);
+}
+
+.espace .espace__menu {
+  display: block;
+  width: auto;
+}
+
+.espace .nav__menu ul {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 0;
+}
+
+.espace .nav__menu a,
+.espace__logout {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.espace__logout {
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--color-yale-blue);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.espace__logout:hover {
+  color: var(--color-ink-black);
+}
+
+.espace .nav :focus-visible {
+  outline: 2px solid var(--color-yale-blue);
+  outline-offset: 3px;
+}
+
+.espace .site-footer__inner {
+  padding-block: var(--space-sm);
+}
+
+.fiches__author {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--faq-muted);
+}
+
+/* Logo de l'IUT : l'image porte son propre fond clair */
+.fiches__iut {
+  align-self: flex-start;
+  display: inline-flex;
+  padding: 0;
+  background: var(--color-platinum);
+}
+
+.fiches__iut img {
+  display: block;
+  width: auto;
+  height: 4.5rem;
+}
+
+.fiche__sub {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--faq-muted);
+}
+
+.fiche__cta {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: var(--space-sm);
+  min-height: 56px;
+  padding: 0.75rem 1.25rem;
+  background: var(--faq-accent);
+  border: 1px solid var(--faq-accent);
+  color: var(--faq-on-accent);
+  text-decoration: none;
+}
+
+.fiche__cta:hover {
+  background: var(--faq-fg);
+  border-color: var(--faq-fg);
+}
+
+.fiche__cta-icon {
+  flex: none;
+}
+
+.fiche__cta-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  line-height: 1.25;
+}
+
+.fiche__cta-label {
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.fiche__cta-meta {
+  font-size: 0.75rem;
+}
+
+.fiche__cta-arrow {
+  margin-left: auto;
+  padding-left: var(--space-xs);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fiche__cta {
+    transition: background-color 200ms ease, border-color 200ms ease;
+  }
+
+  .fiche__cta-arrow {
+    transition: transform 200ms ease;
+  }
+
+  .fiche__cta:hover .fiche__cta-arrow {
+    transform: translate(2px, -2px);
+  }
+}
+
+.fiche__cols {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.fiche__h {
+  margin: 0 0 var(--space-xs);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faq-accent);
+}
+
+.fiche__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--faq-muted);
+}
+
+.fiche__list li {
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+/* Puce : petit losange creux, clin d'oeil au logo */
+.fiche__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 6px;
+  height: 6px;
+  border: 1.5px solid var(--faq-accent);
+  transform: rotate(45deg);
+}
+
+/* Les competences sont l'information principale */
+.fiche__block--skills .fiche__list {
+  font-size: 1rem;
+  color: var(--faq-fg);
+}
+
+.fiche__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-md);
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--faq-muted);
+}
+
+.fiche__status {
+  color: var(--faq-fg);
+}
+
+.fiche__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+  color: var(--faq-fg);
+  text-decoration: underline;
+  text-decoration-color: var(--faq-accent);
+  text-underline-offset: 0.3em;
+}
+
+.fiche__link:hover {
+  color: var(--faq-accent);
+}
+
+@media (max-width: 48rem) {
+  .espace .nav__inner {
+    padding-inline: var(--space-sm);
+  }
+
+  .fiche__cta {
+    align-self: stretch;
+  }
+}
+
+/* Tres petit ecran : la marque garde le logo seul (il reste le lien vers l'accueil) pour laisser la place aux liens */
+@media (max-width: 30rem) {
+  .espace .nav__brand span {
+    display: none;
+  }
+}
+
+/* Menu a gauche (colonnes 1 a 4), fiche a droite (colonnes 5 a 12), deux colonnes de contenu */
+@media (min-width: 64rem) {
+  .espace .faq__head {
+    grid-column: 1 / span 4;
+  }
+
+  .espace .faq.is-tabs .faq__tabs {
+    grid-column: 1 / span 4;
+  }
+
+  .espace .faq__plate {
+    grid-column: 5 / span 8;
+    padding-inline-start: var(--space-lg);
+  }
+
+  .fiche__cols {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Ecrans bas (portables 1280x720, 1024x768) : en-tete, scene et pied de page tiennent dans l'ecran */
+@media (min-width: 64rem) and (max-height: 50rem) {
+  .espace .nav__inner {
+    padding-block: var(--space-xs);
+  }
+
+  .espace .faq__stage {
+    padding-block: var(--space-sm);
+  }
+
+  .espace .site-footer__inner {
+    padding-block: 0.75rem;
+  }
+}
+
+/* Tres petit ecran : le pied de page s'empile et se centre */
+@media (max-width: 30rem) {
+  .espace .site-footer__inner {
+    flex-direction: column;
+    gap: var(--space-xs);
+    text-align: center;
+  }
+
+  .espace .site-footer__links {
+    justify-content: center;
+  }
+}

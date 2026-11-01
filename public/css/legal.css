@@ -1,0 +1,64 @@
+.legal__bar {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: var(--space-sm) var(--space-sm) 0;
+}
+
+.legal__back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--color-yale-blue);
+  font-weight: 500;
+}
+
+.legal__back:hover {
+  color: var(--color-ink-black);
+}
+
+.legal {
+  max-width: 40rem;
+  padding: var(--space-md) var(--space-sm) var(--space-xl);
+  line-height: 1.6;
+}
+
+.legal h1 {
+  margin: 0 0 var(--space-md);
+  font: var(--font-display);
+}
+
+.legal h2 {
+  margin: var(--space-lg) 0 var(--space-xs);
+  font-size: 1.125rem;
+  line-height: 1.3;
+  color: var(--color-yale-blue);
+}
+
+.legal p,
+.legal ul {
+  margin: 0 0 var(--space-sm);
+}
+
+.legal ul {
+  padding-left: 1.25rem;
+}
+
+.legal li + li {
+  margin-top: 0.5rem;
+}
+
+.legal a {
+  color: var(--color-yale-blue);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.legal a:hover {
+  color: var(--color-ink-black);
+}
+
+.legal :focus-visible,
+.legal__back:focus-visible {
+  outline: 2px solid var(--color-yale-blue);
+  outline-offset: 3px;
+}

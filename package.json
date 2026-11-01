@@ -4,14 +4,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview"
+    "build": "node scripts/build-index.js",
+    "predev": "node scripts/build-index.js",
+    "dev": "netlify dev"
   },
   "dependencies": {
-    "astro": "^5.0.0",
-    "@astrojs/node": "^9.0.0",
-    "iron-session": "^8.0.0",
-    "bcryptjs": "^2.4.3"
+    "@netlify/blobs": "^10.7.10",
+    "iron-session": "^8.0.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^27.0.1",
+    "vite": "^5.4.21"
   }
 }

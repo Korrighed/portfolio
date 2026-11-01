@@ -1,0 +1,124 @@
+@font-face {
+  font-family: 'Libre Caslon Text';
+  src: url('/fonts/LibreCaslonText-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Libre Caslon Text';
+  src: url('/fonts/LibreCaslonText-Italic.ttf') format('truetype');
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Libre Caslon Text';
+  src: url('/fonts/LibreCaslonText-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inria Serif';
+  src: url('/fonts/InriaSerif-Bold.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  /* Palette */
+  --color-ink-black: #0d1821;
+  --color-ink-black-3: #0b141c;
+  --color-yale-blue: #344966;
+  --color-powder-blue: #b4cded;
+  --color-powder-blue-light: #dce6f1;
+  --color-platinum: #f0f4ef;
+  --color-slate: #6d7d8e;
+  --color-slate-dark: #3c4a56;
+
+  /* Echelle d'espacement (base 8px) */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+
+  /* Typo partagee (eviter la duplication entre main.css/faq.css/projets.css) */
+  --font-mono: ui-monospace, monospace;
+  --font-display-family: 'Inria Serif', serif;
+  --font-display: 700 2.25rem/1.15 var(--font-display-family);
+
+  /* Hauteur d'un ecran plein (sections Projets et FAQ) : svh = avec les barres du navigateur affichees */
+  --vh-screen: 100vh;
+}
+
+@supports (height: 100svh) {
+  :root {
+    --vh-screen: 100svh;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--color-platinum);
+  color: var(--color-ink-black);
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Contenu generique (login, fiches...) */
+main {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: var(--space-lg);
+}
+
+.error {
+  color: #b3261e;
+}
+
+/* Typo "eyebrow" (label court, majuscules, tracking large) */
+.text-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-yale-blue);
+}
+
+/* Lien "espace enseignant", reutilise dans nav/footer */
+.private-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-slate);
+}
+
+.private-link span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border: 1.5px solid currentColor;
+}

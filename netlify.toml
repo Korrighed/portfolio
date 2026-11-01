@@ -1,0 +1,51 @@
+[build]
+  command = "npm run build"
+  publish = "public"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+# Pages et assets statiques. Les reponses des fonctions n'heritent pas de ces
+# en-tetes (cf. lib/security-headers.js).
+# script-src et style-src 'self' : aucun script ni style en ligne, aucun CDN (Three.js et Vanta sont dans public/vendor/).
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+
+[dev]
+  command = "vite"
+  targetPort = 5173
+  publish = "public"
+  functions = "netlify/functions"
+  autoLaunch = false
+
+[[redirects]]
+  from = "/fiches-reflexives"
+  to = "/.netlify/functions/fiche-list"
+  status = 200
+
+[[redirects]]
+  from = "/fiches-reflexives/:id"
+  to = "/.netlify/functions/fiche-detail?id=:id"
+  status = 200
+
+[[redirects]]
+  from = "/api/pdf/:id"
+  to = "/.netlify/functions/pdf?id=:id"
+  status = 200
+
+[[redirects]]
+  from = "/api/login"
+  to = "/.netlify/functions/login"
+  status = 200
+
+[[redirects]]
+  from = "/api/logout"
+  to = "/.netlify/functions/logout"
+  status = 200

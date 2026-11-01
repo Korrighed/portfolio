@@ -1,0 +1,354 @@
+/* Separateur entre projets et FAQ */
+.section-divider {
+  background: var(--color-ink-black-3);
+  padding: 2rem 0;
+}
+
+.section-divider__inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.section-divider__line {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-yale-blue) 12%, var(--color-yale-blue) 88%, transparent);
+}
+
+.section-divider__marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: var(--color-ink-black);
+  border: 1px solid var(--color-powder-blue);
+}
+
+/* ---------- FAQ : une scene d'un ecran, fond uni (aucun point) ---------- */
+/* Jetons de theme : clair par defaut (accueil), sombre avec .faq--dark (espace enseignant) */
+.faq {
+  --faq-bg: var(--color-platinum);
+  --faq-fg: var(--color-ink-black);
+  --faq-muted: var(--color-slate-dark);
+  --faq-accent: var(--color-yale-blue);
+  --faq-on-accent: var(--color-platinum);
+  --faq-line: var(--color-powder-blue);
+  --faq-dot: 52, 73, 102; /* Yale Blue, en rgb pour le canvas */
+  display: flex;
+  flex-direction: column;
+  min-height: var(--vh-screen);
+  background: var(--faq-bg);
+  color: var(--faq-fg);
+}
+
+.faq--dark {
+  --faq-bg: var(--color-ink-black);
+  --faq-fg: var(--color-platinum);
+  --faq-muted: var(--color-powder-blue);
+  --faq-accent: var(--color-powder-blue);
+  --faq-on-accent: var(--color-ink-black);
+  --faq-line: color-mix(in srgb, var(--color-powder-blue) 28%, transparent);
+  --faq-dot: 180, 205, 237; /* Powder Blue */
+}
+
+.faq .text-eyebrow {
+  color: var(--faq-accent);
+}
+
+.faq :focus-visible {
+  outline: 2px solid var(--faq-accent);
+  outline-offset: 3px;
+}
+
+/* Scene : le canvas de fond couvre toute la zone, sous le texte */
+.faq__scene {
+  position: relative;
+  display: flex;
+  flex: 1;
+}
+
+.faq__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.faq__stage {
+  flex: 1;
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: var(--space-lg);
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-sm) var(--space-md);
+  align-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.faq__head {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.faq__title {
+  margin: 0;
+  font: 700 clamp(2rem, 4vw, 3.25rem) / 1.1 var(--font-display-family);
+}
+
+/* Onglets : caches sans JavaScript (les reponses restent a la suite) */
+.faq__tabs {
+  display: none;
+}
+
+.faq.is-tabs .faq__tabs {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.faq__tab {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--faq-line);
+  color: var(--faq-accent);
+  font: inherit;
+  cursor: pointer;
+}
+
+.faq__tab:hover {
+  border-color: var(--faq-accent);
+}
+
+.faq__tab[aria-selected='true'] {
+  background: var(--faq-accent);
+  border-color: var(--faq-accent);
+  color: var(--faq-on-accent);
+}
+
+.faq__num {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+/* Sous 64rem le libelle n'est lu que par les lecteurs d'ecran */
+.faq__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.faq__plate {
+  grid-column: 1 / -1;
+  padding: var(--space-md) 0;
+}
+
+/* Sans JavaScript : toutes les reponses a la suite */
+.faq__panels {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.faq__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* Avec JavaScript : les panneaux sont empiles dans la meme cellule, la hauteur du
+   panneau est celle de la reponse la plus longue : rien ne bouge au changement. */
+.faq.is-tabs .faq__panels {
+  display: grid;
+}
+
+.faq.is-tabs .faq__panel {
+  grid-area: 1 / 1;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.faq.is-tabs .faq__panel.is-active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.faq__count {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.14em;
+  color: var(--faq-accent);
+}
+
+.faq__q {
+  margin: 0;
+  font: 700 1.5rem / 1.2 var(--font-display-family);
+}
+
+.faq__a {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--faq-muted);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .faq__tab {
+    transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+  }
+
+  .faq.is-tabs .faq__panel {
+    filter: blur(6px);
+    transition: opacity 300ms ease, filter 300ms ease, visibility 0s linear 300ms;
+  }
+
+  .faq.is-tabs .faq__panel.is-active {
+    filter: none;
+    transition-delay: 0s;
+  }
+}
+
+/* Deux colonnes : liste a gauche, panneau a droite (grille 12 colonnes, comme les scenes) */
+@media (min-width: 64rem) {
+  .faq__head {
+    grid-column: 1 / span 5;
+  }
+
+  .faq.is-tabs .faq__tabs {
+    grid-column: 1 / span 5;
+    grid-row: 2;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .faq__plate {
+    grid-column: 7 / span 6;
+    grid-row: 1 / span 2;
+    align-self: center;
+    padding: 0;
+  }
+
+  .faq__tab {
+    grid-template-columns: 3rem 1fr;
+    place-items: normal;
+    align-items: baseline;
+    width: 100%;
+    height: auto;
+    min-height: 44px;
+    padding: var(--space-sm) 0;
+    border: 0;
+    border-top: 1px solid var(--faq-line);
+    color: var(--faq-muted);
+    text-align: left;
+  }
+
+  .faq__tab:last-child {
+    border-bottom: 1px solid var(--faq-line);
+  }
+
+  .faq__tab:hover {
+    color: var(--faq-fg);
+  }
+
+  .faq__tab[aria-selected='true'] {
+    background: none;
+    border-top-color: var(--faq-accent);
+    color: var(--faq-fg);
+  }
+
+  .faq__num {
+    color: var(--faq-accent);
+  }
+
+  .faq__num::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: 0.5rem;
+    border: 1.5px solid currentColor;
+    transform: rotate(45deg);
+    vertical-align: middle;
+    opacity: 0;
+  }
+
+  .faq__tab[aria-selected='true'] .faq__num::before {
+    opacity: 1;
+  }
+
+  .faq__label {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+    font-size: 1rem;
+    line-height: 1.35;
+    font-weight: 500;
+  }
+
+  .faq__q {
+    font-size: clamp(1.5rem, 2.4vw, 2.125rem);
+  }
+
+  .faq__a {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+}
+
+/* Ecran bas : on compacte pour que tout tienne sans defilement */
+@media (min-width: 64rem) and (max-height: 800px) {
+  .faq__stage {
+    padding-block: var(--space-md);
+  }
+
+  .faq__tab {
+    padding-block: 0.75rem;
+  }
+
+  .faq__a {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 63.99rem) and (max-height: 800px) {
+  .faq__stage {
+    padding-block: var(--space-sm);
+  }
+
+  .faq__q {
+    font-size: 1.375rem;
+  }
+
+  .faq__a {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+}
+
+@media (max-width: 48rem) {
+  .faq__stage {
+    padding-inline: var(--space-sm);
+  }
+}

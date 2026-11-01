@@ -1,0 +1,827 @@
+/* Section Projets : une scene plein ecran par projet.
+   Le contenu ne bouge pas : projets-scroll.js fait emerger les informations sur
+   place (fondu depuis le flou) selon la progression du scroll dans le projet, et
+   le fond de points (#projets-bg) s'allume en cercle depuis l'apercu : c'est
+   l'indicateur de progression. Menu des projets : fixe a gauche, vue laterale
+   sous 48rem.
+   Sans JS, ou avec prefers-reduced-motion, chaque projet reste une scene d'au
+   moins un ecran, tout visible, sans pin ni reveal. */
+#projets {
+  --projets-abyss: #08111a;
+  --projets-side: calc(var(--space-lg) + 7.5rem + var(--space-md));
+  --projets-vh: var(--vh-screen);
+  --projets-travel: calc(var(--projets-vh) * 1.9);
+  --projets-bar-h: calc(44px + env(safe-area-inset-top, 0px));
+  --projets-line: color-mix(in srgb, var(--color-powder-blue) 28%, transparent);
+  position: relative;
+  /* Le canvas sticky #projets-bg ne doit pas se peindre sur la section suivante */
+  overflow: clip;
+  background: linear-gradient(
+    var(--color-ink-black) 0,
+    var(--color-ink-black-3) 14%,
+    var(--projets-abyss) 85%,
+    var(--color-ink-black-3) 100%
+  );
+  color: var(--color-platinum);
+}
+
+#projets :focus-visible {
+  outline: 2px solid var(--color-powder-blue);
+  outline-offset: 3px;
+}
+
+/* ---------- Fond de points : sticky dans #projets, absent hors de la section ---------- */
+.projets-bg {
+  position: sticky;
+  top: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: var(--projets-vh);
+  margin-bottom: calc(-1 * var(--projets-vh));
+  pointer-events: none;
+}
+
+/* ---------- Un projet = une scene ---------- */
+.project {
+  position: relative;
+  z-index: 1;
+}
+
+.project__stage {
+  position: relative;
+  box-sizing: border-box;
+  min-height: var(--projets-vh);
+  padding: var(--space-xl) var(--space-lg) var(--space-xl) var(--projets-side);
+}
+
+.project__grid {
+  box-sizing: border-box;
+  height: 100%;
+  max-width: 78rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  grid-template-areas: 'head shot' 'facts facts' 'foot foot';
+  gap: var(--space-md) var(--space-xl);
+}
+
+.project__head {
+  grid-area: head;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  min-width: 0;
+}
+
+.project__shot {
+  grid-area: shot;
+  align-self: center;
+  min-width: 0;
+}
+
+.project__foot {
+  grid-area: foot;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 var(--space-lg);
+  min-width: 0;
+}
+
+.project__name {
+  margin: 0;
+  font-family: var(--font-display-family);
+  font-weight: 700;
+  font-size: clamp(2.75rem, 5.4vw, 5rem);
+  line-height: 1.05;
+  text-wrap: balance;
+  color: var(--color-platinum);
+}
+
+.project__sub {
+  margin: var(--space-xs) 0 0;
+  font-size: 1.125rem;
+  color: var(--color-powder-blue);
+}
+
+.project__synopsis {
+  margin: 0;
+  max-width: 36rem;
+  font-size: 1.125rem;
+  line-height: 1.65;
+  color: var(--color-powder-blue);
+}
+
+.project code {
+  font-family: var(--font-mono);
+  font-size: 0.8125em;
+  padding: 0.15em 0.35em;
+  background: color-mix(in srgb, var(--color-platinum) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-powder-blue) 40%, transparent);
+  color: var(--color-powder-blue);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  background: color-mix(in srgb, var(--color-platinum) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-powder-blue) 50%, transparent);
+  color: var(--color-powder-blue);
+}
+
+/* Logo de la technologie, en couleurs d'origine, decoratif */
+.tag__icon {
+  flex: none;
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* Points cles : un filet par point, pas de puce (la structure suffit). */
+.project__facts {
+  grid-area: facts;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-lg);
+}
+
+.project__facts--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+
+.project__facts li {
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--projets-line);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: var(--color-platinum);
+}
+
+.project__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-md);
+  margin: 0;
+}
+
+.project__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-platinum);
+  text-decoration: underline;
+  text-decoration-color: var(--color-powder-blue);
+  text-underline-offset: 0.3em;
+}
+
+.project__links a:hover {
+  color: var(--color-powder-blue);
+}
+
+/* Indice de defilement : le trait du hero, rappel discret de l'identite. */
+.project__cue {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 1px;
+  height: 2.5rem;
+  background: linear-gradient(var(--color-powder-blue), transparent);
+  transform-origin: top;
+  animation: projets-dive 3.6s ease-in-out infinite;
+  transition: opacity 400ms;
+}
+
+.project.is-done .project__cue {
+  opacity: 0;
+}
+
+@keyframes projets-dive {
+  0% {
+    transform: scaleY(0.35);
+    opacity: 0.4;
+  }
+
+  60% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scaleY(1);
+    opacity: 0.35;
+  }
+}
+
+/* ---------- Cadre de navigateur : l'adresse est le lien du site ---------- */
+.frame {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid var(--projets-line);
+}
+
+.frame::before {
+  content: '';
+  position: absolute;
+  inset: 0.75rem -0.75rem -0.75rem 0.75rem;
+  z-index: -1;
+  background: var(--color-yale-blue);
+}
+
+.frame__bar {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-sm);
+  border-bottom: 1px solid var(--projets-line);
+  background: var(--color-ink-black);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--color-powder-blue);
+  overflow: hidden;
+}
+
+.frame__bar a {
+  color: var(--color-platinum);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.frame__bar a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.frame__shot {
+  margin: 0;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--color-ink-black-3);
+}
+
+.frame__shot img,
+.frame__shot video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Pause de l'apercu anime (visible seulement avec JS) */
+.frame__toggle:not([hidden]) {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  flex: none;
+  min-width: 44px;
+  margin: 0 calc(var(--space-sm) * -1) 0 auto;
+  padding: 0 var(--space-sm);
+  border: 0;
+  border-left: 1px solid var(--projets-line);
+  background: transparent;
+  color: var(--color-powder-blue);
+  font: inherit;
+  cursor: pointer;
+}
+
+.frame__toggle:hover {
+  color: var(--color-platinum);
+}
+
+/* ---------- Emergence des informations : uniquement avec JS et sans reduced-motion ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .js .project {
+    height: calc(var(--projets-vh) + var(--projets-travel));
+  }
+
+  .js .project__stage {
+    position: sticky;
+    top: 0;
+    height: var(--projets-vh);
+  }
+
+  .js .step {
+    opacity: 0;
+    visibility: hidden;
+    filter: blur(6px);
+    transition: opacity 700ms ease, filter 700ms ease, visibility 0s 700ms;
+  }
+
+  .js .step.is-on {
+    opacity: 1;
+    visibility: visible;
+    filter: none;
+    transition-delay: 0s;
+  }
+
+  /* Ecran trop bas pour la scene (mesure par projets-scroll.js) : lecture normale,
+     sans pin, tout visible, plutot que de couper le bas du projet. */
+  .js .project.is-flow {
+    height: auto;
+  }
+
+  .js .project.is-flow .project__stage {
+    position: static;
+    height: auto;
+    min-height: var(--projets-vh);
+  }
+
+  .js .project.is-flow .step {
+    opacity: 1;
+    visibility: visible;
+    filter: none;
+    transition: none;
+  }
+}
+
+/* ---------- Menu des projets, a gauche ---------- */
+.projets-nav {
+  position: fixed;
+  left: var(--space-lg);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+}
+
+/* Menu et barre de section : meme apparition, seulement pendant la section. */
+.projets-nav,
+.projets-bar {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 300ms, visibility 0s 300ms;
+}
+
+.projets-nav.is-visible,
+.projets-bar.is-visible {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+.projets-nav ul,
+.projets-sheet ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.projets-nav ul {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.projets-nav__link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding-left: var(--space-sm);
+  border-left: 2px solid transparent;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: var(--color-powder-blue);
+  transition: color 200ms, border-color 200ms;
+}
+
+.projets-nav__link:hover {
+  color: var(--color-platinum);
+}
+
+.projets-nav__link[aria-current='true'] {
+  color: var(--color-platinum);
+  border-left-color: var(--color-powder-blue);
+}
+
+/* Lien de retour au hero, en tete de menu */
+.projets-nav__top {
+  margin-bottom: var(--space-xs);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--projets-line);
+}
+
+.projets-nav__top .projets-nav__link {
+  font-weight: 600;
+  color: var(--color-platinum);
+}
+
+.projets-nav__cta {
+  margin-top: var(--space-xs);
+  padding-top: var(--space-xs);
+  border-top: 1px solid var(--projets-line);
+}
+
+.projets-nav__cta .projets-nav__link {
+  font-weight: 600;
+  color: var(--color-platinum);
+}
+
+/* Barre de section et vue laterale : mobile uniquement (cf. media 48rem). */
+.projets-bar,
+.projets-scrim,
+.projets-sheet {
+  display: none;
+}
+
+/* ---------- Ecrans bas (portables 13-14") ---------- */
+@media (max-height: 800px) {
+  .project__stage {
+    padding-block: var(--space-lg);
+  }
+
+  .project__name {
+    font-size: clamp(2.25rem, 4.4vw, 3.75rem);
+  }
+
+  .project__synopsis {
+    font-size: 1rem;
+  }
+
+  .project__head {
+    gap: var(--space-sm);
+  }
+
+  .project__facts li {
+    padding-top: var(--space-xs);
+    font-size: 0.9375rem;
+  }
+}
+
+/* ---------- Etroit : une colonne. Le resume laisse la place aux points cles (meme cellule). ---------- */
+@media (max-width: 64rem) {
+  .project__grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-template-areas: 'shot' 'title' 'tags' 'text' 'foot';
+    align-content: center;
+    gap: var(--space-sm);
+  }
+
+  .project__head {
+    display: contents;
+  }
+
+  .project__shot {
+    align-self: start;
+  }
+
+  .project__title {
+    grid-area: title;
+  }
+
+  .project__head > .tags {
+    grid-area: tags;
+  }
+
+  .project__synopsis,
+  .project__facts {
+    grid-area: text;
+  }
+
+  .project__facts,
+  .project__facts--4 {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xs);
+  }
+
+  .js .step.is-gone {
+    opacity: 0;
+    visibility: hidden;
+    filter: blur(6px);
+  }
+
+  /* Lecture normale : le resume et les points cles s'affichent l'un sous l'autre. */
+  .project.is-flow .project__grid {
+    grid-template-rows: none;
+    grid-template-areas: 'shot' 'title' 'tags' 'synopsis' 'facts' 'foot';
+    align-content: start;
+  }
+
+  .project.is-flow .project__synopsis {
+    grid-area: synopsis;
+  }
+
+  .project.is-flow .project__facts {
+    grid-area: facts;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 48rem) {
+  .projets-nav {
+    display: none;
+  }
+
+  /* Barre de section au-dessus du projet : "Projets" puis le projet en cours. */
+  .projets-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    box-sizing: border-box;
+    height: var(--projets-bar-h);
+    padding: env(safe-area-inset-top, 0px) max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));
+    background: color-mix(in srgb, var(--color-ink-black) 90%, transparent);
+    border-bottom: 1px solid var(--projets-line);
+  }
+
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .projets-bar {
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+  }
+
+  .projets-bar__label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    min-width: 0;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--color-powder-blue);
+  }
+
+  .projets-bar__label b {
+    flex: none;
+    font-weight: 600;
+    color: var(--color-platinum);
+  }
+
+  .projets-bar__name {
+    min-width: 0;
+    padding-left: var(--space-xs);
+    border-left: 1px solid var(--projets-line);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .projets-bar__menu {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-right: -14px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--color-powder-blue);
+    cursor: pointer;
+  }
+
+  .projets-bar__menu:hover,
+  .projets-bar__menu[aria-expanded='true'] {
+    color: var(--color-platinum);
+    border-color: var(--projets-line);
+  }
+
+  .projets-bar__bars {
+    width: 16px;
+    height: 10px;
+    background:
+      linear-gradient(currentColor, currentColor) top / 100% 2px no-repeat,
+      linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat,
+      linear-gradient(currentColor, currentColor) bottom / 100% 2px no-repeat;
+  }
+
+  /* Vue laterale : moitie de l'ecran, pleine hauteur, fond plein. */
+  .projets-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    display: block;
+    background: color-mix(in srgb, var(--projets-abyss) 60%, transparent);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 300ms, visibility 0s 300ms;
+  }
+
+  .projets-sheet {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: max(50vw, 12.5rem);
+    padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) 0;
+    background: var(--color-ink-black);
+    border-left: 1px solid var(--projets-line);
+    box-shadow: -16px 0 32px rgba(0, 0, 0, 0.35);
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), visibility 0s 300ms;
+  }
+
+  .projets-scrim.is-open {
+    opacity: 1;
+  }
+
+  .projets-sheet.is-open {
+    transform: none;
+  }
+
+  .projets-scrim.is-open,
+  .projets-sheet.is-open {
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .projets-sheet__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: none;
+    min-height: 44px;
+    padding-left: var(--space-sm);
+    border-bottom: 1px solid var(--projets-line);
+  }
+
+  .projets-sheet__title {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--color-platinum);
+  }
+
+  .projets-sheet__close {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: none;
+    border: 0;
+    color: var(--color-powder-blue);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .projets-sheet__close:hover {
+    color: var(--color-platinum);
+  }
+
+  .projets-sheet nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .projets-sheet ul {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-xs) 0 var(--space-sm);
+  }
+
+  .projets-sheet .projets-nav__link {
+    min-height: 48px;
+  }
+
+  .projets-sheet .projets-nav__cta {
+    margin-top: auto;
+  }
+
+  /* Sous la barre de section. */
+  .project__stage {
+    padding: calc(var(--projets-bar-h) + 0.75rem) max(16px, env(safe-area-inset-right, 0px)) var(--space-md) max(16px, env(safe-area-inset-left, 0px));
+  }
+
+  /* L'apercu prend la hauteur libre : la scene remplit tout l'ecran. */
+  .project__grid {
+    grid-template-rows: minmax(11rem, 1fr) auto auto auto auto;
+    align-content: stretch;
+  }
+
+  .project__shot {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .project__shot .frame {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .project__shot .frame__shot {
+    flex: 1;
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+
+  /* La boite n'est plus en 16:9 : on garde la video entiere (le mobile en incrustation serait coupe). */
+  .project__shot .frame__shot video {
+    object-fit: contain;
+  }
+
+  .project__name {
+    font-size: clamp(2rem, 9vw, 2.5rem);
+  }
+
+  .project__sub {
+    font-size: 1rem;
+  }
+
+  .project__synopsis {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .frame__bar {
+    min-height: 40px;
+    font-size: 0.75rem;
+  }
+
+  .project__facts li {
+    padding-top: 0.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+
+  /* Lecture normale (ecran trop bas) : l'apercu retrouve son ratio 16:9. */
+  .project.is-flow .project__shot,
+  .project.is-flow .project__shot .frame {
+    display: block;
+  }
+
+  .project.is-flow .project__shot .frame__shot {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* Mobile bas (iPhone SE, navigateur avec barres) : on resserre avant de basculer en lecture normale. */
+@media (max-width: 48rem) and (max-height: 760px) {
+  .project__stage {
+    padding-bottom: var(--space-sm);
+  }
+
+  .project__grid {
+    grid-template-rows: minmax(6rem, 1fr) auto auto auto auto;
+    gap: 0.5rem;
+  }
+
+  .project__name {
+    font-size: 1.75rem;
+  }
+
+  .project__sub,
+  .project__synopsis {
+    font-size: 0.875rem;
+  }
+
+  .project__facts li {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    padding-top: 0.35rem;
+  }
+
+  .tag {
+    font-size: 0.6875rem;
+    padding: 0.15rem 0.4rem;
+  }
+
+  .project__links a {
+    min-height: 40px;
+    font-size: 0.8125rem;
+  }
+}

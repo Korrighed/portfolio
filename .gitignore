@@ -5,3 +5,7 @@ dist/
 
 storage/fiches-reflexives/*
 !storage/fiches-reflexives/.gitkeep
+
+# Local Netlify folder
+.netlify
+deno.lock

@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="fr">
+<!-- GENERE depuis src/index.template.html + src/sections/*.html par scripts/build-index.js. Ne pas editer directement, relancer npm run build. -->
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alex, développeur full stack applicatif | Portfolio</title>
+  <meta name="description" content="Portfolio d'Alex, développeur full stack applicatif : projets, profil et réponses aux questions fréquentes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:title" content="Alex, développeur full stack applicatif" />
+  <meta property="og:description" content="Portfolio d'Alex, développeur full stack applicatif : projets, profil et réponses aux questions fréquentes." />
+  <meta property="og:site_name" content="korrighed.dev" />
+  <meta property="og:url" content="https://kaporfolio.netlify.app/" />
+  <meta property="og:image" content="https://kaporfolio.netlify.app/img/og-image.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Alex, développeur full stack : points animés sur fond sombre, « Créateur d'application »" />
+  <link rel="canonical" href="https://kaporfolio.netlify.app/" />
+  <meta name="theme-color" content="#f0f4ef" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Quel est mon profil de développeur ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Je suis capable de travailler aussi bien sur le front que sur le back, avec une préférence marquée pour l'applicatif et le back. Mon objectif est toujours de traduire les règles et les besoins métier en un outil qui facilite le quotidien."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Est-ce que je suis capable de travailler en équipe ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui. J'ai assuré la gestion de différents projets en tant que développeur junior, ainsi que l'infrastructure de certains d'entre eux. Je maîtrise des outils comme Git Flow et GitLab pour faciliter au mieux le travail en équipe."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Est-ce que je travaille en architecture distribuée ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui. Je sais m'adapter aux différentes technologies, qu'il s'agisse de SOAP ou de REST. Concernant le MCP (Model Context Protocol), c'est une compétence que je suis encore en train de développer."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Est-ce que j'utilise l'IA pour coder ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui, principalement Claude Code. J'accorde un effort particulier au travail préparatoire : le choix de la technologie et l'identification du besoin, via des documents comme les PRD et les TRD, pour cadrer au mieux le développement avec ces nouveaux outils. J'essaie aussi d'exploiter les agents au mieux, en les répartissant entre plusieurs tâches et flux de travail."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Est-ce que je suis capable de respecter et de créer une identité visuelle ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ce n'est pas mon domaine d'expertise. En revanche, je sais parfaitement créer ou respecter une identité visuelle propre et cohérente pour chaque projet."
+      }
+    }
+  ]
+}
+  </script>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="/css/nav.css" />
+  <link rel="stylesheet" href="/css/hero.css" />
+  <link rel="stylesheet" href="/css/projets.css" />
+  <link rel="stylesheet" href="/css/faq.css" />
+  <link rel="stylesheet" href="/css/footer.css" />
+  <link rel="stylesheet" href="/css/login-dialog.css" />
+</head>
+
+<body>
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="nav__brand" href="/" aria-label="korrighed.dev, accueil">
+        <img class="nav__logo" src="/img/logo/logo-ka-intro.svg" alt="" width="43" height="40">
+        <span>korrighed.dev</span>
+      </a>
+
+      <button class="nav__toggle" type="button" aria-controls="nav-menu" aria-expanded="false"
+        aria-label="Ouvrir le menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav id="nav-menu" class="nav__menu">
+        <ul>
+          <li><a href="#projets">Projets</a></li>
+          <li><a href="#faq">Questions</a></li>
+          <li><a class="nav__github" href="https://github.com/Korrighed" target="_blank" rel="noopener" aria-label="GitHub /Korrighed"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>/Korrighed</a></li>
+          <li><a class="private-link" href="/login.html"><img class="private-link__logo" src="/img/logo/LogoIUT.png" alt="" width="375" height="181">Espace enseignant</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section id="hero" class="hero">
+    <div class="hero-blocks">
+      <div class="hero-block hero-block-1 hero-pos-desktop-1 hero-pos-mobile-1">
+        <span class="hero-block__portfolio">
+          <span class="hero-block__name">Alex</span>
+          <span class="hero-block__role">Développeur full stack</span>
+        </span>
+      </div>
+      <div class="hero-block hero-block-2 hero-pos-desktop-2 hero-pos-mobile-2">
+        <span class="hero-block__subtitle">Créateur d'application</span>
+      </div>
+    </div>
+    <a href="#projets" aria-label="Aller aux projets" class="hero__scroll">
+      <span class="hero__scroll-label">Projets</span>
+      <span class="hero__scroll-line"></span>
+    </a>
+  </section>
+
+  <section id="projets" aria-label="Projets">
+    <script src="/js/js-flag.js"></script>
+    <canvas id="projets-bg" class="projets-bg" aria-hidden="true"></canvas>
+
+    <section class="project" id="projet-1" aria-labelledby="projet-1-titre" data-short="Vitrine Twitch">
+      <div class="project__stage">
+        <div class="project__grid">
+          <div class="project__head">
+            <div class="step project__title" data-step="1" data-mstep="2">
+              <h2 class="project__name" id="projet-1-titre">Vitrine créateur Twitch</h2>
+              <p class="project__sub">Gestion des secrets via Netlify</p>
+            </div>
+            <div class="step tags" data-step="2">
+              <span class="tag"><img class="tag__icon" src="/img/tech/vite.svg" alt="" width="14" height="14">Vite</span>
+              <span class="tag"><img class="tag__icon" src="/img/tech/javascript.svg" alt="" width="14" height="14">Vanilla JS</span>
+              <span class="tag"><img class="tag__icon" src="/img/tech/netlify.svg" alt="" width="14" height="14">Netlify Functions</span>
+              <span class="tag"><img class="tag__icon" src="/img/tech/twitch.svg" alt="" width="14" height="14">API Twitch Helix</span>
+            </div>
+            <p class="step project__synopsis" data-step="3" data-until="4">Projet personnel. Site vitrine pensé modulable : le thème repose sur des variables CSS (<code>:root</code>) pour s'adapter à n'importe quel contexte, avec un statut (en stream / hors stream) et une bannière qui se mettent à jour seuls, sans intervention manuelle.</p>
+          </div>
+          <div class="step project__shot" data-step="2" data-mstep="1">
+            <div class="frame">
+              <div class="frame__bar"><a href="https://yozoravtfan.netlify.app/" target="_blank" rel="noopener">yozoravtfan.netlify.app ↗</a><button type="button" class="frame__toggle" hidden>Pause</button></div>
+              <figure class="frame__shot"><video class="frame__video" muted loop playsinline preload="none" poster="/img/projets/twitch.jpg" width="1280" height="720" aria-label="Aperçu animé de la vitrine Twitch : accueil, menu, statut et planning, clips et dernière VOD, réseaux."><source src="/video/twitch.mp4" type="video/mp4"></video></figure>
+            </div>
+          </div>
+          <ul class="step project__facts project__facts--4" data-step="4">
+            <li>Thème entièrement piloté par variables CSS <code>:root</code> : personnalisable sans toucher au reste du code.</li>
+            <li>Statut en stream / hors stream mis à jour toutes les 3 minutes.</li>
+            <li>Clé API Twitch dev sécurisée côté fonctions Netlify, jamais exposée au client.</li>
+            <li>Environnement local qui reproduit la prod : Vite et Netlify Functions lancés en parallèle.</li>
+          </ul>
+          <div class="step project__foot" data-step="5">
+            <p class="project__links">
+              <a href="https://yozoravtfan.netlify.app/" target="_blank" rel="noopener">Site ↗</a>
+              <a href="https://github.com/Korrighed/Yozora_Site" target="_blank" rel="noopener">GitHub ↗</a>
+            </p>
+          </div>
+        </div>
+        <span class="project__cue" aria-hidden="true"></span>
+      </div>
+    </section>
+
+    <section class="project" id="projet-2" aria-labelledby="projet-2-titre" data-short="GW2 Compagnon">
+      <div class="project__stage">
+        <div class="project__grid">
+          <div class="project__head">
+            <div class="step project__title" data-step="1" data-mstep="2">
+              <h2 class="project__name" id="projet-2-titre">GW2 Compagnon</h2>
+              <p class="project__sub">Lazy loading et traitement de données API</p>
+            </div>
+            <div class="step tags" data-step="2">
+              <span class="tag"><img class="tag__icon" src="/img/tech/vue.svg" alt="" width="14" height="14">Vue 3</span>
+              <span class="tag"><img class="tag__icon" src="/img/tech/pinia.svg" alt="" width="14" height="14">Pinia</span>
+              <span class="tag">AG Grid</span>
+              <span class="tag"><img class="tag__icon" src="/img/tech/vite.svg" alt="" width="14" height="14">Vite</span>
+            </div>
+            <p class="step project__synopsis" data-step="3" data-until="4">Projet personnel. Agacement de devoir changer de personnage en jeu pour consulter chaque inventaire : l'app centralise les infos de compte via l'API officielle Guild Wars 2, en lecture seule.</p>
+          </div>
+          <div class="step project__shot" data-step="2" data-mstep="1">
+            <div class="frame">
+              <div class="frame__bar"><a href="https://korrighed.github.io/Gw2_Compagnon_app/" target="_blank" rel="noopener">korrighed.github.io/Gw2_Compagnon_app ↗</a><button type="button" class="frame__toggle" hidden>Pause</button></div>
+              <figure class="frame__shot"><video class="frame__video" muted loop playsinline preload="none" poster="/img/projets/gw2.jpg" width="1280" height="720" aria-label="Aperçu animé de GW2 Compagnon : saisie de la clé, choix d'un personnage, inventaire et détail d'un objet."><source src="/video/gw2.mp4" type="video/mp4"></video></figure>
+            </div>
+          </div>
+          <ul class="step project__facts" data-step="4">
+            <li>Authentification par clé API ArenaNet en lecture seule : aucune écriture possible sur le compte.</li>
+            <li>Affiche aujourd'hui noms de personnages et contenu des inventaires, dans des tableaux triables (AG Grid).</li>
+            <li>Périmètre volontairement limité pendant la phase d'apprentissage, pensé pour évoluer.</li>
+          </ul>
+          <div class="step project__foot" data-step="5">
+            <p class="project__links">
+              <a href="https://korrighed.github.io/Gw2_Compagnon_app/" target="_blank" rel="noopener">Site ↗</a>
+              <a href="https://github.com/Korrighed/Gw2_Compagnon_app" target="_blank" rel="noopener">GitHub ↗</a>
+            </p>
+          </div>
+        </div>
+        <span class="project__cue" aria-hidden="true"></span>
+      </div>
+    </section>
+
+    <section class="project" id="projet-3" aria-labelledby="projet-3-titre" data-short="Hyperloop NC">
+      <div class="project__stage">
+        <div class="project__grid">
+          <div class="project__head">
+            <div class="step project__title" data-step="1" data-mstep="2">
+              <h2 class="project__name" id="projet-3-titre">Hyperloop NC</h2>
+              <p class="project__sub">Angular</p>
+            </div>
+            <div class="step tags" data-step="2">
+              <span class="tag"><img class="tag__icon" src="/img/tech/angular.svg" alt="" width="14" height="14">Angular 21</span>
+              <span class="tag"><img class="tag__icon" src="/img/tech/typescript.svg" alt="" width="14" height="14">TypeScript</span>
+              <span class="tag"><img class="tag__icon" src="/img/tech/vitest.svg" alt="" width="14" height="14">Vitest</span>
+            </div>
+            <p class="step project__synopsis" data-step="3" data-until="4">Projet personnel. Exercice Angular : concevoir un réseau de transport fictif de bout en bout (routing, formulaires, calcul de tarifs, traduction) sans back-end, uniquement des données JSON côté client.</p>
+          </div>
+          <div class="step project__shot" data-step="2" data-mstep="1">
+            <div class="frame">
+              <div class="frame__bar"><a href="https://hyperloop-nc.netlify.app/" target="_blank" rel="noopener">hyperloop-nc.netlify.app ↗</a><button type="button" class="frame__toggle" hidden>Pause</button></div>
+              <figure class="frame__shot"><video class="frame__video" muted loop playsinline preload="none" poster="/img/projets/hyperloop.jpg" width="1280" height="720" aria-label="Aperçu animé d'Hyperloop NC : carte du réseau, sélection d'une station, classes de voyage."><source src="/video/hyperloop.mp4" type="video/mp4"></video></figure>
+            </div>
+          </div>
+          <ul class="step project__facts project__facts--4" data-step="4">
+            <li>13 stations, 2 lignes, tarif au kilomètre calculé côté client (Haversine + 10 %), sans base de données.</li>
+            <li>Trilingue FR / EN / JA via <code>@angular/localize</code> : un build et un port de dev par langue (4200 / 4201 / 4202).</li>
+            <li>Extraction i18n outillée (<code>extract-i18n</code>) et fichiers de traduction XLF par langue.</li>
+            <li>Tests unitaires Vitest, TypeScript strict.</li>
+          </ul>
+          <div class="step project__foot" data-step="5">
+            <p class="project__links">
+              <a href="https://hyperloop-nc.netlify.app/" target="_blank" rel="noopener">Site ↗</a>
+              <a href="https://github.com/Korrighed/hyperloopNc" target="_blank" rel="noopener">GitHub ↗</a>
+            </p>
+          </div>
+        </div>
+        <span class="project__cue" aria-hidden="true"></span>
+      </div>
+    </section>
+
+    <section class="project" id="projet-4" aria-labelledby="projet-4-titre" data-short="Dice Roller">
+      <div class="project__stage">
+        <div class="project__grid">
+          <div class="project__head">
+            <div class="step project__title" data-step="1" data-mstep="2">
+              <h2 class="project__name" id="projet-4-titre">Dice Roller</h2>
+              <p class="project__sub">Three.js et animations 3D dans le navigateur</p>
+            </div>
+            <div class="step tags" data-step="2">
+              <span class="tag"><img class="tag__icon" src="/img/tech/react.svg" alt="" width="14" height="14">React 19</span>
+              <span class="tag"><img class="tag__icon" src="/img/tech/typescript.svg" alt="" width="14" height="14">TypeScript</span>
+              <span class="tag"><img class="tag__icon" src="/img/tech/threejs.svg" alt="" width="14" height="14">Three.js</span>
+              <span class="tag">React Three Fiber</span>
+              <span class="tag"><img class="tag__icon" src="/img/tech/vite.svg" alt="" width="14" height="14">Vite</span>
+            </div>
+            <p class="step project__synopsis" data-step="3" data-until="4">Projet personnel. Les lanceurs de dés numériques classiques se contentent d'un nombre aléatoire abstrait : celui-ci simule un vrai lancer physique en 3D, avec détection de la face qui atterrit vers le haut.</p>
+          </div>
+          <div class="step project__shot" data-step="2" data-mstep="1">
+            <div class="frame">
+              <div class="frame__bar"><a href="https://lance-des.netlify.app/" target="_blank" rel="noopener">lance-des.netlify.app ↗</a><button type="button" class="frame__toggle" hidden>Pause</button></div>
+              <figure class="frame__shot"><video class="frame__video" muted loop playsinline preload="none" poster="/img/projets/dice.jpg" width="1280" height="720" aria-label="Aperçu animé du Dice Roller : ajout de dés, lancer en 3D, historique des lancers."><source src="/video/dice.mp4" type="video/mp4"></video></figure>
+            </div>
+          </div>
+          <ul class="step project__facts project__facts--4" data-step="4">
+            <li>Dés polyédriques D4, D6, D8, D10, D12, D20, D100 animés en physique temps réel.</li>
+            <li>Détection de la face qui atterrit vers le haut (« face-up detection »).</li>
+            <li>Modificateurs de jet et historique des lancers conservés en local.</li>
+            <li>Architecture 3D déclarative (React Three Fiber) plutôt que Three.js impératif.</li>
+          </ul>
+          <div class="step project__foot" data-step="5">
+            <p class="project__links">
+              <a href="https://lance-des.netlify.app/" target="_blank" rel="noopener">Site ↗</a>
+              <a href="https://github.com/Korrighed/dice-roller" target="_blank" rel="noopener">GitHub ↗</a>
+            </p>
+          </div>
+        </div>
+        <span class="project__cue" aria-hidden="true"></span>
+      </div>
+    </section>
+
+    <section class="project" id="projet-5" aria-labelledby="projet-5-titre" data-short="Safe Campus">
+      <div class="project__stage">
+        <div class="project__grid">
+          <div class="project__head">
+            <div class="step project__title" data-step="1" data-mstep="2">
+              <h2 class="project__name" id="projet-5-titre">Safe Campus</h2>
+              <p class="project__sub">Dockerisation et pipeline CI/CD</p>
+            </div>
+            <div class="step tags" data-step="2">
+              <span class="tag"><img class="tag__icon" src="/img/tech/docker.svg" alt="" width="14" height="14">Docker Compose</span>
+              <span class="tag"><img class="tag__icon" src="/img/tech/laravel.svg" alt="" width="14" height="14">PHP 8.4 / Laravel</span>
+              <span class="tag"><img class="tag__icon" src="/img/tech/filament.svg" alt="" width="14" height="14">Filament</span>
+              <span class="tag"><img class="tag__icon" src="/img/tech/nuxt.svg" alt="" width="14" height="14">Nuxt 4</span>
+              <span class="tag"><img class="tag__icon" src="/img/tech/postgresql.svg" alt="" width="14" height="14">PostgreSQL 17</span>
+            </div>
+            <p class="step project__synopsis" data-step="3" data-until="4">Projet de groupe — SAE501. Mon périmètre, réalisé seul : une API Laravel + panel d'administration Filament connectée à un front Nuxt, avec un environnement Docker qui démarre en une commande, quel que soit le poste.</p>
+          </div>
+          <div class="step project__shot" data-step="2" data-mstep="1">
+            <div class="frame">
+              <div class="frame__bar"><a href="https://github.com/Korrighed/safe-campus-front" target="_blank" rel="noopener">github.com/Korrighed/safe-campus-front ↗</a><button type="button" class="frame__toggle" hidden>Pause</button></div>
+              <figure class="frame__shot"><video class="frame__video" muted loop playsinline preload="none" poster="/img/projets/safecampus.jpg" width="1280" height="720" aria-label="Aperçu animé de Safe Campus : accueil, rubrique Addictions, page Alcool."><source src="/video/safecampus.mp4" type="video/mp4"></video></figure>
+            </div>
+          </div>
+          <ul class="step project__facts" data-step="4">
+            <li>Back et front en stacks Docker indépendantes (un <code>docker-compose.yml</code> par dépôt), reliées par un réseau partagé pour la communication SSR.</li>
+            <li>Image PHP 8.4 sur mesure : <code>pdo_pgsql</code>, gd, intl, zip, Xdebug pour le débug pas à pas.</li>
+            <li>Build front multi-stage : seul <code>.output/</code> atterrit dans l'image de prod, ni <code>node_modules</code> ni sources.</li>
+          </ul>
+          <div class="step project__foot" data-step="5">
+            <p class="project__links">
+              <a href="https://github.com/Korrighed/safe-campus-front" target="_blank" rel="noopener">Front ↗</a>
+              <a href="https://github.com/Korrighed/safe-campus-back" target="_blank" rel="noopener">Back ↗</a>
+            </p>
+          </div>
+        </div>
+        <span class="project__cue" aria-hidden="true"></span>
+      </div>
+    </section>
+
+    <!-- Menu des projets : fixe a gauche des 48rem, vue laterale en dessous. -->
+    <nav class="projets-nav" aria-label="Navigation entre projets">
+      <ul>
+        <li class="projets-nav__top"><a class="projets-nav__link" href="#hero" data-goto="hero">Accueil</a></li>
+        <li><a class="projets-nav__link" href="#projet-1" data-goto="0">Vitrine Twitch</a></li>
+        <li><a class="projets-nav__link" href="#projet-2" data-goto="1">GW2 Compagnon</a></li>
+        <li><a class="projets-nav__link" href="#projet-3" data-goto="2">Hyperloop NC</a></li>
+        <li><a class="projets-nav__link" href="#projet-4" data-goto="3">Dice Roller</a></li>
+        <li><a class="projets-nav__link" href="#projet-5" data-goto="4">Safe Campus</a></li>
+        <li class="projets-nav__cta"><a class="projets-nav__link" href="#faq" data-goto="faq">QA</a></li>
+      </ul>
+    </nav>
+
+    <div class="projets-bar">
+      <p class="projets-bar__label"><b>Projets</b><span class="projets-bar__name" id="projets-bar-name"></span></p>
+      <button class="projets-bar__menu" type="button" aria-label="Ouvrir la liste des projets" aria-expanded="false" aria-controls="projets-sheet"><span class="projets-bar__bars"></span></button>
+    </div>
+
+    <div class="projets-scrim"></div>
+    <aside class="projets-sheet" id="projets-sheet" role="dialog" aria-modal="true" aria-label="Projets">
+      <div class="projets-sheet__head">
+        <p class="projets-sheet__title">Projets</p>
+        <button class="projets-sheet__close" type="button" aria-label="Fermer la liste">×</button>
+      </div>
+      <nav aria-label="Projets">
+        <ul>
+          <li class="projets-nav__top"><a class="projets-nav__link" href="#hero" data-goto="hero">Accueil</a></li>
+          <li><a class="projets-nav__link" href="#projet-1" data-goto="0">Vitrine Twitch</a></li>
+          <li><a class="projets-nav__link" href="#projet-2" data-goto="1">GW2 Compagnon</a></li>
+          <li><a class="projets-nav__link" href="#projet-3" data-goto="2">Hyperloop NC</a></li>
+          <li><a class="projets-nav__link" href="#projet-4" data-goto="3">Dice Roller</a></li>
+          <li><a class="projets-nav__link" href="#projet-5" data-goto="4">Safe Campus</a></li>
+          <li class="projets-nav__cta"><a class="projets-nav__link" href="#faq" data-goto="faq">QA</a></li>
+          <li><a class="projets-nav__link" href="/login.html">Espace enseignant</a></li>
+        </ul>
+      </nav>
+    </aside>
+  </section>
+
+  <section id="faq" class="faq" aria-labelledby="faq-title">
+    <div class="section-divider">
+      <div class="section-divider__inner">
+        <div class="section-divider__line" aria-hidden="true">
+          <span class="section-divider__marker"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq__scene">
+      <canvas class="faq__bg" aria-hidden="true"></canvas>
+
+      <div class="faq__stage">
+        <header class="faq__head">
+          <span class="text-eyebrow">02 — Questions</span>
+          <h2 id="faq-title" class="faq__title">Questions fréquentes</h2>
+        </header>
+
+        <div class="faq__tabs">
+        <button class="faq__tab" type="button"><span class="faq__num" aria-hidden="true">01</span><span class="faq__label">Quel est mon profil de développeur ?</span></button>
+        <button class="faq__tab" type="button"><span class="faq__num" aria-hidden="true">02</span><span class="faq__label">Est-ce que je suis capable de travailler en équipe ?</span></button>
+        <button class="faq__tab" type="button"><span class="faq__num" aria-hidden="true">03</span><span class="faq__label">Est-ce que je travaille en architecture distribuée ?</span></button>
+        <button class="faq__tab" type="button"><span class="faq__num" aria-hidden="true">04</span><span class="faq__label">Est-ce que j'utilise l'IA pour coder ?</span></button>
+        <button class="faq__tab" type="button"><span class="faq__num" aria-hidden="true">05</span><span class="faq__label">Est-ce que je suis capable de respecter et de créer une identité visuelle ?</span></button>
+        </div>
+
+        <div class="faq__plate">
+          <div class="faq__panels">
+          <article class="faq__panel" id="faq-panel-1">
+            <p class="faq__count" aria-hidden="true">01 / 05</p>
+            <h3 class="faq__q">Quel est mon profil de développeur ?</h3>
+            <p class="faq__a">Je suis capable de travailler aussi bien sur le front que sur le back, avec une préférence marquée pour l'applicatif et le back. Mon objectif est toujours de traduire les règles et les besoins métier en un outil qui facilite le quotidien.</p>
+          </article>
+          <article class="faq__panel" id="faq-panel-2">
+            <p class="faq__count" aria-hidden="true">02 / 05</p>
+            <h3 class="faq__q">Est-ce que je suis capable de travailler en équipe ?</h3>
+            <p class="faq__a">Oui. J'ai assuré la gestion de différents projets en tant que développeur junior, ainsi que l'infrastructure de certains d'entre eux. Je maîtrise des outils comme Git Flow et GitLab pour faciliter au mieux le travail en équipe.</p>
+          </article>
+          <article class="faq__panel" id="faq-panel-3">
+            <p class="faq__count" aria-hidden="true">03 / 05</p>
+            <h3 class="faq__q">Est-ce que je travaille en architecture distribuée ?</h3>
+            <p class="faq__a">Oui. Je sais m'adapter aux différentes technologies, qu'il s'agisse de SOAP ou de REST. Concernant le MCP (Model Context Protocol), c'est une compétence que je suis encore en train de développer.</p>
+          </article>
+          <article class="faq__panel" id="faq-panel-4">
+            <p class="faq__count" aria-hidden="true">04 / 05</p>
+            <h3 class="faq__q">Est-ce que j'utilise l'IA pour coder ?</h3>
+            <p class="faq__a">Oui, principalement Claude Code. J'accorde un effort particulier au travail préparatoire : le choix de la technologie et l'identification du besoin, via des documents comme les PRD et les TRD, pour cadrer au mieux le développement avec ces nouveaux outils. J'essaie aussi d'exploiter les agents au mieux, en les répartissant entre plusieurs tâches et flux de travail.</p>
+          </article>
+          <article class="faq__panel" id="faq-panel-5">
+            <p class="faq__count" aria-hidden="true">05 / 05</p>
+            <h3 class="faq__q">Est-ce que je suis capable de respecter et de créer une identité visuelle ?</h3>
+            <p class="faq__a">Ce n'est pas mon domaine d'expertise. En revanche, je sais parfaitement créer ou respecter une identité visuelle propre et cohérente pour chaque projet.</p>
+          </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact" class="site-footer">
+    <div class="site-footer__inner">
+      <span class="site-footer__brand">Alex Portfolio</span>
+      <div class="site-footer__links">
+        <a href="https://github.com/Korrighed">GitHub</a>
+        <a href="/mentions-legales.html">Mentions légales</a>
+        <a class="private-link" href="/login.html"><span></span>Espace enseignant</a>
+      </div>
+    </div>
+  </footer>
+
+  <dialog id="login-dialog" class="login" aria-labelledby="login-title">
+    <form class="login__form" method="post" action="/api/login">
+      <button class="login__close" type="button" aria-label="Fermer" data-login-close><span aria-hidden="true">×</span></button>
+      <span class="login__iut"><img src="/img/logo/LogoIUT.png" alt="IUT, Université de la Nouvelle-Calédonie" width="375" height="181" /></span>
+      <span class="text-eyebrow">Espace enseignant</span>
+      <h2 id="login-title" class="login__title">Connexion</h2>
+      <p class="login__error" id="login-error" role="alert" hidden>Code incorrect.</p>
+      <label class="login__label" for="login-code">Code d'accès</label>
+      <input class="login__input" type="password" id="login-code" name="code" required autocomplete="current-password" />
+      <button class="login__submit" type="submit">Se connecter</button>
+    </form>
+  </dialog>
+
+  <script src="/js/nav.js"></script>
+
+  <script type="module" src="/js/projets-scroll.js"></script>
+
+  <script type="module" src="/js/faq.js"></script>
+
+  <script type="module" src="/js/faq-ripple.js"></script>
+
+  <script type="module" src="/js/login-dialog.js"></script>
+
+  <script src="/vendor/three.min.js"></script>
+  <script src="/vendor/vanta.dots.min.js"></script>
+  <script src="/js/hero-vanta.js"></script>
+</body>
+
+</html>
