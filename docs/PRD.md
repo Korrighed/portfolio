@@ -66,7 +66,7 @@ Statut : **livré** ou **à livrer**.
 | F-07 | Section Questions fréquentes : 5 questions sur le profil d'Alex, rendues depuis `src/data/faq.json` (même source pour le HTML et pour les données structurées `FAQPage`) ; onglets au clavier et à la souris ; sans JavaScript les 5 réponses restent lisibles à la suite | US-04 | AC-07 : Étant donné l'accueil, alors la section affiche 5 questions avec leur réponse et `public/index.html` contient un bloc `application/ld+json` de 5 `Question` | à livrer |
 | F-08 | Section CV retirée du site : le CV reste en local | US-05 | AC-08 : `public/index.html` ne contient ni `id="cv"` ni lien vers un PDF de CV | à livrer |
 | F-09 | Pied de page : GitHub et lien Espace enseignant ; aucune adresse email | US-06 | AC-09 : Le pied de page contient ces deux liens et aucun `mailto:` | à livrer |
-| F-10 | Connexion par code d'accès seul (pas d'identifiant) : `POST /api/login` ; succès vers `/fiches-reflexives`, échec vers `/login.html?error=1` avec message | US-07 | AC-10 : Étant donné un mauvais code, quand je valide, alors « Code incorrect. » s'affiche | livré |
+| F-10 | Connexion par code d'accès seul (pas d'identifiant), lu en clair dans la variable `AUTH_CODE` : `POST /api/login` ; succès vers `/fiches-reflexives`, échec vers `/login.html?error=1` avec message ; après 5 échecs depuis la même adresse, refus pendant 15 minutes (`/login.html?error=2`) | US-07 | AC-10 : Étant donné un mauvais code, quand je valide, alors « Code incorrect. » s'affiche | livré |
 | F-11 | Page des fiches (protégée) : une scène sombre à onglets, le titre de chaque fiche dans le menu | US-08 | AC-11 : Sans session, alors redirection vers `/login.html` ; avec session, trois onglets et trois panneaux | à livrer |
 | F-12 | Panneau d'une fiche : sous-titre, compétences visées, livrables, statut, date, liens et lien vers le PDF ; l'ancienne page de détail redirige vers la liste | US-08 | AC-12 : Un `id` inconnu renvoie 404 sur `/fiches-reflexives/:id` ; un `id` connu redirige vers `/fiches-reflexives` | à livrer |
 | F-13 | Service du PDF réservé aux sessions valides | US-08 | AC-13 : Sans session, `GET /api/pdf/:id` renvoie 401 | livré |
@@ -85,7 +85,7 @@ Statut : **livré** ou **à livrer**.
 |---|---|---|---|
 | NF-01 | Sécurité | Cookie de session `HttpOnly`, `SameSite=Lax`, durée 8 h, `Secure` sur tout déploiement HTTPS (production, deploy-previews, branch deploys) | livré (à vérifier sur un deploy-preview) |
 | NF-02 | Robustesse | Aucune entrée malformée (cookie mal encodé, corps de POST sans champ) ne produit un code 500 | à livrer |
-| NF-03 | Sécurité | Les tentatives de connexion sont limitées (seuil à fixer, voir Questions ouvertes) | à livrer |
+| NF-03 | Sécurité | Les tentatives de connexion sont limitées : 5 échecs par adresse IP bloquent la connexion 15 minutes, même avec le bon code ; un succès remet le compteur à zéro | livré (branche `feature/code-acces-limite-tentatives`) ; compteur à valider sur Blobs réel |
 | NF-04 | Sécurité | Toutes les routes portent `X-Content-Type-Options`, `Referrer-Policy`, une protection anti-cadrage et une CSP ; pages protégées et PDF portent `Cache-Control: private, no-store` | livré (CSP validée dans Chrome : 0 violation, hero Vanta, GSAP et login fonctionnels ; à revalider après le retrait de GSAP, aucune nouvelle origine n'est utilisée) |
 | NF-05 | Sécurité | Chaque script CDN a une version exacte et un attribut `integrity` | à livrer |
 | NF-06 | Performance | Les médias de démo se chargent en différé et ne bloquent pas le premier affichage ; budget de poids par média à fixer | à livrer |
@@ -129,5 +129,4 @@ flowchart LR
 - Aperçus : le GIF Twitch (1,7 Mo) pourrait passer en MP4 comme les autres. La barre du cadre de Safe Campus pointe vers le dépôt front, le site en ligne étant protégé par un code d'accès.
 - `public/projets/` (gabarits vides, non liés) : je les classe hors périmètre et à supprimer avant la V1. À confirmer.
 - CV et contact : le CV reste en local ; le formulaire de contact (adresse jamais affichée) sera traité dans un lot ultérieur.
-- Limite de tentatives de connexion : quel seuil, et quel mécanisme (Netlify n'offre pas de limiteur dédié aux Functions classiques, à vérifier) ?
 - Formulaire de contact ou statistiques de visite : souhaités un jour ? Aucun n'est prévu pour l'instant.

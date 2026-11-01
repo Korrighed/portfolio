@@ -32,8 +32,11 @@
     </main>
 
     <script>
-      if (new URLSearchParams(location.search).has('error')) {
-        document.getElementById('error-msg').hidden = false;
+      const error = new URLSearchParams(location.search).get('error');
+      if (error) {
+        const message = document.getElementById('error-msg');
+        if (error === '2') message.textContent = 'Trop de tentatives. Réessayez dans quelques minutes.';
+        message.hidden = false;
       }
     </script>
   </body>

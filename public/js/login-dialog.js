@@ -44,7 +44,10 @@ if (dialog && typeof dialog.showModal === 'function') {
         location.assign('/fiches-reflexives');
         return;
       }
-      error.textContent = 'Code incorrect.';
+      error.textContent =
+        new URL(response.url).searchParams.get('error') === '2'
+          ? 'Trop de tentatives. Réessayez dans quelques minutes.'
+          : 'Code incorrect.';
     } catch {
       error.textContent = 'Connexion impossible, réessayez.';
     }

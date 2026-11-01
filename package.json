@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@netlify/blobs": "^10.7.10",
-    "bcryptjs": "^2.4.3",
     "iron-session": "^8.0.0"
   },
   "devDependencies": {
