@@ -5,7 +5,60 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Portfolio</title>
+  <title>Alex, développeur full stack applicatif | Portfolio</title>
+  <meta name="description" content="Portfolio d'Alex, développeur full stack applicatif : projets, profil et réponses aux questions fréquentes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:title" content="Alex, développeur full stack applicatif" />
+  <meta property="og:description" content="Portfolio d'Alex, développeur full stack applicatif : projets, profil et réponses aux questions fréquentes." />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Quel est mon profil de développeur ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Je suis capable de travailler aussi bien sur le front que sur le back, avec une préférence marquée pour l'applicatif et le back. Mon objectif est toujours de traduire les règles et les besoins métier en un outil qui facilite le quotidien."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Est-ce que je suis capable de travailler en équipe ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui. J'ai assuré la gestion de différents projets en tant que développeur junior, ainsi que l'infrastructure de certains d'entre eux. Je maîtrise des outils comme Git Flow et GitLab pour faciliter au mieux le travail en équipe."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Est-ce que je travaille en architecture distribuée ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui. Je sais m'adapter aux différentes technologies, qu'il s'agisse de SOAP ou de REST. Concernant le MCP (Model Context Protocol), c'est une compétence que je suis encore en train de développer."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Est-ce que j'utilise l'IA pour coder ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Oui, principalement Claude Code. J'accorde un effort particulier au travail préparatoire : le choix de la technologie et l'identification du besoin, via des documents comme les PRD et les TRD, pour cadrer au mieux le développement avec ces nouveaux outils. J'essaie aussi d'exploiter les agents au mieux, en les répartissant entre plusieurs tâches et flux de travail."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Est-ce que je suis capable de respecter et de créer une identité visuelle ?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ce n'est pas mon domaine d'expertise. En revanche, je sais parfaitement créer ou respecter une identité visuelle propre et cohérente pour chaque projet."
+      }
+    }
+  ]
+}
+  </script>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -13,17 +66,16 @@
   <link rel="stylesheet" href="/css/nav.css" />
   <link rel="stylesheet" href="/css/hero.css" />
   <link rel="stylesheet" href="/css/projets.css" />
-  <link rel="stylesheet" href="/css/competences.css" />
-  <link rel="stylesheet" href="/css/cv.css" />
+  <link rel="stylesheet" href="/css/faq.css" />
   <link rel="stylesheet" href="/css/footer.css" />
 </head>
 
 <body>
   <header class="nav">
     <div class="nav__inner">
-      <a class="nav__brand" href="/" aria-label="Alex.dev, accueil">
+      <a class="nav__brand" href="/" aria-label="korrighed.dev, accueil">
         <img class="nav__logo" src="/img/logo/logo-ka-intro.svg" alt="" width="43" height="40">
-        <span>Alex.dev</span>
+        <span>korrighed.dev</span>
       </a>
 
       <button class="nav__toggle" type="button" aria-controls="nav-menu" aria-expanded="false"
@@ -36,8 +88,7 @@
       <nav id="nav-menu" class="nav__menu">
         <ul>
           <li><a href="#projets">Projets</a></li>
-          <li><a href="#competences">Compétences</a></li>
-          <li><a href="#cv">CV</a></li>
+          <li><a href="#faq">Questions</a></li>
           <li><a class="private-link" href="/login.html"><span></span>Espace enseignant</a></li>
         </ul>
       </nav>
@@ -100,7 +151,6 @@
               <a href="https://yozoravtfan.netlify.app/" target="_blank" rel="noopener">Site ↗</a>
               <a href="https://github.com/Korrighed/Yozora_Site" target="_blank" rel="noopener">GitHub ↗</a>
             </p>
-            <button class="project__next" type="button" data-goto="1" data-at="start">Suite : <b>GW2 Compagnon</b> ↓</button>
           </div>
         </div>
         <span class="project__cue" aria-hidden="true"></span>
@@ -139,7 +189,6 @@
               <a href="https://korrighed.github.io/Gw2_Compagnon_app/" target="_blank" rel="noopener">Site ↗</a>
               <a href="https://github.com/Korrighed/Gw2_Compagnon_app" target="_blank" rel="noopener">GitHub ↗</a>
             </p>
-            <button class="project__next" type="button" data-goto="2" data-at="start">Suite : <b>Hyperloop NC</b> ↓</button>
           </div>
         </div>
         <span class="project__cue" aria-hidden="true"></span>
@@ -179,7 +228,6 @@
               <a href="https://hyperloop-nc.netlify.app/" target="_blank" rel="noopener">Site ↗</a>
               <a href="https://github.com/Korrighed/hyperloopNc" target="_blank" rel="noopener">GitHub ↗</a>
             </p>
-            <button class="project__next" type="button" data-goto="3" data-at="start">Suite : <b>Dice Roller</b> ↓</button>
           </div>
         </div>
         <span class="project__cue" aria-hidden="true"></span>
@@ -220,7 +268,6 @@
               <a href="https://lance-des.netlify.app/" target="_blank" rel="noopener">Site ↗</a>
               <a href="https://github.com/Korrighed/dice-roller" target="_blank" rel="noopener">GitHub ↗</a>
             </p>
-            <button class="project__next" type="button" data-goto="4" data-at="start">Suite : <b>Safe Campus</b> ↓</button>
           </div>
         </div>
         <span class="project__cue" aria-hidden="true"></span>
@@ -260,7 +307,6 @@
               <a href="https://github.com/Korrighed/safe-campus-front" target="_blank" rel="noopener">Front ↗</a>
               <a href="https://github.com/Korrighed/safe-campus-back" target="_blank" rel="noopener">Back ↗</a>
             </p>
-            <button class="project__next" type="button" data-goto="contact" data-at="start">Suite : <b>Me contacter</b> ↓</button>
           </div>
         </div>
         <span class="project__cue" aria-hidden="true"></span>
@@ -303,7 +349,7 @@
     </aside>
   </section>
 
-  <section id="competences">
+  <section id="faq" class="faq" aria-labelledby="faq-title">
     <div class="section-divider">
       <div class="section-divider__inner">
         <div class="section-divider__line" aria-hidden="true">
@@ -312,75 +358,48 @@
       </div>
     </div>
 
-    <div class="section__inner">
-      <div class="section-head">
-        <span class="section-head__eyebrow text-eyebrow">02 — Compétences</span>
-        <h2 class="section-head__title">Ce avec quoi je travaille</h2>
+    <div class="faq__stage">
+      <header class="faq__head">
+        <span class="text-eyebrow">02 — Questions</span>
+        <h2 id="faq-title" class="faq__title">Questions fréquentes</h2>
+      </header>
+
+      <div class="faq__tabs">
+        <button class="faq__tab" type="button" data-faq="1"><span class="faq__num" aria-hidden="true">01</span><span class="faq__label">Quel est mon profil de développeur ?</span></button>
+        <button class="faq__tab" type="button" data-faq="2"><span class="faq__num" aria-hidden="true">02</span><span class="faq__label">Est-ce que je suis capable de travailler en équipe ?</span></button>
+        <button class="faq__tab" type="button" data-faq="3"><span class="faq__num" aria-hidden="true">03</span><span class="faq__label">Est-ce que je travaille en architecture distribuée ?</span></button>
+        <button class="faq__tab" type="button" data-faq="4"><span class="faq__num" aria-hidden="true">04</span><span class="faq__label">Est-ce que j'utilise l'IA pour coder ?</span></button>
+        <button class="faq__tab" type="button" data-faq="5"><span class="faq__num" aria-hidden="true">05</span><span class="faq__label">Est-ce que je suis capable de respecter et de créer une identité visuelle ?</span></button>
       </div>
 
-      <div class="competences-grid">
-        <div class="competences-col competences-col--skills">
-          <h3>Compétences</h3>
-          <ul class="list-dotted">
-            <li>Mettre en place l'environnement de dev d'une équipe et le documenter pour qu'il tourne sur tous les
-              postes.</li>
-            <li>Travailler en git flow : branches de feature, revue avant merge, messages de commit normalisés.</li>
-            <li>Écrire la doc technique : README d'installation, conventions de code, guides de pipeline.</li>
-            <li>Intégrer une API tierce de bout en bout : authentification, cache, gestion des erreurs et des secrets.
-            </li>
-            <li>Modéliser des données et la logique métier avant de coder l'interface.</li>
-            <li>Tenir une grille et une échelle typographique cohérentes d'un écran à l'autre.</li>
-          </ul>
+      <div class="faq__plate">
+        <div class="faq__panels">
+          <article class="faq__panel" id="faq-panel-1" data-faq="1">
+            <p class="faq__count" aria-hidden="true">01 / 05</p>
+            <h3 class="faq__q">Quel est mon profil de développeur ?</h3>
+            <p class="faq__a">Je suis capable de travailler aussi bien sur le front que sur le back, avec une préférence marquée pour l'applicatif et le back. Mon objectif est toujours de traduire les règles et les besoins métier en un outil qui facilite le quotidien.</p>
+          </article>
+          <article class="faq__panel" id="faq-panel-2" data-faq="2">
+            <p class="faq__count" aria-hidden="true">02 / 05</p>
+            <h3 class="faq__q">Est-ce que je suis capable de travailler en équipe ?</h3>
+            <p class="faq__a">Oui. J'ai assuré la gestion de différents projets en tant que développeur junior, ainsi que l'infrastructure de certains d'entre eux. Je maîtrise des outils comme Git Flow et GitLab pour faciliter au mieux le travail en équipe.</p>
+          </article>
+          <article class="faq__panel" id="faq-panel-3" data-faq="3">
+            <p class="faq__count" aria-hidden="true">03 / 05</p>
+            <h3 class="faq__q">Est-ce que je travaille en architecture distribuée ?</h3>
+            <p class="faq__a">Oui. Je sais m'adapter aux différentes technologies, qu'il s'agisse de SOAP ou de REST. Concernant le MCP (Model Context Protocol), c'est une compétence que je suis encore en train de développer.</p>
+          </article>
+          <article class="faq__panel" id="faq-panel-4" data-faq="4">
+            <p class="faq__count" aria-hidden="true">04 / 05</p>
+            <h3 class="faq__q">Est-ce que j'utilise l'IA pour coder ?</h3>
+            <p class="faq__a">Oui, principalement Claude Code. J'accorde un effort particulier au travail préparatoire : le choix de la technologie et l'identification du besoin, via des documents comme les PRD et les TRD, pour cadrer au mieux le développement avec ces nouveaux outils. J'essaie aussi d'exploiter les agents au mieux, en les répartissant entre plusieurs tâches et flux de travail.</p>
+          </article>
+          <article class="faq__panel" id="faq-panel-5" data-faq="5">
+            <p class="faq__count" aria-hidden="true">05 / 05</p>
+            <h3 class="faq__q">Est-ce que je suis capable de respecter et de créer une identité visuelle ?</h3>
+            <p class="faq__a">Ce n'est pas mon domaine d'expertise. En revanche, je sais parfaitement créer ou respecter une identité visuelle propre et cohérente pour chaque projet.</p>
+          </article>
         </div>
-
-        <div class="competences-col competences-col--tech">
-          <h3>Technologies</h3>
-          <div class="tech-grid">
-            <div class="tech-group">
-              <h4>Front</h4>
-              <ul>
-                <li>Vue 3, Pinia</li>
-                <li>Angular, TypeScript</li>
-                <li>Nuxt 4</li>
-                <li>HTML / CSS / JS vanilla</li>
-                <li>Vite</li>
-              </ul>
-            </div>
-            <div class="tech-group">
-              <h4>Back</h4>
-              <ul>
-                <li>Node.js, NestJS</li>
-                <li>PHP 8.4, Laravel</li>
-                <li>PostgreSQL 17</li>
-                <li>Fonctions serverless</li>
-                <li>Sessions, hashage</li>
-              </ul>
-            </div>
-            <div class="tech-group">
-              <h4>Outils</h4>
-              <ul>
-                <li>Docker Compose</li>
-                <li>Git, GitHub, CI/CD</li>
-                <li>Netlify, GitHub Pages</li>
-                <li>Vitest, Prettier</li>
-                <li>Astro</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="cv" class="cv">
-    <div class="cv__grid">
-      <span class="cv__label text-eyebrow">03 — CV</span>
-      <div class="cv__text">
-        <h2>Le CV en une page</h2>
-        <p>Parcours, formation et stack, au format PDF.</p>
-      </div>
-      <div class="cv__action">
-        <a href="/cv-alex.pdf" download>Télécharger le CV (PDF)</a>
       </div>
     </div>
   </section>
@@ -389,7 +408,6 @@
     <div class="site-footer__inner">
       <span class="site-footer__brand">Alex Portfolio</span>
       <div class="site-footer__links">
-        <a href="mailto:boutin.alexis@protonmail.com">boutin.alexis@protonmail.com</a>
         <a href="https://github.com/Korrighed">GitHub</a>
         <a class="private-link" href="/login.html"><span></span>Espace enseignant</a>
       </div>
@@ -399,6 +417,8 @@
   <script src="/js/nav.js"></script>
 
   <script type="module" src="/js/projets-scroll.js"></script>
+
+  <script type="module" src="/js/faq.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js"></script>

@@ -48,7 +48,7 @@
   --space-lg: 2.5rem;
   --space-xl: 4rem;
 
-  /* Typo partagee (eviter la duplication entre main.css/cv.css/competences.css/projets.css) */
+  /* Typo partagee (eviter la duplication entre main.css/faq.css/projets.css) */
   --font-mono: ui-monospace, monospace;
   --font-display-family: 'Inria Serif', serif;
   --font-display: 700 2.25rem/1.15 var(--font-display-family);
@@ -90,7 +90,7 @@ main {
   color: #b3261e;
 }
 
-/* En-tete de section (eyebrow + titre), reutilise dans projets/competences */
+/* En-tete de section (eyebrow + titre), reutilise dans projets/faq */
 .section-head {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -100,8 +100,8 @@ main {
   margin-bottom: var(--space-lg);
 }
 
-/* Typo "eyebrow" (label court, majuscules, tracking large) - partagee avec
-   .cv__label (cv.css) via cette classe utilitaire. */
+/* Typo "eyebrow" (label court, majuscules, tracking large), partagee
+   entre les sections via cette classe utilitaire. */
 .text-eyebrow {
   font-size: 0.75rem;
   font-weight: 600;
@@ -132,7 +132,7 @@ main {
   }
 }
 
-/* Liste a puces carrees, reutilisee dans projets/competences */
+/* Liste a puces carrees, disponible pour les sections */
 .list-dotted {
   margin: 0;
   padding: 0;

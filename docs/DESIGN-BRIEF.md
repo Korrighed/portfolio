@@ -26,8 +26,7 @@ International Typographic Style : colonnes et modules réguliers, marges et gout
 | Gouttière | `--space-md` (1.5rem) |
 | Marge latérale | `--space-lg` (2.5rem) |
 | En-tête de section | eyebrow colonnes 1 à 3, titre colonnes 4 à 10 |
-| Compétences | Compétences colonnes 1 à 5, Technologies colonnes 7 à 12 |
-| CV | label 1 à 3, texte 4 à 8, action 9 à 12 |
+| Questions fréquentes | cadre de 72 rem au plus ; liste centrée de 48 rem au plus ; en-tête de section sur la grille de 12 colonnes |
 
 ## 3. Fondations
 
@@ -39,7 +38,7 @@ Palette validée par Alex : Ink Black, Yale Blue, Powder Blue, Platinum. Les aut
 |---|---|---|---|
 | `--color-ink-black` | `#0d1821` | Fond du hero et du pied de page ; texte sur fond clair | 16.15:1 sur Platinum |
 | `--color-ink-black-3` | `#0b141c` | Fond de la section Projets et du séparateur | Powder 11.40:1, Platinum 16.70:1 |
-| `--color-yale-blue` | `#344966` | Couleur de marque, eyebrow, liens du menu, bouton CV | 8.25:1 sur Platinum |
+| `--color-yale-blue` | `#344966` | Couleur de marque, eyebrow, liens du menu, bouton principal | 8.25:1 sur Platinum |
 | `--color-powder-blue` | `#b4cded` | Texte secondaire sur fond sombre, filets, points du fond de la section Projets | 11.02:1 sur Ink Black |
 | `--projets-abyss` (local à `#projets`) | `#08111a` | Bas du dégradé de fond : Ink Black → Ink Black 3 → abyss → Ink Black 3 (la plongée) | décoratif |
 | `--color-powder-blue-light` | `#dce6f1` | Bordure des blocs de code sur fond clair | décoratif |
@@ -93,7 +92,7 @@ Les états de focus ne sont pas stylés : le navigateur applique son contour par
 
 | Composant | États actuels | Notes |
 |---|---|---|
-| Barre de navigation | repos, survol (Yale vers Ink) | Burger sous 48rem, `aria-expanded` mis à jour. La marque est le logo KA (hauteur 2,5 rem, se trace une fois au chargement) suivi de « Alex.dev » |
+| Barre de navigation | repos, survol (Yale vers Ink) | Burger sous 48rem, `aria-expanded` mis à jour. La marque est le logo KA (hauteur 2,5 rem, se trace une fois au chargement) suivi de « korrighed.dev » (le domaine) |
 | Logo KA | statique, intro (une fois), boucle de 6 s, favicon | Losange à double bord, lettres en Inria Serif Bold (glyphes convertis en tracés), double ligne horizontale qui naît du bord intérieur et s'arrête contre les lettres ; aucun trait n'en coupe un autre. Trait de 5 sur un dessin de 400. Yale Blue sur Platinum. Fichiers : `public/img/logo/logo-ka.svg`, `logo-ka-intro.svg`, `logo-ka-anime.svg` ; favicon plein (lettres Platinum en négatif) `public/favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`. En dessous de 56 px le double bord et la double ligne ne sont plus lisibles : on utilise le favicon plein |
 | Bouton « Projets » du hero | repos, survol (fond Powder), actif (échelle 0.94 + anneau 450 ms) | Pastille arrondie ; l'anneau est coupé sous `prefers-reduced-motion` |
 | Scène projet (`.project`) | repos (informations apparues ou non), fin de scène (`is-done`), lecture normale (`is-flow`) | Plein écran ; grille 5/7 colonnes sur desktop, une colonne sous 64rem |
@@ -104,10 +103,11 @@ Les états de focus ne sont pas stylés : le navigateur applique son contour par
 | Tag | repos | Mono, bordure Powder à 50 % |
 | Lien de scène (`.project__links a`) | repos, survol (Platinum vers Powder), focus | Souligné Powder ; zone tactile de 44 px |
 | Points clés (`.project__facts`) | repos | Un filet par point, pas de puce ; 3 ou 4 colonnes sur desktop |
-| Bouton CV | repos, survol (Yale vers Ink) | Plat, sans arrondi |
-| Liste à puces rondes (`.list-dotted`) | repos | Puce 6 px, Yale ; utilisée dans Compétences (plus dans Projets) |
+| Onglets de la FAQ (`.faq__tab`) | repos, survol, sélectionné, focus | ≥ 64rem : liste verticale à gauche, filet Powder entre les lignes, numéro en mono, losange creux devant la question choisie, filet Yale au-dessus. En dessous : 5 pastilles numérotées de 44 px, la choisie en Yale plein |
+| Réponse de la FAQ (`.faq__panel`) | affichée, masquée | Compteur mono « 01 / 05 », question en Inria Serif, réponse en slate foncé ; fond Platinum uni, aucun point ; la section mesure l'écran (`100svh`) |
+| Liste à puces rondes (`.list-dotted`) | repos | Puce 6 px, Yale ; plus utilisée dans les sections de l'accueil |
 | Lien Espace enseignant (`.private-link`) | repos, survol | Carré creux 8 px devant le libellé |
-| Eyebrow (`.text-eyebrow`) | repos | Partagé entre sections et CV |
+| Eyebrow (`.text-eyebrow`) | repos | Partagé entre les sections |
 | Fond de points (`#projets-bg`) | progression 0 à 100 % par projet | Indicateur de progression : cercle lumineux depuis l'aperçu ; remplace la barre en onde |
 | Indice de défilement (`.project__cue`) | visible, masqué en fin de scène | Trait de 1 px qui s'estompe, comme sur le bouton du hero |
 
@@ -129,7 +129,7 @@ Les états de focus ne sont pas stylés : le navigateur applique son contour par
 |---|---|
 | Scène projet | Épinglée (`sticky`) sur 190 % de la hauteur de l'écran en plus. Les informations ne se déplacent pas : elles passent de 0 à 1 d'opacité et d'un flou de 6 px à net en 700 ms, quand la progression atteint 0, 0,2, 0,4, 0,62 et 0,82 (seuils, pas de `scrub`). Sur mobile l'aperçu apparaît avant le titre |
 | Fond de points | Boucle `requestAnimationFrame` active seulement quand la section est à l'écran et l'onglet visible. Cercle lumineux : rayon proportionnel à la progression du projet (lissé), anneau plus gros à son bord ; houle douce dont la phase suit le scroll, sans dérive ; 700 ms de fondu au changement de projet |
-| Défilement vers un projet | Défilement lisse du navigateur ; menu : fin de scène (tout révélé) ; « Suite » : début du projet suivant |
+| Défilement vers un projet | Défilement lisse du navigateur ; menu : fin de scène (tout révélé)  |
 | Menu des projets | Fondu 300 ms ; liens 200 ms |
 | Vue latérale (mobile) | Glissement 300 ms depuis la droite ; fond assombri 300 ms |
 | Bouton « Projets » | 200 ms ; anneau 450 ms |
@@ -146,6 +146,6 @@ Les états de focus ne sont pas stylés : le navigateur applique son contour par
 ## 8. Questions ouvertes
 
 - Maquette : celle de la section Projets est l'artefact « Portfolio Dossier » (§2). Aucune maquette n'est documentée pour les autres sections ni pour les pages hors accueil (login, fiches) : une maquette Figma existe-t-elle ?
-- Section CV : à reprendre dans un second temps, hors de cette passe.
+- Section CV : retirée du site (le CV reste en local) ; formulaire de contact à traiter dans un lot ultérieur.
 - Faut-il corriger les trois contrastes sous 4.5:1 en assombrissant `--color-slate`, ou en changeant les usages ?
 - Les pages login et fiches reprennent-elles la grille et les polices de l'accueil ? Aujourd'hui elles n'utilisent que `main.css`.

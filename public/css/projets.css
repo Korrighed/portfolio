@@ -193,29 +193,6 @@
   color: var(--color-powder-blue);
 }
 
-.project__next {
-  min-height: 44px;
-  padding: 0;
-  background: none;
-  border: 0;
-  color: var(--color-powder-blue);
-  font: inherit;
-  font-size: 0.9375rem;
-  text-align: left;
-  cursor: pointer;
-}
-
-.project__next b {
-  color: var(--color-platinum);
-  font-weight: 600;
-}
-
-.project__next:hover b {
-  text-decoration: underline;
-  text-decoration-color: var(--color-powder-blue);
-  text-underline-offset: 0.3em;
-}
-
 /* Indice de defilement : le trait du hero, rappel discret de l'identite. */
 .project__cue {
   position: absolute;
@@ -826,8 +803,7 @@
     padding: 0.15rem 0.4rem;
   }
 
-  .project__links a,
-  .project__next {
+  .project__links a {
     min-height: 40px;
     font-size: 0.8125rem;
   }
