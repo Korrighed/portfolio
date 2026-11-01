@@ -12,11 +12,11 @@ flowchart TD
   Accueil["Accueil /"]
   Login["Connexion /login.html"]
   Liste["Fiches /fiches-reflexives"]
-  Fiche["Fiche /fiches-reflexives/:id"]
+  Fiche["Détail /fiches-reflexives/:id (redirige vers la liste)"]
   Pdf["PDF /api/pdf/:id"]
   Accueil -->|Espace enseignant| Login
-  Login -->|identifiants valides| Liste
-  Login -->|identifiants faux| Login
+  Login -->|code valide| Liste
+  Login -->|code faux| Login
   Liste --> Fiche
   Fiche --> Pdf
   Fiche --> Liste
@@ -28,7 +28,7 @@ flowchart TD
 | Accueil `/` | Hero, 5 projets, questions fréquentes, pied de page | URL, lien du site |
 | Scène projet (dans l'accueil) | Un projet par écran : titre, tags, aperçu, résumé, points clés, liens | Bouton « Projets » du hero, menu des projets |
 | Vue latérale des projets (mobile) | Liste des projets sur la moitié de l'écran | Bouton de la barre de section |
-| Connexion `/login.html` | Identifiant et mot de passe de l'enseignant | Lien « Espace enseignant » |
+| Connexion `/login.html` | Code d'accès de l'enseignant | Lien « Espace enseignant » |
 | Fiches, fiche, PDF | Espace enseignant protégé | Connexion réussie |
 
 ## 2. Parcours utilisateur
@@ -60,13 +60,14 @@ flowchart LR
 ```mermaid
 flowchart LR
   A([Début]) --> B["Espace enseignant"]
-  B --> C["Saisie identifiant et mot de passe"]
+  B --> C["Fenêtre de connexion sur l'accueil : saisie du code d'accès"]
   C --> D{Valides ?}
   D -- oui --> E["Liste des fiches"]
   D -- non --> F["Message d'erreur"]
   F --> C
-  E --> G["Fiche"]
-  G --> H["Ouverture du PDF"]
+  E --> G["Choix d'une fiche dans le menu (titre du document)"]
+  G --> H["Compétences, livrables, statut"]
+  H --> J["Ouverture du PDF"]
   E --> I([Déconnexion])
 ```
 

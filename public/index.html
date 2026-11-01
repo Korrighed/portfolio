@@ -68,6 +68,7 @@
   <link rel="stylesheet" href="/css/projets.css" />
   <link rel="stylesheet" href="/css/faq.css" />
   <link rel="stylesheet" href="/css/footer.css" />
+  <link rel="stylesheet" href="/css/login-dialog.css" />
 </head>
 
 <body>
@@ -418,6 +419,18 @@
     </div>
   </footer>
 
+  <dialog id="login-dialog" class="login" aria-labelledby="login-title">
+    <form class="login__form" method="post" action="/api/login">
+      <button class="login__close" type="button" aria-label="Fermer" data-login-close><span aria-hidden="true">×</span></button>
+      <span class="text-eyebrow">Espace enseignant</span>
+      <h2 id="login-title" class="login__title">Connexion</h2>
+      <p class="login__error" id="login-error" role="alert" hidden>Code incorrect.</p>
+      <label class="login__label" for="login-code">Code d'accès</label>
+      <input class="login__input" type="password" id="login-code" name="code" required autocomplete="current-password" />
+      <button class="login__submit" type="submit">Se connecter</button>
+    </form>
+  </dialog>
+
   <script src="/js/nav.js"></script>
 
   <script type="module" src="/js/projets-scroll.js"></script>
@@ -425,6 +438,8 @@
   <script type="module" src="/js/faq.js"></script>
 
   <script type="module" src="/js/faq-ripple.js"></script>
+
+  <script type="module" src="/js/login-dialog.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js"></script>

@@ -1,4 +1,4 @@
-import { verifyCredentials, createSessionCookieHeader } from './lib/auth.js';
+import { verifyCode, createSessionCookieHeader } from './lib/auth.js';
 
 export const handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -9,10 +9,9 @@ export const handler = async (event) => {
     ? Buffer.from(event.body || '', 'base64').toString('utf8')
     : event.body || '';
   const params = new URLSearchParams(rawBody);
-  const username = params.get('username');
-  const password = params.get('password');
+  const code = params.get('code');
 
-  if (verifyCredentials(username, password)) {
+  if (await verifyCode(code)) {
     return {
       statusCode: 302,
       headers: {

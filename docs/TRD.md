@@ -1,7 +1,7 @@
 # TRD — Portfolio d'Alex
 
 Statut : brouillon
-Couvre : PRD F-01 … F-18, NF-01 … NF-12
+Couvre : PRD F-01 … F-20, NF-01 … NF-13
 
 ## 1. Stack
 
@@ -59,8 +59,9 @@ flowchart TD
 | `public/js/nav.js` | Menu repliable | DOM |
 | `public/js/projets-scroll.js` | Progression par projet, apparition des informations (`is-on`, `inert`), fond de points (`#projets-bg`), menu des projets, vue latérale mobile, mesure du repli en lecture normale (`is-flow`) | DOM, `matchMedia`, canvas 2D |
 | `public/css/projets.css` | Scènes (`sticky`), grille, menu, barre de section, vue latérale ; repli sans JS et sous `prefers-reduced-motion` | Tokens de `main.css` |
-| `netlify/functions/lib/auth.js` | Identifiants, scellement et lecture du cookie, garde `withAuth` | `iron-session`, `bcryptjs` |
-| `netlify/functions/lib/fiche-repository.js` | Liste des fiches (en dur) et recherche par `id` | — |
+| `netlify/functions/lib/auth.js` | Vérification du code d'accès, scellement et lecture du cookie, garde `withAuth` | `iron-session`, `bcryptjs` |
+| `netlify/functions/lib/fiche-repository.js` | Auteur, fiches (métadonnées en dur) et recherche par `id` | — |
+| `netlify/functions/lib/fiches-view.js` | Rendu HTML de la scène à onglets des fiches | — |
 | `netlify/functions/lib/storage.js` | Lecture d'un PDF dans Blobs | `@netlify/blobs` |
 | `netlify/functions/lib/page.js` | Gabarit HTML des pages protégées | — |
 | `netlify.toml` | Build, dev, redirects | — |
@@ -80,8 +81,8 @@ sequenceDiagram
   participant F as Fonction
   participant A as lib/auth.js
   participant B as Blobs
-  E->>F: POST /api/login (username, password)
-  F->>A: verifyCredentials
+  E->>F: POST /api/login (code)
+  F->>A: verifyCode
   A-->>F: ok
   F-->>E: 302 /fiches-reflexives + cookie session
   E->>F: GET /api/pdf/fiche-1
@@ -97,8 +98,8 @@ sequenceDiagram
 | ID | Exigence | Lien PRD | Vérification |
 |---|---|---|---|
 | T-01 | `parseCookies` ne lève jamais : `decodeURIComponent` dans un `try/catch`, cookie invalide traité comme absent | NF-02 | `curl -H "Cookie: session=%E0%A4%A" /api/pdf/fiche-1` renvoie 401, pas 500 |
-| T-02 | `login.js` valide que `username` et `password` sont des chaînes non vides avant `verifyCredentials` | NF-02, F-10 | `curl -X POST /api/login` sans corps renvoie 302 vers `/login.html?error=1` |
-| T-03 | Comparaison asynchrone du mot de passe (`bcrypt.compare`) et de l'identifiant en temps constant | NF-03 | Lecture du code ; test T-02 inchangé |
+| T-02 | `verifyCode` refuse tout `code` qui n'est pas une chaîne non vide (corps vide ou ancien format : 302 vers `/login.html?error=1`, jamais 500) | NF-02, F-10 | `curl -X POST /api/login` sans corps renvoie 302 vers `/login.html?error=1` |
+| T-03 | Comparaison asynchrone du code (`bcrypt.compare`, qui ne bloque pas la boucle d'événements) | NF-03 | Lecture du code ; test T-02 inchangé |
 | T-04 | Limitation des tentatives de connexion ; mécanisme à trancher (voir §11) | NF-03 | Après N échecs, réponse refusée pendant une durée donnée |
 | T-05 | En-têtes de sécurité via `[[headers]]` dans `netlify.toml` : `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `frame-ancestors` (CSP), CSP complète autorisant jsDelivr | NF-04 | `curl -I` sur `/` et `/login.html` |
 | T-06 | `Cache-Control: private, no-store` sur `fiche-list`, `fiche-detail`, `pdf` | NF-04, NF-11 | `curl -I` avec cookie valide |
@@ -113,6 +114,9 @@ sequenceDiagram
 | T-19 | FAQ en onglets (`public/js/faq.js`) : cinq panneaux empilés dans la même cellule de grille, donc la hauteur du panneau est celle de la réponse la plus longue ; `visibility` et `opacity` ; flou de 6 px vers net en 300 ms sous `no-preference` ; rôles `tablist`, `tab`, `tabpanel`, flèches, Début et Fin ; sans JavaScript, toutes les réponses à la suite | F-07, F-19 | À 1280×720, 1024×768 et 390×844 : la section mesure l'écran et changer d'onglet ne modifie ni sa hauteur ni celle du panneau |
 | T-20 | `#projets` porte `overflow: clip` (sans conteneur de défilement : le sticky continue de fonctionner) : le canvas `#projets-bg`, dont la marge négative le laisse dépasser du bas de la section, ne se peint plus sur la FAQ | F-19 | Canvas de la FAQ masqué : 0 pixel hors du fond Platinum dans la FAQ et à 120 px au-dessus ; scènes projet toujours épinglées |
 | T-21 | Fond de la FAQ : canvas 2D `.faq__bg` (`public/js/faq-ripple.js`), grille de 34 px à 10 % d'opacité ; onde = anneau de 40 px qui part du centre du bloc de réponse (1,9 s au changement de question via l'événement `faq:change`, 3 s à la première arrivée, `IntersectionObserver`), pic à 42 % ; zones sans point (titre, liste, réponse affichée, marge de 16 px), géométrie et points visibles calculés au redimensionnement et au départ d'une onde, points au repos tracés en un seul remplissage ; boucle `requestAnimationFrame` seulement pendant une onde ; grille fixe sous `prefers-reduced-motion` | F-19, NF-07 | À 1280, 1024 et 390 px : 0 pixel de point dans les zones de texte, aucune boucle active au repos |
+| T-22 | Les fiches (titre, sous-titre, date, compétences, livrables, statut, liens, fichier) vivent dans `netlify/functions/lib/fiche-repository.js` ; `fiches-view.js` rend la scène côté serveur (balisage de la FAQ + `faq--dark`), `page.js` accepte `bodyClass`, `styles`, `scripts` et pose `noindex` ; sans session, 302 vers `/login.html` | F-11, F-12 | Appel de `fiche-list` avec cookie forgé : 3 `faq__tab`, 3 `faq__panel` ; sans cookie : 302 |
+| T-23 | `faq.css` passe par des jetons `--faq-bg`, `--faq-fg`, `--faq-muted`, `--faq-accent`, `--faq-on-accent`, `--faq-line`, `--faq-dot` ; `.faq--dark` les redéfinit ; `faq.js` et `faq-ripple.js` ciblent `.faq` ; `faq-ripple.js` lit `--faq-dot` pour la couleur des points | F-20 | FAQ de l'accueil inchangée ; points Powder Blue sur la page des fiches |
+| T-24 | `<dialog id="login-dialog">` (`src/sections/login-dialog.html`, `login-dialog.css`, `login-dialog.js`) : `showModal`, envoi par `fetch('/api/login')` qui suit la redirection (succès si l'URL finale commence par `/fiches-reflexives`, sinon « Code incorrect. ») ; `/login.html` redirige vers `/?connexion=1` quand JavaScript est actif et reste le repli sans JavaScript | F-21, F-10 | Code faux : message dans la fenêtre, URL inchangée ; bon code : arrivée sur `/fiches-reflexives` |
 | T-12 | Garde sur l'initialisation de Vanta (`typeof VANTA`) et respect de `prefers-reduced-motion` | NF-10 | CDN bloqué : aucune erreur console bloquante |
 | T-13 | Échappement HTML des champs interpolés dans `page.js` et `fiche-*.js` | F-11, F-12 | Titre contenant `<` rendu en texte |
 | T-14 | `[dev] command` de `netlify.toml` lance Vite sans `npx` ; documenter `netlify login` ou `--offline` | NF-12 | Chronométrer `npm run dev` jusqu'à « Local dev server ready » |
@@ -124,7 +128,7 @@ sequenceDiagram
 |---|---|
 | Pas de session sur page protégée | 302 vers `/login.html` |
 | Pas de session sur `/api/pdf/:id` | 401 |
-| Identifiants faux ou champs absents | 302 vers `/login.html?error=1` |
+| Code faux ou champ absent | 302 vers `/login.html?error=1` |
 | `id` de fiche inconnu | 404 « Introuvable » |
 | PDF absent de Blobs | 404 générique ; détail dans les logs serveur uniquement |
 | `SESSION_SECRET` absent ou court | Erreur serveur explicite dans les logs |
@@ -134,9 +138,9 @@ sequenceDiagram
 
 ## 7. Sécurité et vie privée
 
-- Le mot de passe n'est jamais stocké en clair : hash bcrypt dans `AUTH_PASSWORD_HASH`.
+- Le code d'accès n'est jamais stocké en clair : hash bcrypt dans `AUTH_PASSWORD_HASH`. Sans identifiant, le code est le seul secret : il doit être long (au moins 12 caractères) tant que les tentatives ne sont pas limitées (NF-03).
 - Le cookie est scellé par `iron-session` ; sa lecture échoue proprement si le secret change.
-- `.env` est ignoré par git. `.env.example` donne les noms attendus. Les mêmes variables doivent exister côté Netlify : `SESSION_SECRET`, `AUTH_USERNAME`, `AUTH_PASSWORD_HASH`, `PDF_BLOB_STORE` (optionnel).
+- `.env` est ignoré par git. `.env.example` donne les noms attendus. Les mêmes variables doivent exister côté Netlify : `SESSION_SECRET`, `AUTH_PASSWORD_HASH`, `PDF_BLOB_STORE` (optionnel) ; `AUTH_USERNAME` n'est plus utilisée et peut être supprimée.
 - Menaces connues : force brute sur le login (T-04), contenu tiers non vérifié (T-08), mise en cache d'une page protégée par un intermédiaire (T-06), XSS latent si la liste devient dynamique (T-13).
 
 ## 8. Qualité

@@ -44,7 +44,7 @@ Palette validée par Alex : Ink Black, Yale Blue, Powder Blue, Platinum. Les aut
 | `--color-platinum` | `#f0f4ef` | Fond clair principal, texte sur fond sombre | 16.15:1 avec Ink Black |
 | `--color-slate` | `#6d7d8e` | Titres de groupe techno, lien Espace enseignant | **3.80:1 sur Platinum, 4.25:1 sur Ink Black : sous 4.5:1** |
 | `--color-slate-dark` | `#3c4a56` | Texte courant sur fond clair | 8.19:1 sur Platinum |
-| (en dur) `#b3261e` | erreur | Message « Identifiants incorrects. » | 5.88:1 sur Platinum ; à promouvoir en token |
+| (en dur) `#b3261e` | erreur | Message « Code incorrect. » | 5.88:1 sur Platinum ; à promouvoir en token |
 
 Points sous le seuil (texte ≥ 4.5:1) :
 
@@ -103,6 +103,8 @@ Les états de focus ne sont pas stylés : le navigateur applique son contour par
 | Lien de scène (`.project__links a`) | repos, survol (Platinum vers Powder), focus | Souligné Powder ; zone tactile de 44 px |
 | Points clés (`.project__facts`) | repos | Un filet par point, pas de puce ; 3 ou 4 colonnes sur desktop |
 | Onglets de la FAQ (`.faq__tab`) | repos, survol, sélectionné, focus | ≥ 64rem : liste verticale à gauche, filet Powder entre les lignes, numéro en mono, losange creux devant la question choisie, filet Yale au-dessus. En dessous : 5 pastilles numérotées de 44 px, la choisie en Yale plein |
+| Scène des fiches (`.faq--dark`, `.espace__bar`, `.fiche__*`) | repos, onglet choisi | Même scène que la FAQ en thème sombre (fond Ink Black, texte Platinum, accent et filets Powder Blue) ; menu à gauche (titres des documents), panneau à droite : sous-titre en italique, compétences (information principale, 1 rem) et livrables (0,875 rem) en deux colonnes dès 64rem, statut, date, liens ; puce en losange creux ; barre en haut : accueil et déconnexion |
+| Fenêtre de connexion (`.login`) | fermée, ouverte, erreur | `<dialog>` de 26 rem au plus, thème sombre (fond Ink Black, texte Platinum, bouton Powder Blue), titre en Inria Serif, fermeture par la croix, `Échap` ou un clic sur le fond ; apparition de 250 ms sous `no-preference` ; message d'erreur en rose clair (`#ffb4ab`) |
 | Réponse de la FAQ (`.faq__panel`) | affichée, masquée | Compteur mono « 01 / 05 », question en Inria Serif, réponse en slate foncé ; la section mesure l'écran (`100svh`) sur fond Platinum |
 | Fond de la FAQ (`.faq__bg`) | repos, onde | Grille de points Yale Blue de 34 px à 10 % d'opacité, fixe ; à chaque changement de question, un anneau de 40 px part du centre de la réponse, pic à 42 % d'opacité et rayon de point 1,6 + 1,6 px, éteint en 1,9 s ; aucun point sous le titre, la liste ni la réponse |
 | Liste à puces rondes (`.list-dotted`) | repos | Puce 6 px, Yale ; plus utilisée dans les sections de l'accueil |

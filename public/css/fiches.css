@@ -1,0 +1,183 @@
+/* Espace enseignant : fiches reflexives. Reprend la scene a onglets de la FAQ (faq.css)
+   en version sombre (.faq--dark). Chargee apres faq.css. */
+body.espace {
+  --espace-bar-h: 4.75rem;
+  background: var(--color-ink-black);
+  color: var(--color-platinum);
+}
+
+/* main.css limite <main> a 48rem : la scene prend toute la largeur */
+.espace__main {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.espace .faq {
+  min-height: calc(var(--vh-screen) - var(--espace-bar-h));
+}
+
+/* Barre : retour a l'accueil et deconnexion */
+.espace__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  min-height: var(--espace-bar-h);
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.espace__links {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.espace__bar a,
+.espace__bar button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--color-powder-blue);
+  font: inherit;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--color-powder-blue) 50%, transparent);
+  text-underline-offset: 0.3em;
+}
+
+.espace__bar a:hover,
+.espace__bar button:hover {
+  color: var(--color-platinum);
+}
+
+.espace__bar :focus-visible {
+  outline: 2px solid var(--color-powder-blue);
+  outline-offset: 3px;
+}
+
+/* En-tete : auteur et formation */
+.fiches__author {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--faq-muted);
+}
+
+/* Panneau d'une fiche */
+.fiche__sub {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--faq-muted);
+}
+
+.fiche__cols {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.fiche__h {
+  margin: 0 0 var(--space-xs);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faq-accent);
+}
+
+.fiche__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--faq-muted);
+}
+
+.fiche__list li {
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+/* Puce : petit losange creux, clin d'oeil au logo */
+.fiche__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 6px;
+  height: 6px;
+  border: 1.5px solid var(--faq-accent);
+  transform: rotate(45deg);
+}
+
+/* Les competences sont l'information principale */
+.fiche__block--skills .fiche__list {
+  font-size: 1rem;
+  color: var(--faq-fg);
+}
+
+.fiche__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-md);
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--faq-muted);
+}
+
+.fiche__status {
+  color: var(--faq-fg);
+}
+
+.fiche__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+  color: var(--faq-fg);
+  text-decoration: underline;
+  text-decoration-color: var(--faq-accent);
+  text-underline-offset: 0.3em;
+}
+
+.fiche__link:hover {
+  color: var(--faq-accent);
+}
+
+@media (max-width: 48rem) {
+  .espace__bar {
+    padding-inline: var(--space-sm);
+  }
+}
+
+/* Menu a gauche (colonnes 1 a 4), fiche a droite (colonnes 5 a 12), deux colonnes de contenu */
+@media (min-width: 64rem) {
+  .espace .faq__head {
+    grid-column: 1 / span 4;
+  }
+
+  .espace .faq.is-tabs .faq__tabs {
+    grid-column: 1 / span 4;
+  }
+
+  .espace .faq__plate {
+    grid-column: 5 / span 8;
+    padding-inline-start: var(--space-lg);
+  }
+
+  .fiche__cols {
+    grid-template-columns: 1fr 1fr;
+  }
+}

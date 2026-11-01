@@ -12,14 +12,13 @@ function getSessionSecret() {
   return secret;
 }
 
-export function verifyCredentials(username, password) {
-  const expectedUsername = process.env.AUTH_USERNAME;
+// Code d'acces unique : seul le hash bcrypt (AUTH_PASSWORD_HASH) est stocke, jamais le code en clair.
+export async function verifyCode(code) {
   const expectedHash = process.env.AUTH_PASSWORD_HASH;
+  if (!expectedHash) return false;
+  if (typeof code !== 'string' || code.length === 0) return false;
 
-  if (!expectedUsername || !expectedHash) return false;
-  if (username !== expectedUsername) return false;
-
-  return bcrypt.compareSync(password, expectedHash);
+  return bcrypt.compare(code, expectedHash);
 }
 
 // CONTEXT est une variable de build Netlify, pas du runtime des fonctions :

@@ -1,6 +1,6 @@
 // Section FAQ : un onglet par question ; la reponse change sur place (aucun decalage).
 // Sans JavaScript, les cinq reponses restent visibles a la suite.
-const section = document.querySelector('#faq');
+const section = document.querySelector('.faq');
 
 if (section) {
   const list = section.querySelector('.faq__tabs');
