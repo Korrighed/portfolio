@@ -32,12 +32,12 @@
 
 [[redirects]]
   from = "/fiches-reflexives/:id"
-  to = "/.netlify/functions/fiche-detail?id=:id"
+  to = "/.netlify/functions/fiche-detail/:id"
   status = 200
 
 [[redirects]]
   from = "/api/pdf/:id"
-  to = "/.netlify/functions/pdf?id=:id"
+  to = "/.netlify/functions/pdf/:id"
   status = 200
 
 [[redirects]]

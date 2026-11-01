@@ -75,7 +75,37 @@ export const fiches = [
   },
 ];
 
+// L'id de la fiche peut arriver par le parametre ?id=..., par le chemin de la fonction
+// (/.netlify/functions/pdf/affmar) ou par l'URL d'origine (/api/pdf/affmar) : on les essaie dans cet ordre
+// et on garde la premiere fiche connue. Un parametre non substitue (":id") est ignore.
+const lastSegment = (path) => {
+  const last = String(path || '').split('?')[0].split('/').filter(Boolean).pop() || '';
+  try {
+    return decodeURIComponent(last);
+  } catch {
+    return last;
+  }
+};
+
+export function ficheIds(event) {
+  const ids = [];
+  const fromQuery = event.queryStringParameters?.id;
+  if (fromQuery && !fromQuery.startsWith(':')) ids.push(fromQuery);
+  if (event.path) ids.push(lastSegment(event.path));
+  if (event.rawUrl) {
+    try {
+      ids.push(lastSegment(new URL(event.rawUrl).pathname));
+    } catch {
+      // rawUrl illisible : ignore
+    }
+  }
+  return ids.filter(Boolean);
+}
+
 export function findFiche(event) {
-  const id = event.queryStringParameters?.id;
-  return fiches.find((f) => f.id === id) || null;
+  for (const id of ficheIds(event)) {
+    const fiche = fiches.find((f) => f.id === id);
+    if (fiche) return fiche;
+  }
+  return null;
 }
