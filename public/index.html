@@ -358,22 +358,25 @@
       </div>
     </div>
 
-    <div class="faq__stage">
-      <header class="faq__head">
-        <span class="text-eyebrow">02 — Questions</span>
-        <h2 id="faq-title" class="faq__title">Questions fréquentes</h2>
-      </header>
+    <div class="faq__scene">
+      <canvas class="faq__bg" aria-hidden="true"></canvas>
 
-      <div class="faq__tabs">
+      <div class="faq__stage">
+        <header class="faq__head">
+          <span class="text-eyebrow">02 — Questions</span>
+          <h2 id="faq-title" class="faq__title">Questions fréquentes</h2>
+        </header>
+
+        <div class="faq__tabs">
         <button class="faq__tab" type="button" data-faq="1"><span class="faq__num" aria-hidden="true">01</span><span class="faq__label">Quel est mon profil de développeur ?</span></button>
         <button class="faq__tab" type="button" data-faq="2"><span class="faq__num" aria-hidden="true">02</span><span class="faq__label">Est-ce que je suis capable de travailler en équipe ?</span></button>
         <button class="faq__tab" type="button" data-faq="3"><span class="faq__num" aria-hidden="true">03</span><span class="faq__label">Est-ce que je travaille en architecture distribuée ?</span></button>
         <button class="faq__tab" type="button" data-faq="4"><span class="faq__num" aria-hidden="true">04</span><span class="faq__label">Est-ce que j'utilise l'IA pour coder ?</span></button>
         <button class="faq__tab" type="button" data-faq="5"><span class="faq__num" aria-hidden="true">05</span><span class="faq__label">Est-ce que je suis capable de respecter et de créer une identité visuelle ?</span></button>
-      </div>
+        </div>
 
-      <div class="faq__plate">
-        <div class="faq__panels">
+        <div class="faq__plate">
+          <div class="faq__panels">
           <article class="faq__panel" id="faq-panel-1" data-faq="1">
             <p class="faq__count" aria-hidden="true">01 / 05</p>
             <h3 class="faq__q">Quel est mon profil de développeur ?</h3>
@@ -399,6 +402,7 @@
             <h3 class="faq__q">Est-ce que je suis capable de respecter et de créer une identité visuelle ?</h3>
             <p class="faq__a">Ce n'est pas mon domaine d'expertise. En revanche, je sais parfaitement créer ou respecter une identité visuelle propre et cohérente pour chaque projet.</p>
           </article>
+          </div>
         </div>
       </div>
     </div>
@@ -419,6 +423,8 @@
   <script type="module" src="/js/projets-scroll.js"></script>
 
   <script type="module" src="/js/faq.js"></script>
+
+  <script type="module" src="/js/faq-ripple.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js"></script>

@@ -9,6 +9,8 @@ if (section) {
 
   if (list && tabs.length > 0 && tabs.length === panels.length) {
     section.classList.add('is-tabs');
+    let current = -1;
+    let ready = false;
     list.setAttribute('role', 'tablist');
     list.setAttribute('aria-label', 'Questions fréquentes');
 
@@ -28,6 +30,8 @@ if (section) {
     });
 
     function select(index, focus) {
+      const changed = index !== current;
+      current = index;
       tabs.forEach((tab, i) => {
         const on = i === index;
         tab.setAttribute('aria-selected', String(on));
@@ -35,6 +39,7 @@ if (section) {
         panels[i].classList.toggle('is-active', on);
       });
       if (focus) tabs[index].focus();
+      if (changed && ready) section.dispatchEvent(new CustomEvent('faq:change', { detail: { index } }));
     }
 
     list.addEventListener('keydown', (event) => {
@@ -52,5 +57,6 @@ if (section) {
     });
 
     select(0, false);
+    ready = true;
   }
 }

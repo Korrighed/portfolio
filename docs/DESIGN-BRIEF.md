@@ -104,12 +104,12 @@ Les états de focus ne sont pas stylés : le navigateur applique son contour par
 | Lien de scène (`.project__links a`) | repos, survol (Platinum vers Powder), focus | Souligné Powder ; zone tactile de 44 px |
 | Points clés (`.project__facts`) | repos | Un filet par point, pas de puce ; 3 ou 4 colonnes sur desktop |
 | Onglets de la FAQ (`.faq__tab`) | repos, survol, sélectionné, focus | ≥ 64rem : liste verticale à gauche, filet Powder entre les lignes, numéro en mono, losange creux devant la question choisie, filet Yale au-dessus. En dessous : 5 pastilles numérotées de 44 px, la choisie en Yale plein |
-| Réponse de la FAQ (`.faq__panel`) | affichée, masquée | Compteur mono « 01 / 05 », question en Inria Serif, réponse en slate foncé ; fond Platinum uni, aucun point ; la section mesure l'écran (`100svh`) |
+| Réponse de la FAQ (`.faq__panel`) | affichée, masquée | Compteur mono « 01 / 05 », question en Inria Serif, réponse en slate foncé ; la section mesure l'écran (`100svh`) sur fond Platinum |
+| Fond de la FAQ (`.faq__bg`) | repos, onde | Grille de points Yale Blue de 34 px à 10 % d'opacité, fixe ; à chaque changement de question, un anneau de 40 px part du centre de la réponse, pic à 42 % d'opacité et rayon de point 1,6 + 1,6 px, éteint en 1,9 s ; aucun point sous le titre, la liste ni la réponse |
 | Liste à puces rondes (`.list-dotted`) | repos | Puce 6 px, Yale ; plus utilisée dans les sections de l'accueil |
 | Lien Espace enseignant (`.private-link`) | repos, survol | Carré creux 8 px devant le libellé |
 | Eyebrow (`.text-eyebrow`) | repos | Partagé entre les sections |
-| Fond de points (`#projets-bg`) | progression 0 à 100 % par projet | Indicateur de progression : cercle lumineux depuis l'aperçu ; remplace la barre en onde |
-| Indice de défilement (`.project__cue`) | visible, masqué en fin de scène | Trait de 1 px qui s'estompe, comme sur le bouton du hero |
+$1| Indice de défilement (`.project__cue`) | visible, masqué en fin de scène | Trait de 1 px qui s'estompe, comme sur le bouton du hero |
 
 ## 5. Mise en page et responsive
 
@@ -129,7 +129,7 @@ Les états de focus ne sont pas stylés : le navigateur applique son contour par
 |---|---|
 | Scène projet | Épinglée (`sticky`) sur 190 % de la hauteur de l'écran en plus. Les informations ne se déplacent pas : elles passent de 0 à 1 d'opacité et d'un flou de 6 px à net en 700 ms, quand la progression atteint 0, 0,2, 0,4, 0,62 et 0,82 (seuils, pas de `scrub`). Sur mobile l'aperçu apparaît avant le titre |
 | Fond de points | Boucle `requestAnimationFrame` active seulement quand la section est à l'écran et l'onglet visible. Cercle lumineux : rayon proportionnel à la progression du projet (lissé), anneau plus gros à son bord ; houle douce dont la phase suit le scroll, sans dérive ; 700 ms de fondu au changement de projet |
-| Défilement vers un projet | Défilement lisse du navigateur ; menu : fin de scène (tout révélé)  |
+$1| FAQ | Panneau : flou de 6 px vers net et opacité en 300 ms au changement de question (sous `no-preference`). Fond : onde de 1,9 s au changement, onde d'arrivée de 3 s une seule fois quand la section est à moitié visible ; boucle active seulement pendant l'onde |
 | Menu des projets | Fondu 300 ms ; liens 200 ms |
 | Vue latérale (mobile) | Glissement 300 ms depuis la droite ; fond assombri 300 ms |
 | Bouton « Projets » | 200 ms ; anneau 450 ms |

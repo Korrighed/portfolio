@@ -1,7 +1,7 @@
 # Plan d'implémentation — Section FAQ dans un losange ouvert
 
 Statut : livré sur la branche, en attente de validation d'Alex
-Couvre : PRD F-01, F-04, F-07, F-08, F-09, F-19, NF-09, NF-13 ; TRD T-18 à T-20
+Couvre : PRD F-01, F-04, F-07, F-08, F-09, F-19, NF-09, NF-13 ; TRD T-18 à T-21
 Branche : `feature/faq` (depuis `dev`). Merge sur `dev` en `--no-ff` après accord d'Alex.
 
 ## 1. Objectif du lot
@@ -44,6 +44,7 @@ flowchart LR
 | T105 | Rendu de la FAQ en onglets et panneaux au build | US-04 | `scripts/build-index.js` | T101 | | fait |
 | T106 | FAQ en une scène d'un écran (onglets, panneaux, script) | US-04 | `src/sections/faq.html`, `public/css/faq.css`, `public/js/faq.js`, `src/index.template.html` | T105 | | fait |
 | T107 | Retirer les points du fond et le losange | US-04 | `src/sections/faq.html`, `public/css/faq.css` | T106 | | fait |
+| T108 | Fond de points pâle et onde depuis le bloc de réponse | US-04 | `src/sections/faq.html`, `public/css/faq.css`, `public/js/faq.js`, `public/js/faq-ripple.js`, `src/index.template.html` | T107 | | fait |
 
 Fichier détaillé de chaque tâche : `docs/tasks/Txxx-slug.md`.
 
@@ -52,7 +53,7 @@ Fichier détaillé de chaque tâche : `docs/tasks/Txxx-slug.md`.
 ```mermaid
 flowchart TD
   T101 --> T102
-  T101 --> T105 --> T106 --> T107
+  T101 --> T105 --> T106 --> T107 --> T108
   T103
   T104
 ```
