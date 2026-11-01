@@ -9,7 +9,9 @@
 #projets {
   --projets-abyss: #08111a;
   --projets-side: calc(var(--space-lg) + 7.5rem + var(--space-md));
-  --projets-travel: 190vh;
+  --projets-vh: 100vh;
+  --projets-travel: calc(var(--projets-vh) * 1.9);
+  --projets-bar-h: calc(44px + env(safe-area-inset-top, 0px));
   --projets-line: color-mix(in srgb, var(--color-powder-blue) 28%, transparent);
   position: relative;
   background: linear-gradient(
@@ -21,9 +23,10 @@
   color: var(--color-platinum);
 }
 
+/* svh : hauteur avec les barres du navigateur affichees (evite de couper le bas). */
 @supports (height: 100svh) {
   #projets {
-    --projets-travel: 190svh;
+    --projets-vh: 100svh;
   }
 }
 
@@ -39,16 +42,9 @@
   z-index: 0;
   display: block;
   width: 100%;
-  height: 100vh;
-  margin-bottom: -100vh;
+  height: var(--projets-vh);
+  margin-bottom: calc(-1 * var(--projets-vh));
   pointer-events: none;
-}
-
-@supports (height: 100svh) {
-  .projets-bg {
-    height: 100svh;
-    margin-bottom: -100svh;
-  }
 }
 
 /* ---------- Un projet = une scene ---------- */
@@ -60,7 +56,7 @@
 .project__stage {
   position: relative;
   box-sizing: border-box;
-  min-height: 100vh;
+  min-height: var(--projets-vh);
   padding: var(--space-xl) var(--space-lg) var(--space-xl) var(--projets-side);
 }
 
@@ -88,11 +84,6 @@
 .project__shot {
   grid-area: shot;
   align-self: center;
-  min-width: 0;
-}
-
-.project__facts {
-  grid-area: facts;
   min-width: 0;
 }
 
@@ -156,6 +147,8 @@
 
 /* Points cles : un filet par point, pas de puce (la structure suffit). */
 .project__facts {
+  grid-area: facts;
+  min-width: 0;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -322,26 +315,16 @@
   font-size: 0.8125rem;
 }
 
-/* ---------- Emergence des informations, uniquement avec JS et sans reduced-motion ---------- */
+/* ---------- Emergence des informations : uniquement avec JS et sans reduced-motion ---------- */
 @media (prefers-reduced-motion: no-preference) {
   .js .project {
-    height: calc(100vh + var(--projets-travel));
+    height: calc(var(--projets-vh) + var(--projets-travel));
   }
 
   .js .project__stage {
     position: sticky;
     top: 0;
-    height: 100vh;
-  }
-
-  @supports (height: 100svh) {
-    .js .project {
-      height: calc(100svh + var(--projets-travel));
-    }
-
-    .js .project__stage {
-      height: 100svh;
-    }
+    height: var(--projets-vh);
   }
 
   .js .step {
@@ -367,7 +350,7 @@
   .js .project.is-flow .project__stage {
     position: static;
     height: auto;
-    min-height: 100vh;
+    min-height: var(--projets-vh);
   }
 
   .js .project.is-flow .step {
@@ -375,18 +358,6 @@
     visibility: visible;
     filter: none;
     transition: none;
-  }
-
-  @supports (height: 100svh) {
-    .js .project.is-flow .project__stage {
-      min-height: 100svh;
-    }
-  }
-}
-
-@supports (height: 100svh) {
-  .project__stage {
-    min-height: 100svh;
   }
 }
 
@@ -397,12 +368,18 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 20;
+}
+
+/* Menu et barre de section : meme apparition, seulement pendant la section. */
+.projets-nav,
+.projets-bar {
   visibility: hidden;
   opacity: 0;
   transition: opacity 300ms, visibility 0s 300ms;
 }
 
-.projets-nav.is-visible {
+.projets-nav.is-visible,
+.projets-bar.is-visible {
   visibility: visible;
   opacity: 1;
   transition-delay: 0s;
@@ -542,10 +519,6 @@
   .project.is-flow .project__facts {
     grid-area: facts;
   }
-
-  .project.is-flow .project__shot {
-    align-self: start;
-  }
 }
 
 /* ---------- Mobile ---------- */
@@ -554,7 +527,7 @@
     display: none;
   }
 
-  /* Barre de section au-dessus du projet : « Projets » puis le projet en cours. */
+  /* Barre de section au-dessus du projet : "Projets" puis le projet en cours. */
   .projets-bar {
     position: fixed;
     top: 0;
@@ -566,19 +539,10 @@
     justify-content: space-between;
     gap: var(--space-sm);
     box-sizing: border-box;
-    height: calc(44px + env(safe-area-inset-top, 0px));
+    height: var(--projets-bar-h);
     padding: env(safe-area-inset-top, 0px) max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));
     background: color-mix(in srgb, var(--color-ink-black) 90%, transparent);
     border-bottom: 1px solid var(--projets-line);
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 300ms, visibility 0s 300ms;
-  }
-
-  .projets-bar.is-visible {
-    visibility: visible;
-    opacity: 1;
-    transition-delay: 0s;
   }
 
   @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -650,16 +614,10 @@
     inset: 0;
     z-index: 55;
     display: block;
-    background: rgba(8, 17, 26, 0.6);
+    background: color-mix(in srgb, var(--projets-abyss) 60%, transparent);
     opacity: 0;
     visibility: hidden;
     transition: opacity 300ms, visibility 0s 300ms;
-  }
-
-  .projets-scrim.is-open {
-    opacity: 1;
-    visibility: visible;
-    transition-delay: 0s;
   }
 
   .projets-sheet {
@@ -681,8 +639,16 @@
     transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), visibility 0s 300ms;
   }
 
+  .projets-scrim.is-open {
+    opacity: 1;
+  }
+
   .projets-sheet.is-open {
     transform: none;
+  }
+
+  .projets-scrim.is-open,
+  .projets-sheet.is-open {
     visibility: visible;
     transition-delay: 0s;
   }
@@ -746,9 +712,9 @@
     margin-top: auto;
   }
 
-  /* Sous la barre de section : un seul bandeau de 44 px, qui porte de l'information. */
+  /* Sous la barre de section. */
   .project__stage {
-    padding: calc(44px + env(safe-area-inset-top, 0px) + 0.75rem) max(16px, env(safe-area-inset-right, 0px)) var(--space-md) max(16px, env(safe-area-inset-left, 0px));
+    padding: calc(var(--projets-bar-h) + 0.75rem) max(16px, env(safe-area-inset-right, 0px)) var(--space-md) max(16px, env(safe-area-inset-left, 0px));
   }
 
   /* L'apercu prend la hauteur libre : la scene remplit tout l'ecran. */

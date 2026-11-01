@@ -17,7 +17,6 @@ if (section && canvas) {
   const scrim = section.querySelector('.projets-scrim');
   const sheetClose = section.querySelector('.projets-sheet__close');
   const links = [...section.querySelectorAll('.projets-nav__link')];
-  const n = projects.length;
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const stacked = window.matchMedia('(max-width: 64rem)');
@@ -26,25 +25,27 @@ if (section && canvas) {
   // Seuils d'apparition des etapes 1 a 5 (progression 0..1 dans le projet).
   // L'etape 1 est visible des l'arrivee sur le projet.
   const THRESHOLDS = [0, 0.2, 0.4, 0.62, 0.82];
+  const DONE_FROM = 0.97;
 
   // ---------- Fond de points = indicateur de progression du projet ----------
   // Grille de points (meme esprit que le hero Vanta). Le cercle lumineux part de
   // derriere l'apercu et grandit avec la lecture : a 100 % tout l'ecran est allume.
   // Rien ne descend. La houle suit le scroll (phase), sans derive.
-  const GAP = 34;
+  const GAP = 34; // espacement des points, comme le hero
+  const TAU = Math.PI * 2;
+  const EASE_SCROLL = 0.06;
+  const EASE_PROGRESS = 0.14;
+  const EASE_TINT = 0.03;
+  const FADE_MS = 700; // fondu au changement de projet
+  const EDGE_RATIO = 0.14; // bord doux du cercle, en part du rayon maximal
+  const RING_WIDTH = 22; // largeur de l'anneau plus gros au bord du cercle, en px
+  const SWELL = { x: 0.011, y: 0.007, time: 0.00035, scroll: 0.0016, lift: 3 };
+  const COLOR_FROM = [180, 205, 237]; // Powder Blue
+  const COLOR_TO = [120, 160, 215]; // bleu plus profond, atteint au dernier projet
   const dpr = Math.min(2, window.devicePixelRatio || 1);
+
   let width = 0;
   let height = 0;
-
-  function resizeCanvas() {
-    const rect = canvas.getBoundingClientRect();
-    width = rect.width;
-    height = rect.height;
-    canvas.width = Math.round(width * dpr);
-    canvas.height = Math.round(height * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-
   let active = -1;
   let progress = 0;
   let progressEased = 0;
@@ -56,36 +57,45 @@ if (section && canvas) {
   let scrollTarget = window.scrollY;
   let scrollEased = scrollTarget;
 
-  function drawDots(time, delta) {
-    scrollEased += (scrollTarget - scrollEased) * 0.06;
-    progressEased += (progress - progressEased) * 0.14;
-    fade = Math.min(1, fade + delta / 700);
-    tint += (Math.max(0, active) / (n - 1) - tint) * 0.03;
+  function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    width = rect.width;
+    height = rect.height;
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
 
-    // Powder Blue (180, 205, 237) qui glisse legerement vers un bleu plus profond.
-    const red = Math.round(180 - 60 * tint);
-    const green = Math.round(205 - 45 * tint);
-    const blue = Math.round(237 - 22 * tint);
+  function mixColor(amount) {
+    return COLOR_FROM.map((from, index) => Math.round(from + (COLOR_TO[index] - from) * amount));
+  }
+
+  function drawDots(time, delta) {
+    scrollEased += (scrollTarget - scrollEased) * EASE_SCROLL;
+    progressEased += (progress - progressEased) * EASE_PROGRESS;
+    fade = Math.min(1, fade + delta / FADE_MS);
+    tint += (Math.max(0, active) / (projects.length - 1) - tint) * EASE_TINT;
+
+    const [red, green, blue] = mixColor(tint);
     const gain = 0.4 + 0.6 * fade;
-    const edge = maxRadius * 0.14;
+    const edge = maxRadius * EDGE_RATIO;
     const radius = progressEased * (maxRadius + edge);
+    const started = progressEased > 0.001;
 
     ctx.clearRect(0, 0, width, height);
     for (let y = GAP / 2; y < height + GAP; y += GAP) {
       for (let x = GAP / 2; x < width + GAP; x += GAP) {
-        const dx = x - centerX;
-        const dy = y - centerY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+        const distance = Math.hypot(x - centerX, y - centerY);
         const reach = clamp((radius - distance) / edge, 0, 1);
-        const ring = (distance - radius) / 22;
-        const band = Math.exp(-ring * ring) * (progressEased > 0.001 ? 1 : 0);
-        const swell = Math.sin(x * 0.011 + y * 0.007 - time * 0.00035 - scrollEased * 0.0016);
+        const ring = (distance - radius) / RING_WIDTH;
+        const band = started ? Math.exp(-ring * ring) : 0;
+        const swell = Math.sin(x * SWELL.x + y * SWELL.y - time * SWELL.time - scrollEased * SWELL.scroll);
         const k = swell * 0.5 + 0.5;
         const alpha = (0.07 + 0.05 * k + 0.2 * reach + 0.2 * band) * gain;
         const dot = 1.1 + 0.4 * k + 0.4 * reach + 0.8 * band;
         ctx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha.toFixed(3)})`;
         ctx.beginPath();
-        ctx.arc(x, y + swell * 3, dot, 0, 6.2832);
+        ctx.arc(x, y + swell * SWELL.lift, dot, 0, TAU);
         ctx.fill();
       }
     }
@@ -116,7 +126,7 @@ if (section && canvas) {
   // En colonne (apercu au-dessus du titre), l'ordre d'apparition suit l'ordre de lecture :
   // data-mstep remplace data-step.
   function applySteps(index, value) {
-    // Mode lecture normale (scene trop haute pour l'ecran) : tout est visible d'emblee.
+    // Lecture normale (scene trop haute pour l'ecran) ou reduced-motion : tout est visible d'emblee.
     const showAll = reduceMotion.matches || projects[index].classList.contains('is-flow');
     stepsByProject[index].forEach((element) => {
       const mobileStep = element.getAttribute('data-mstep');
@@ -128,7 +138,7 @@ if (section && canvas) {
       element.classList.toggle('is-gone', gone);
       element.inert = !on || (gone && stacked.matches);
     });
-    projects[index].classList.toggle('is-done', value >= 0.97);
+    projects[index].classList.toggle('is-done', value >= DONE_FROM);
   }
 
   // Une scene epinglee fait exactement un ecran : si son contenu est plus haut
@@ -152,17 +162,17 @@ if (section && canvas) {
   }
 
   // ---------- Mise a jour au scroll ----------
-  let queued = false;
-
-  function update() {
-    queued = false;
-    const viewport = window.innerHeight;
+  function updateMenu(viewport) {
     const box = section.getBoundingClientRect();
-    const inView = box.top < viewport && box.bottom > 0;
     const showMenu = box.top < viewport * 0.5 && box.bottom > viewport * 0.5;
     nav.classList.toggle('is-visible', showMenu);
     bar.classList.toggle('is-visible', showMenu);
+    return box.top < viewport && box.bottom > 0;
+  }
 
+  // Applique les etapes de chaque projet ; le projet actif est le dernier dont le haut
+  // a passe la moitie de l'ecran. Retourne son index.
+  function updateProjects(viewport) {
     let current = 0;
     projects.forEach((project, index) => {
       const rect = project.getBoundingClientRect();
@@ -174,6 +184,33 @@ if (section && canvas) {
         progress = value;
       }
     });
+    return current;
+  }
+
+  // Le cercle part du centre de l'apercu du projet actif.
+  function updateRippleCenter(current) {
+    const preview = projects[current].querySelector('.frame');
+    if (!preview) return;
+    const rect = preview.getBoundingClientRect();
+    if (rect.width === 0) return;
+    centerX = rect.left + rect.width / 2;
+    centerY = rect.top + rect.height / 2;
+    maxRadius = Math.max(
+      1,
+      Math.hypot(centerX, centerY),
+      Math.hypot(width - centerX, centerY),
+      Math.hypot(centerX, height - centerY),
+      Math.hypot(width - centerX, height - centerY),
+    );
+  }
+
+  let queued = false;
+
+  function update() {
+    queued = false;
+    const viewport = window.innerHeight;
+    const inView = updateMenu(viewport);
+    const current = updateProjects(viewport);
     scrollTarget = window.scrollY;
 
     if (current !== active) {
@@ -182,26 +219,12 @@ if (section && canvas) {
       fade = 0;
       setActive(current);
     }
-
-    const preview = projects[current].querySelector('.frame');
-    if (preview) {
-      const rect = preview.getBoundingClientRect();
-      if (rect.width > 0) {
-        centerX = rect.left + rect.width / 2;
-        centerY = rect.top + rect.height / 2;
-        maxRadius = Math.max(
-          1,
-          Math.hypot(centerX, centerY),
-          Math.hypot(width - centerX, centerY),
-          Math.hypot(centerX, height - centerY),
-          Math.hypot(width - centerX, height - centerY),
-        );
-      }
-    }
+    updateRippleCenter(current);
 
     if (inView && !document.hidden) startLoop();
     else stopLoop();
 
+    // Sous reduced-motion : pas de boucle, le fond est redessine a chaque mise a jour.
     if (reduceMotion.matches) {
       scrollEased = scrollTarget;
       progressEased = progress;
@@ -216,13 +239,13 @@ if (section && canvas) {
     requestAnimationFrame(update);
   }
 
-  window.addEventListener('scroll', scheduleUpdate, { passive: true });
   function onResize() {
     measureFlow();
     resizeCanvas();
     scheduleUpdate();
   }
 
+  window.addEventListener('scroll', scheduleUpdate, { passive: true });
   window.addEventListener('resize', onResize);
   document.addEventListener('visibilitychange', scheduleUpdate);
   reduceMotion.addEventListener('change', onResize);
@@ -230,7 +253,8 @@ if (section && canvas) {
   document.fonts?.ready.then(onResize);
 
   // ---------- Navigation ----------
-  // Menu : on atterrit sur le projet entierement revele (fin de scene). « Suite » : au debut du projet suivant.
+  // Menu : on atterrit sur le projet entierement revele (fin de scene).
+  // "Suite" : au debut du projet suivant.
   function goTo(target, atStart) {
     let top;
     if (target === 'contact') {
@@ -261,21 +285,23 @@ if (section && canvas) {
     }
   }
 
-  function closeSheet() {
+  function closeSheet({ restoreFocus = true } = {}) {
     sheet.classList.remove('is-open');
     scrim.classList.remove('is-open');
     menuButton.setAttribute('aria-expanded', 'false');
     sheet.setAttribute('inert', '');
-    lastFocus?.focus?.();
+    if (restoreFocus) lastFocus?.focus?.();
+    lastFocus = null;
   }
 
   menuButton.addEventListener('click', (event) => {
     if (sheet.classList.contains('is-open')) closeSheet();
     else openSheet(event.detail === 0);
   });
-  sheetClose.addEventListener('click', closeSheet);
-  scrim.addEventListener('click', closeSheet);
+  sheetClose.addEventListener('click', () => closeSheet());
+  scrim.addEventListener('click', () => closeSheet());
 
+  // Echap ferme la vue ; Tab reste dedans.
   document.addEventListener('keydown', (event) => {
     if (!sheet.classList.contains('is-open')) return;
     if (event.key === 'Escape') {
@@ -284,7 +310,6 @@ if (section && canvas) {
     }
     if (event.key !== 'Tab') return;
     const focusable = [...sheet.querySelectorAll('a[href], button')];
-    if (!focusable.length) return;
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
     if (event.shiftKey && document.activeElement === first) {
@@ -300,13 +325,7 @@ if (section && canvas) {
   section.querySelectorAll('[data-goto]').forEach((element) => {
     element.addEventListener('click', (event) => {
       event.preventDefault();
-      if (sheet.contains(element)) {
-        sheet.classList.remove('is-open');
-        scrim.classList.remove('is-open');
-        menuButton.setAttribute('aria-expanded', 'false');
-        sheet.setAttribute('inert', '');
-        lastFocus = null;
-      }
+      if (sheet.contains(element)) closeSheet({ restoreFocus: false });
       goTo(element.getAttribute('data-goto'), element.getAttribute('data-at') === 'start');
     });
   });
