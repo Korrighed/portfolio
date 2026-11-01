@@ -1,7 +1,7 @@
 # TRD — Portfolio d'Alex
 
 Statut : brouillon
-Couvre : PRD F-01 … F-20, NF-01 … NF-13
+Couvre : PRD F-01 … F-23, NF-01 … NF-13
 
 ## 1. Stack
 
@@ -66,7 +66,7 @@ flowchart TD
 | `netlify/functions/lib/fiche-repository.js` | Auteur, fiches (métadonnées en dur) et recherche par `id` | — |
 | `netlify/functions/lib/fiches-view.js` | Rendu HTML de la scène à onglets des fiches | — |
 | `netlify/functions/lib/storage.js` | Lecture d'un PDF dans Blobs | `@netlify/blobs` |
-| `netlify/functions/lib/page.js` | Gabarit HTML des pages protégées | — |
+| `netlify/functions/lib/page.js` | Gabarit HTML des pages protégées : en-tête clair, pied de page clair | — |
 | `netlify.toml` | Build, dev, redirects | — |
 | `vite.config.js` | Racine `public/`, port 5173 strict, régénération de l'accueil | `scripts/build-index.js` |
 
@@ -120,6 +120,10 @@ sequenceDiagram
 | T-22 | Les fiches (titre, sous-titre, date, compétences, livrables, statut, liens, fichier) vivent dans `netlify/functions/lib/fiche-repository.js` ; `fiches-view.js` rend la scène côté serveur (balisage de la FAQ + `faq--dark`), `page.js` accepte `bodyClass`, `styles`, `scripts` et pose `noindex` ; sans session, 302 vers `/login.html` | F-11, F-12 | Appel de `fiche-list` avec cookie forgé : 3 `faq__tab`, 3 `faq__panel` ; sans cookie : 302 |
 | T-23 | `faq.css` passe par des jetons `--faq-bg`, `--faq-fg`, `--faq-muted`, `--faq-accent`, `--faq-on-accent`, `--faq-line`, `--faq-dot` ; `.faq--dark` les redéfinit ; `faq.js` et `faq-ripple.js` ciblent `.faq` ; `faq-ripple.js` lit `--faq-dot` pour la couleur des points | F-20 | FAQ de l'accueil inchangée ; points Powder Blue sur la page des fiches |
 | T-24 | `<dialog id="login-dialog">` (`src/sections/login-dialog.html`, `login-dialog.css`, `login-dialog.js`) : `showModal`, envoi par `fetch('/api/login')` qui suit la redirection (succès si l'URL finale commence par `/fiches-reflexives`, sinon « Code incorrect. ») ; `/login.html` redirige vers `/?connexion=1` quand JavaScript est actif et reste le repli sans JavaScript | F-21, F-10 | Code faux : message dans la fenêtre, URL inchangée ; bon code : arrivée sur `/fiches-reflexives` |
+| T-25 | Espace enseignant : `renderPage` pose l'en-tête (`nav espace__bar`, classes de `nav.css`) et le pied de page (`site-footer--light`) ; le corps est une colonne flex (`body.espace`) dont la scène remplit la hauteur libre ; le PDF est un lien `fiche__cta` sous le sous-titre ; écrans bas (`min-width: 64rem` et `max-height: 50rem`) : paddings réduits | F-22, NF-08 | À 1280×720 et 1024×768, la hauteur du document égale celle de l'écran ; à 320 px, aucun débordement horizontal ; 3 `fiche__cta` rendus |
+| T-26 | Menu des projets : lien « Accueil » (`data-goto="hero"`, `goTo` défile vers `#hero`) en tête du menu fixe et de la vue latérale ; lien `/login.html` en fin de vue latérale, qui ferme la vue (`projets-scroll.js`) puis ouvre la fenêtre de connexion (`login-dialog.js`) | F-04, F-21 | Mobile : « Accueil » ramène au hero et la vue se ferme ; « Espace enseignant » ouvre la fenêtre, la vue est fermée |
+| T-27 | Hero : les deux blocs de texte sont en position absolue dans `.hero-blocks` ; leur placement tient dans quatre classes (`hero-pos-desktop-1` et `-2` dès 48rem, `hero-pos-mobile-1` et `-2` en dessous) qui ne portent que `top` et `left` ou `right`, en % du hero (valeurs par défaut : placement d'origine à 1440×900) ; tailles `clamp(...)` plafonnées à 3,5 rem et 1,8 rem, réduites par la hauteur d'écran (`vh`) ; `min-height` du hero en `--vh-screen` | F-02, NF-08 | De 1920×1080 à 320×568 et en 844×390, aux valeurs par défaut : aucun texte hors écran, aucun chevauchement, aucun texte près du bouton |
+| T-28 | Page statique `public/mentions-legales.html` + `public/css/legal.css` ; lien dans `src/sections/footer.html` et `renderFooter` | F-23 | La page répond 200, cinq `h2`, aucun `@` ni `mailto:` |
 | T-12 | Garde sur l'initialisation de Vanta (`typeof VANTA`) et respect de `prefers-reduced-motion` | NF-10 | CDN bloqué : aucune erreur console bloquante |
 | T-13 | Échappement HTML des champs interpolés dans `page.js` et `fiche-*.js` | F-11, F-12 | Titre contenant `<` rendu en texte |
 | T-14 | `[dev] command` de `netlify.toml` lance Vite sans `npx` ; documenter `netlify login` ou `--offline` | NF-12 | Chronométrer `npm run dev` jusqu'à « Local dev server ready » |
@@ -168,6 +172,7 @@ sequenceDiagram
 | 2026-10-31 | Section Projets : scènes épinglées en CSS `sticky`, informations qui émergent sur place, fond de points en canvas 2D comme indicateur ; GSAP retiré | Garder GSAP (pin + scrub) ; cartes empilées sans pin ; carrousel horizontal ; vague de progression globale ; indicateur qui descend dans la scène | Alex : le lecteur ne doit pas se décaler dans un projet, le fond sert d'indicateur par projet ; moins de dépendances et plus de bug de pin ; maquette validée par Alex (artefact « Portfolio Dossier ») |
 | 2026-11-01 | Aperçus des projets en MP4 H.264 muet (bureau + mobile en incrustation) lus uniquement pour le projet actif | GIF (3 à 10 fois plus lourds) ; WebM en plus (non nécessaire) ; lecture permanente de toutes les vidéos | Poids, CPU, accessibilité |
 | 2026-11-01 | Code d'accès en clair dans `AUTH_CODE` (comparaison en temps constant) et limite de 5 échecs par IP pendant 15 minutes, compteur dans Blobs | Garder le hash bcrypt ; service de limitation externe ; blocage global de tous les visiteurs ; `X-Forwarded-For` pour l'IP | Alex est seul sur le site : le hash ajoutait une étape à chaque changement de code et ne protège que d'une fuite de la variable ; Blobs est déjà utilisé ; un blocage global permettrait de verrouiller l'enseignant dehors ; `X-Forwarded-For` est falsifiable |
+| 2026-11-01 | Espace enseignant : en-tête et pied de page clairs, PDF en bouton principal ; hero en flux ; mentions légales ; périodes retirées des projets ; fiche « yozora » renommée « twitch » (`fiche-twitch.pdf`) ; PDF déposés dans Blobs depuis `storage/fiches-reflexives/` (ignoré par git) | Garder les pixels absolus du hero ; contenu des mentions légales sur l'accueil (fenêtre) ; PDF servis depuis `public/` | Le hero cassait de 768 px à 320 px ; une page statique suffit et se partage ; NF-11 interdit les PDF sous `public/` |
 | 2026-11-01 | Lot FAQ : Compétences remplacées par une FAQ (données uniques HTML + JSON-LD), section CV et email retirés du site, liens « Suite » supprimés, marque « korrighed.dev » | Garder Compétences ; FAQ écrite deux fois (HTML et JSON-LD) ; formulaire de contact dans ce lot | Demande d'Alex ; une seule source évite la divergence entre texte et données structurées |
 
 ## 10. Dette et risques connus
@@ -183,7 +188,6 @@ sequenceDiagram
 | Aucun test, lint ni CI | Moyenne | Moyen | Régressions non détectées |
 | Fond de points en canvas : boucle `requestAnimationFrame` (~800 points) non mesurée sur appareil modeste | Faible | Faible | Saccades possibles ; la boucle est pausée hors de la section et onglet masqué |
 | Vidéos non lisibles sans MP4/H.264 (navigateurs libres) | Faible | Faible | L'affiche JPG reste affichée |
-| Hero positionné en pixels absolus (`hero.css`) | Faible | Moyen | Mise en page fragile entre 48rem et grands écrans (à vérifier au navigateur) |
 | `main` toujours sur le scaffold Astro, 27 commits de retard | Faible | Faible | Confusion sur la branche de référence |
 | Dossier `storage/` et règles `.astro/`, `dist/` dans `.gitignore` obsolètes | Faible | Faible | Bruit |
 

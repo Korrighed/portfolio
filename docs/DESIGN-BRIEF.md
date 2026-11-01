@@ -58,7 +58,7 @@ Points sous le seuil (texte ≥ 4.5:1) :
 |---|---|---|---|
 | Titres de section, titres de colonne | Inria Serif Bold | `2.25rem` / 700 / interligne 1.15 (`--font-display`) ; h3 de colonne `1.25rem` | `serif` |
 | Titres de carte projet | Inria Serif Bold | `clamp(2.5rem, 6vw, 4.5rem)` / 700 / 1.05 | `serif` |
-| Identité (nav, hero, pied de page) | Libre Caslon Text (Regular, Italic, Bold) | marque nav `1.25rem` 700 ; hero nom et rôle `3.5rem` italique ; sous-titre `1.8rem` ; pied `1.125rem` italique | `serif` |
+| Identité (nav, hero, pied de page) | Libre Caslon Text (Regular, Italic, Bold) | marque nav `1.25rem` 700 ; hero nom et rôle `3.5rem` italique (fluide, réduit sur petit écran et écran bas) ; sous-titre `1.8rem` ; pied `1.125rem` italique | `serif` |
 | Texte courant | `system-ui` | `1rem` à `1.125rem`, interligne 1.55 à 1.7 | `sans-serif` |
 | Eyebrow | `system-ui` | `0.75rem` / 600 / espacement `0.18em` / majuscules | — |
 | Code, tags, index | `ui-monospace` (`--font-mono`) | `0.75rem` à `0.8125rem` | `monospace` |
@@ -103,7 +103,10 @@ Les états de focus ne sont pas stylés : le navigateur applique son contour par
 | Lien de scène (`.project__links a`) | repos, survol (Platinum vers Powder), focus | Souligné Powder ; zone tactile de 44 px |
 | Points clés (`.project__facts`) | repos | Un filet par point, pas de puce ; 3 ou 4 colonnes sur desktop |
 | Onglets de la FAQ (`.faq__tab`) | repos, survol, sélectionné, focus | ≥ 64rem : liste verticale à gauche, filet Powder entre les lignes, numéro en mono, losange creux devant la question choisie, filet Yale au-dessus. En dessous : 5 pastilles numérotées de 44 px, la choisie en Yale plein |
-| Scène des fiches (`.faq--dark`, `.espace__bar`, `.fiche__*`) | repos, onglet choisi | Même scène que la FAQ en thème sombre (fond Ink Black, texte Platinum, accent et filets Powder Blue) ; menu à gauche (titres des documents), panneau à droite : sous-titre en italique, compétences (information principale, 1 rem) et livrables (0,875 rem) en deux colonnes dès 64rem, statut, date, liens ; puce en losange creux ; barre en haut : accueil et déconnexion |
+| Scène des fiches (`.faq--dark`, `.fiche__*`) | repos, onglet choisi | Même scène que la FAQ en thème sombre (fond Ink Black, texte Platinum, accent et filets Powder Blue) ; menu à gauche (titres des documents), panneau à droite : sous-titre en italique, compétences (information principale, 1 rem) et livrables (0,875 rem) en deux colonnes dès 64rem, statut, date, liens ; puce en losange creux ; le lien PDF est un bouton plein (`.fiche__cta`, Powder Blue, texte Ink Black, 56 px, icône de document, « Ouvrir la fiche réflexive », mention « PDF · s'ouvre dans un nouvel onglet », flèche ↗), sous le sous-titre ; pleine largeur sous 48rem |
+| Logo de l'IUT (`.fiches__iut`, `.login__iut`) | repos | `LogoIUT.png` (fond clair propre à l'image) avant la mention « Espace enseignant » : 4,5 rem de haut sur la page des fiches, 3,75 rem dans la fenêtre de connexion |
+| En-tête et pied de page de l'espace enseignant (`.nav.espace__bar`, `.site-footer--light`) | repos | Fond Platinum, filet Powder Blue, texte Yale Blue : même aspect que la barre de l'accueil ; la scène sombre occupe la hauteur libre entre les deux ; sous 30rem, la marque garde le logo seul et le pied de page s'empile |
+| Page « Mentions légales » (`.legal`) | repos | Une colonne de 40 rem sur fond Platinum, titre en Inria Serif, intertitres Yale Blue |
 | Fenêtre de connexion (`.login`) | fermée, ouverte, erreur | `<dialog>` de 26 rem au plus, thème sombre (fond Ink Black, texte Platinum, bouton Powder Blue), titre en Inria Serif, fermeture par la croix, `Échap` ou un clic sur le fond ; apparition de 250 ms sous `no-preference` ; message d'erreur en rose clair (`#ffb4ab`) |
 | Réponse de la FAQ (`.faq__panel`) | affichée, masquée | Compteur mono « 01 / 05 », question en Inria Serif, réponse en slate foncé ; la section mesure l'écran (`100svh`) sur fond Platinum |
 | Fond de la FAQ (`.faq__bg`) | repos, onde | Grille de points Yale Blue de 34 px à 10 % d'opacité, fixe ; à chaque changement de question, un anneau de 40 px part du centre de la réponse, pic à 42 % d'opacité et rayon de point 1,6 + 1,6 px, éteint en 1,9 s ; aucun point sous le titre, la liste ni la réponse |
@@ -117,7 +120,7 @@ Les états de focus ne sont pas stylés : le navigateur applique son contour par
 
 | Point de rupture | Comportement |
 |---|---|
-| `max-width: 48rem` | Burger de la nav du site ; grilles 12 colonnes à 1 colonne ; hero recalé (tailles réduites). Section Projets : menu fixe remplacé par la barre de section et la vue latérale ; aperçu au-dessus du titre et il prend la hauteur libre ; marges de 16 px |
+| `max-width: 48rem` | Burger de la nav du site ; grilles 12 colonnes à 1 colonne ; hero : deux blocs en position absolue (classes `hero-pos-*`), tailles fluides. Section Projets : menu fixe remplacé par la barre de section et la vue latérale ; aperçu au-dessus du titre et il prend la hauteur libre ; marges de 16 px |
 | `min-width: 48rem` | Colonne de gauche réservée au menu des projets (`2.5rem + 7.5rem + 1.5rem`) : la scène ne passe pas dessous |
 | `max-width: 64rem` | Scène en une colonne : aperçu, titre, tags, puis résumé et points clés dans la même cellule (le résumé laisse la place aux points clés) |
 | `max-height: 800px` | Scène compactée (marges, titre, texte réduits) pour tenir sans défilement |

@@ -41,3 +41,22 @@
 .site-footer .private-link:hover {
   color: var(--color-powder-blue);
 }
+
+/* Variante claire (espace enseignant) : meme aspect que la barre de navigation */
+.site-footer--light {
+  background: var(--color-platinum);
+  border-top-color: var(--color-powder-blue);
+  color: var(--color-yale-blue);
+}
+
+.site-footer--light .site-footer__brand {
+  color: var(--color-ink-black);
+}
+
+.site-footer--light .site-footer__links a {
+  color: var(--color-yale-blue);
+}
+
+.site-footer--light .site-footer__links a:hover {
+  color: var(--color-ink-black);
+}

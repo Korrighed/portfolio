@@ -1,6 +1,6 @@
 .hero {
   position: relative;
-  min-height: 90vh;
+  min-height: calc(var(--vh-screen) * 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8,6 +8,7 @@
   background: var(--color-ink-black);
 }
 
+/* Calque des textes : les blocs y sont places en position absolue (cf. classes hero-pos-* plus bas) */
 .hero-blocks {
   position: absolute;
   inset: 0;
@@ -15,82 +16,70 @@
 }
 
 .hero-block {
+  position: absolute;
+  width: max-content;
+  max-width: 90%;
   color: var(--color-platinum);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  text-align: center;
-  padding: var(--space-xs);
   font-family: 'Libre Caslon Text', serif;
-  line-height: 5rem;
+  line-height: 1.3;
 }
 
-.hero-block__subtitle {
-  font-size: 1.8rem;
-  font-weight: 400;
-}
-
+/* Tailles fluides : plafonnees a 3,5 rem et 1,8 rem sur grand ecran, reduites par la hauteur sur ecran bas */
 .hero-block__portfolio {
-  font-size: 3.5rem;
-  font-style: italic;
   display: flex;
   flex-direction: column;
+  font-size: clamp(1.75rem, min(1.2rem + 3.5vw, 8vh), 3.5rem);
+  font-style: italic;
 }
 
 .hero-block__name {
   align-self: flex-end;
 }
 
-.hero-block-1 {
-  position: absolute;
-  top: 31px;
-  left: 190px;
-  width: 42%;
-  height: 18%;
-  align-items: flex-end;
-  justify-content: flex-start;
+/* Retour a la ligne equilibre : evite un mot seul sur la derniere ligne */
+.hero-block__role {
+  text-wrap: balance;
+}
+
+.hero-block__subtitle {
+  font-size: clamp(1.1rem, min(0.9rem + 1.2vw, 4vh), 1.8rem);
+  font-weight: 400;
 }
 
 .hero-block-2 {
-  position: absolute;
-  top: 125px;
-  right: 216px;
-  width: 31%;
-  height: 28%;
-  align-items: flex-end;
-  justify-content: flex-end;
+  text-align: right;
 }
 
-@media (max-width: 48rem) {
-  .hero-block {
-    line-height: 2rem;
+/* ==========================================================================
+   PLACEMENT DU TEXTE : modifier uniquement les nombres ci-dessous.
+   Deux ensembles de deux classes, poses sur les blocs dans src/sections/hero.html :
+     - bureau (ecrans de 48rem et plus) : hero-pos-desktop-1 et hero-pos-desktop-2
+     - mobile (moins de 48rem)          : hero-pos-mobile-1 et hero-pos-mobile-2
+   Bloc 1 = « Alex / Developpeur full stack » (ancre en haut a gauche : top + left).
+   Bloc 2 = « Createur d'application »        (ancre en haut a droite : top + right).
+   Les nombres sont des pourcentages du hero : top = depuis le haut, left / right = depuis le bord.
+   ========================================================================== */
+@media (min-width: 48rem) {
+  .hero-pos-desktop-1 {
+    top: 5.2%;
+    left: 13.7%;
   }
 
-  .hero-block__subtitle {
-    font-size: 1.1rem;
+  .hero-pos-desktop-2 {
+    top: 34.9%;
+    right: 15.6%;
+  }
+}
+
+@media (max-width: 47.9375rem) {
+  .hero-pos-mobile-1 {
+    top: 29.3%;
+    left: 5.9%;
   }
 
-  .hero-block__portfolio {
-    font-size: 1.85rem;
-  }
-
-  .hero-block-1 {
-    top: 16px;
-    left: 37px;
-    width: 100%;
-    height: 18%;
-    align-items: flex-end;
-    justify-content: center;
-  }
-
-  .hero-block-2 {
-    top: 199px;
-    right: 1px;
-    width: 103%;
-    height: 23%;
-    align-items: flex-end;
-    justify-content: flex-end;
+  .hero-pos-mobile-2 {
+    top: 52.9%;
+    right: 5.9%;
   }
 }
 

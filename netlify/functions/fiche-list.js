@@ -8,8 +8,9 @@ export const handler = withAuth(async () => {
     title: 'Fiches réflexives',
     nav: [{ href: '/', label: 'Accueil' }],
     bodyClass: 'espace',
-    styles: ['/css/faq.css', '/css/fiches.css'],
+    styles: ['/css/nav.css', '/css/footer.css', '/css/faq.css', '/css/fiches.css'],
     scripts: ['/js/faq.js', '/js/faq-ripple.js'],
+    footer: true,
     body: `<main class="espace__main">${renderFichesScene(fiches, author)}</main>`,
   });
 

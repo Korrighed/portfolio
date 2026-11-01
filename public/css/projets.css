@@ -404,6 +404,18 @@
   border-left-color: var(--color-powder-blue);
 }
 
+/* Lien de retour au hero, en tete de menu */
+.projets-nav__top {
+  margin-bottom: var(--space-xs);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--projets-line);
+}
+
+.projets-nav__top .projets-nav__link {
+  font-weight: 600;
+  color: var(--color-platinum);
+}
+
 .projets-nav__cta {
   margin-top: var(--space-xs);
   padding-top: var(--space-xs);
