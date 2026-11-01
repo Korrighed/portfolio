@@ -15,7 +15,7 @@ Couvre : PRD F-01 … F-18, NF-01 … NF-12
 | Session | `iron-session` | ^8.0.0 | Cookie scellé, sans base |
 | Mot de passe | `bcryptjs` | ^2.4.3 | Hash du compte unique |
 | Fichiers | `@netlify/blobs` | ^10.7.10 | Stockage des PDF hors dépôt |
-| Animation | GSAP + ScrollTrigger + ScrollToPlugin, via CDN | 3.15.0 | Scrollytelling des projets |
+| Animation des projets | Aucune bibliothèque : `position: sticky`, canvas 2D, `matchMedia`, transitions CSS | — | Scènes épinglées ; GSAP retiré le 2026-10-31 (voir §9) |
 | Hero | Three.js + Vanta (dots), via CDN | 0.134.0 / 0.5.24 | Fond animé |
 | Polices | Libre Caslon Text, Inria Serif (TTF locaux) | — | Voir `DESIGN-BRIEF.md` |
 
@@ -57,7 +57,8 @@ flowchart TD
 | `scripts/build-index.js` | Remplace les marqueurs `<!-- include:… -->` | `src/` |
 | `scripts/hash-password.js` | Produit le hash bcrypt à coller dans `.env` | `bcryptjs` |
 | `public/js/nav.js` | Menu repliable | DOM |
-| `public/js/projets-scroll.js` | Pin, révélation, onde, menu latéral, CTA hero | GSAP (global) |
+| `public/js/projets-scroll.js` | Progression par projet, apparition des informations (`is-on`, `inert`), fond de points (`#projets-bg`), menu des projets, vue latérale mobile, mesure du repli en lecture normale (`is-flow`) | DOM, `matchMedia`, canvas 2D |
+| `public/css/projets.css` | Scènes (`sticky`), grille, menu, barre de section, vue latérale ; repli sans JS et sous `prefers-reduced-motion` | Tokens de `main.css` |
 | `netlify/functions/lib/auth.js` | Identifiants, scellement et lecture du cookie, garde `withAuth` | `iron-session`, `bcryptjs` |
 | `netlify/functions/lib/fiche-repository.js` | Liste des fiches (en dur) et recherche par `id` | — |
 | `netlify/functions/lib/storage.js` | Lecture d'un PDF dans Blobs | `@netlify/blobs` |
@@ -70,7 +71,7 @@ flowchart TD
 | Service | Usage | Auth | Limites, erreurs connues |
 |---|---|---|---|
 | Netlify Blobs | Lecture des PDF (`getStore('fiches-reflexives')`, `connectLambda(event)`) | Contexte Netlify | Lecture entière en mémoire (pas de stream) ; échec = 404 générique, détail dans les logs |
-| jsDelivr | GSAP, Three.js, Vanta | Aucune | Pas de SRI ; CDN indisponible = animations absentes |
+| jsDelivr | Three.js, Vanta (hero) | Aucune | Pas de SRI ; CDN indisponible = fond du hero absent. La section Projets n'en dépend plus |
 | API Netlify (CLI) | Variables d'environnement et état du site au `netlify dev` | Session `netlify login` | Session expirée : appels réseau lents (voir §10) |
 
 ```mermaid
@@ -103,9 +104,11 @@ sequenceDiagram
 | T-06 | `Cache-Control: private, no-store` sur `fiche-list`, `fiche-detail`, `pdf` | NF-04, NF-11 | `curl -I` avec cookie valide |
 | T-07 | `Secure` posé dès que la connexion est HTTPS (ne plus dépendre de `CONTEXT === 'production'`), y compris sur le cookie de déconnexion | NF-01 | Test sur un deploy-preview |
 | T-08 | Scripts CDN : version exacte conservée, ajout de `integrity` et `crossorigin="anonymous"` | NF-05 | Inspection de `index.template.html` ; console sans erreur SRI |
-| T-09 | Médias : balise `<video muted loop playsinline preload="none">` dans `.reel__preview`, lecture déclenchée à l'entrée dans le viewport (IntersectionObserver) | F-05, NF-06 | Onglet Réseau : aucun média chargé avant visibilité |
-| T-10 | Sous `prefers-reduced-motion`, `projets-scroll.js` ne crée ni pin ni scrub et laisse les étapes visibles | F-16 | Émulation de la préférence : 5 étapes visibles par carte |
-| T-11 | Une étape non révélée est inatteignable au clavier (`visibility: hidden` via `autoAlpha`, ou `inert`) | NF-07 | Parcours Tab : aucun lien invisible focalisé |
+| T-09 | Médias : `<img loading="lazy" decoding="async" width height>` dans `.frame__shot` ; GIF Twitch de 1,7 Mo, captures JPG de 45 à 155 Ko ; passage à webm/mp4 à décider (PRD, Questions ouvertes) | F-05, NF-06 | Onglet Réseau : aucun aperçu chargé avant d'approcher de la scène |
+| T-10 | Sous `prefers-reduced-motion` ou sans JS : pas de `sticky`, pas de masquage des informations (les règles sont sous `@media (prefers-reduced-motion: no-preference)` et la classe `js`) ; le fond de points est dessiné une fois, sans boucle | F-16 | Émulation de la préférence : toutes les informations visibles par projet, aucun pin |
+| T-11 | Une information non révélée est `inert` (JS) et `visibility: hidden` (CSS) ; en mode lecture normale (`is-flow`), plus rien n'est masqué | NF-07 | Parcours Tab : aucun lien invisible focalisé |
+| T-16 | Une scène épinglée fait un écran : `measureFlow()` mesure `grid.scrollHeight` contre `clientHeight` et pose `is-flow` si le contenu est plus haut (petit mobile, paysage, zoom) | F-16 | À 700×340 : les 5 projets sont en lecture normale, tout visible, aucun défilement horizontal |
+| T-17 | Menu : `projets-nav` (fixe, dès 48rem) ; sous 48rem, barre `projets-bar` et vue `projets-sheet` (`role="dialog"`, `aria-modal`, `inert` fermée, `Esc`, piège de focus, focus rendu au bouton) | F-04, F-17 | À 390×844 : la vue mesure 50 % de la largeur ; le focus revient au bouton à la fermeture |
 | T-12 | Garde sur l'initialisation de Vanta (`typeof VANTA`) et respect de `prefers-reduced-motion` | NF-10 | CDN bloqué : aucune erreur console bloquante |
 | T-13 | Échappement HTML des champs interpolés dans `page.js` et `fiche-*.js` | F-11, F-12 | Titre contenant `<` rendu en texte |
 | T-14 | `[dev] command` de `netlify.toml` lance Vite sans `npx` ; documenter `netlify login` ou `--offline` | NF-12 | Chronométrer `npm run dev` jusqu'à « Local dev server ready » |
@@ -121,7 +124,8 @@ sequenceDiagram
 | `id` de fiche inconnu | 404 « Introuvable » |
 | PDF absent de Blobs | 404 générique ; détail dans les logs serveur uniquement |
 | `SESSION_SECRET` absent ou court | Erreur serveur explicite dans les logs |
-| GSAP absent | `projets-scroll.js` se désactive ; les cartes restent lisibles empilées |
+| JavaScript absent ou en échec | La classe `js` n'est pas posée : aucune information masquée, scènes non épinglées, tout lisible |
+| Scène plus haute que l'écran | Le projet passe en lecture normale (`is-flow`) : pas de pin, tout visible, rien de coupé |
 | Vanta absent | Fond uni Ink Black (garde à ajouter, T-12) |
 
 ## 7. Sécurité et vie privée
@@ -149,6 +153,7 @@ sequenceDiagram
 | 2026-09-22 | Vite pour le HMR local (f5e217a) | `netlify dev` seul | Rechargement à chaud |
 | 2026-09-22 | PDF dans Netlify Blobs (65c0cef) | Stockage local `storage/` | Pas de redéploiement pour un PDF |
 | 2026-10-26 | PRD = état cible ; pas de `DATA-MODEL` ; `APP-FLOW` réduit à des schémas ; direction artistique déplacée dans `DESIGN-BRIEF` | PRD de l'existant ; document de données | Demande d'Alex ; pas de base de données |
+| 2026-10-31 | Section Projets : scènes épinglées en CSS `sticky`, informations qui émergent sur place, fond de points en canvas 2D comme indicateur ; GSAP retiré | Garder GSAP (pin + scrub) ; cartes empilées sans pin ; carrousel horizontal ; vague de progression globale ; indicateur qui descend dans la scène | Alex : le lecteur ne doit pas se décaler dans un projet, le fond sert d'indicateur par projet ; moins de dépendances et plus de bug de pin ; maquette validée par Alex (artefact « Portfolio Dossier ») |
 
 ## 10. Dette et risques connus
 
@@ -161,6 +166,8 @@ sequenceDiagram
 | `public/index.html` généré mais versionné | Moyenne | Faible | Deux sources de vérité ; 2 resynchronisations déjà nécessaires (a8e7f5f, c9fa098) |
 | `npm run dev` lent (voir ci-dessous) | Moyenne | Faible | Perte de temps à chaque session |
 | Aucun test, lint ni CI | Moyenne | Moyen | Régressions non détectées |
+| Fond de points en canvas : boucle `requestAnimationFrame` (~800 points) non mesurée sur appareil modeste | Faible | Faible | Saccades possibles ; la boucle est pausée hors de la section et onglet masqué |
+| Aperçus provisoires (`public/img/projets/`), Safe Campus sans aperçu | Faible | Faible | Rendu final dépend de captures propres d'Alex |
 | Hero positionné en pixels absolus (`hero.css`) | Faible | Moyen | Mise en page fragile entre 48rem et grands écrans (à vérifier au navigateur) |
 | `main` toujours sur le scaffold Astro, 27 commits de retard | Faible | Faible | Confusion sur la branche de référence |
 | Dossier `storage/` et règles `.astro/`, `dist/` dans `.gitignore` obsolètes | Faible | Faible | Bruit |

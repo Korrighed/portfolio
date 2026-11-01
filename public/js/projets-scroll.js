@@ -1,185 +1,336 @@
-if (typeof gsap === 'undefined') {
-  // CDN gsap absent/en echec : pas de scrollytelling possible, on laisse
-  // le fallback CSS (chaque .reel en ecran plein page empile normalement).
-  throw new Error('gsap non charge, projets-scroll.js desactive.');
-}
+// Section Projets : scenes epinglees (CSS sticky), informations qui emergent sur place
+// selon la progression du scroll dans le projet, fond de points = indicateur.
+// Aucune dependance : natif (scroll, canvas 2D, matchMedia).
 
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+const section = document.querySelector('#projets');
+const canvas = document.querySelector('#projets-bg');
 
-// La barre de progression EST une onde sinusoidale (meme principe que la
-// reference : path redessine chaque frame a partir d'un offset croissant),
-// adapte en JS vanilla. Un seul rAF partage anime toutes les cartes (meme
-// "d" partout) ; chaque carte a son propre trace "fill" clippe sur la
-// largeur = avancement de ses etapes, par-dessus un trace "track" discret.
-const WAVE_WIDTH = 300;
-const WAVE_HEIGHT = 24;
-const WAVE_AMPLITUDE = 8;
-const WAVE_FREQUENCY = 0.06;
-const WAVE_SPEED = 0.03;
+if (section && canvas) {
+  const ctx = canvas.getContext('2d');
+  const projects = [...section.querySelectorAll('.project')];
+  const stepsByProject = projects.map((project) => [...project.querySelectorAll('.step')]);
+  const nav = section.querySelector('.projets-nav');
+  const bar = section.querySelector('.projets-bar');
+  const barName = section.querySelector('#projets-bar-name');
+  const menuButton = section.querySelector('.projets-bar__menu');
+  const sheet = section.querySelector('.projets-sheet');
+  const scrim = section.querySelector('.projets-scrim');
+  const sheetClose = section.querySelector('.projets-sheet__close');
+  const links = [...section.querySelectorAll('.projets-nav__link')];
 
-const svgNS = 'http://www.w3.org/2000/svg';
-const wavePaths = [];
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const stacked = window.matchMedia('(max-width: 64rem)');
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-function buildWaveD(offset) {
-  let d = '';
-  for (let x = 0; x <= WAVE_WIDTH; x += 6) {
-    const y = WAVE_HEIGHT / 2 - WAVE_AMPLITUDE * Math.sin(x * WAVE_FREQUENCY - offset);
-    d += `${x === 0 ? 'M' : 'L'}${x},${y.toFixed(1)} `;
+  // Seuils d'apparition des etapes 1 a 5 (progression 0..1 dans le projet).
+  // L'etape 1 est visible des l'arrivee sur le projet.
+  const THRESHOLDS = [0, 0.2, 0.4, 0.62, 0.82];
+  const DONE_FROM = 0.97;
+
+  // ---------- Fond de points = indicateur de progression du projet ----------
+  // Grille de points (meme esprit que le hero Vanta). Le cercle lumineux part de
+  // derriere l'apercu et grandit avec la lecture : a 100 % tout l'ecran est allume.
+  // Rien ne descend. La houle suit le scroll (phase), sans derive.
+  const GAP = 34; // espacement des points, comme le hero
+  const TAU = Math.PI * 2;
+  const EASE_SCROLL = 0.06;
+  const EASE_PROGRESS = 0.14;
+  const EASE_TINT = 0.03;
+  const FADE_MS = 700; // fondu au changement de projet
+  const EDGE_RATIO = 0.14; // bord doux du cercle, en part du rayon maximal
+  const RING_WIDTH = 22; // largeur de l'anneau plus gros au bord du cercle, en px
+  const SWELL = { x: 0.011, y: 0.007, time: 0.00035, scroll: 0.0016, lift: 3 };
+  const COLOR_FROM = [180, 205, 237]; // Powder Blue
+  const COLOR_TO = [120, 160, 215]; // bleu plus profond, atteint au dernier projet
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+
+  let width = 0;
+  let height = 0;
+  let active = -1;
+  let progress = 0;
+  let progressEased = 0;
+  let fade = 1;
+  let tint = 0;
+  let centerX = 0;
+  let centerY = 0;
+  let maxRadius = 1;
+  let scrollTarget = window.scrollY;
+  let scrollEased = scrollTarget;
+
+  function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    width = rect.width;
+    height = rect.height;
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
-  return d;
-}
 
-function createProgressWave(bar, clipId) {
-  const svg = document.createElementNS(svgNS, 'svg');
-  svg.setAttribute('class', 'reel__progress-wave');
-  svg.setAttribute('viewBox', `0 0 ${WAVE_WIDTH} ${WAVE_HEIGHT}`);
-  svg.setAttribute('preserveAspectRatio', 'none');
-
-  const clipPath = document.createElementNS(svgNS, 'clipPath');
-  clipPath.setAttribute('id', clipId);
-  const clipRect = document.createElementNS(svgNS, 'rect');
-  clipRect.setAttribute('x', '0');
-  clipRect.setAttribute('y', '0');
-  clipRect.setAttribute('width', '0');
-  clipRect.setAttribute('height', String(WAVE_HEIGHT));
-  clipPath.appendChild(clipRect);
-
-  const track = document.createElementNS(svgNS, 'path');
-  track.setAttribute('class', 'reel__progress-wave-track');
-
-  const fill = document.createElementNS(svgNS, 'path');
-  fill.setAttribute('class', 'reel__progress-wave-fill');
-  fill.setAttribute('clip-path', `url(#${clipId})`);
-
-  svg.append(clipPath, track, fill);
-  bar.appendChild(svg);
-  wavePaths.push(track, fill);
-
-  return clipRect;
-}
-
-const STEP_GAP = 0.3;
-const STEP_DURATION = 1;
-
-// Longueur de scroll d'une carte, en hauteurs de viewport. Volontairement
-// decouple du nombre d'etapes : passer de 4 a 5 etapes (points cles et liens
-// separes) ne doit pas rallonger la section, seulement resserrer les reveals.
-const REEL_VIEWPORTS = 4;
-
-const reelTriggers = new Map();
-
-document.querySelectorAll('.reel').forEach((reel, index) => {
-  const pin = reel.querySelector('.reel__pin');
-  const navLink = document.querySelector(`.reel-nav__link[href="#${reel.id}"]`);
-  const steps = [...reel.querySelectorAll('.step')].sort(
-    (a, b) => Number(a.dataset.step) - Number(b.dataset.step),
-  );
-
-  // Barre de progression = onde clippee sur sa largeur, cf. createProgressWave.
-  const progressBar = pin.querySelector('.reel__progress');
-  const progressClipRect = progressBar ? createProgressWave(progressBar, `reel-progress-clip-${index}`) : null;
-
-  gsap.set(steps, { opacity: 0, y: 24 });
-
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: reel,
-      start: 'top top',
-      end: () => '+=' + window.innerHeight * REEL_VIEWPORTS,
-      scrub: 1,
-      pin,
-      onToggle: (self) => navLink?.classList.toggle('is-active', self.isActive),
-      onUpdate: (self) => {
-        if (progressClipRect) progressClipRect.setAttribute('width', String(self.progress * WAVE_WIDTH));
-      },
-    },
-  });
-
-  steps.forEach((step) => {
-    tl.to(step, { opacity: 1, y: 0, duration: STEP_DURATION, ease: 'power2.out' }, `+=${STEP_GAP}`);
-  });
-
-  reelTriggers.set(reel.id, { trigger: tl.scrollTrigger, stepCount: steps.length });
-});
-
-// Boucle d'animation de l'onde, demarree une fois toutes les cartes creees
-// (wavePaths contient alors track + fill de chaque carte, meme "d" partage).
-// prefers-reduced-motion : on dessine l'onde une seule fois (etat statique,
-// la barre de progression reste utile) au lieu de la boucle rAF continue.
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-if (wavePaths.length) {
-  if (prefersReducedMotion) {
-    const d = buildWaveD(0);
-    wavePaths.forEach((path) => path.setAttribute('d', d));
-  } else {
-    let waveOffset = 0;
-    const animateWave = () => {
-      waveOffset += WAVE_SPEED;
-      const d = buildWaveD(waveOffset);
-      wavePaths.forEach((path) => path.setAttribute('d', d));
-      requestAnimationFrame(animateWave);
-    };
-    requestAnimationFrame(animateWave);
+  function mixColor(amount) {
+    return COLOR_FROM.map((from, index) => Math.round(from + (COLOR_TO[index] - from) * amount));
   }
-}
 
-// Defile vers une progression donnee d'une carte, au lieu du saut d'ancre brut
-// qui atterrit sur `top top` (progress 0 = carte vierge, aucune etape revelee,
-// l'utilisateur doit scroller pour voir quoi que ce soit). start/end sont relus
-// a chaque appel : les pin-spacers des cartes precedentes decalent les
-// positions, une valeur mise en cache serait fausse d'un viewport ou plus sur
-// les dernieres cartes.
-function scrollToReelProgress(reelId, progress, duration = 1.2) {
-  const data = reelTriggers.get(reelId);
-  if (!data) return false;
-  const target = data.trigger.start + (data.trigger.end - data.trigger.start) * progress;
-  gsap.to(window, {
-    duration,
-    ease: 'power2.inOut',
-    scrollTo: { y: target, autoKill: false },
+  function drawDots(time, delta) {
+    scrollEased += (scrollTarget - scrollEased) * EASE_SCROLL;
+    progressEased += (progress - progressEased) * EASE_PROGRESS;
+    fade = Math.min(1, fade + delta / FADE_MS);
+    tint += (Math.max(0, active) / (projects.length - 1) - tint) * EASE_TINT;
+
+    const [red, green, blue] = mixColor(tint);
+    const gain = 0.4 + 0.6 * fade;
+    const edge = maxRadius * EDGE_RATIO;
+    const radius = progressEased * (maxRadius + edge);
+    const started = progressEased > 0.001;
+
+    ctx.clearRect(0, 0, width, height);
+    for (let y = GAP / 2; y < height + GAP; y += GAP) {
+      for (let x = GAP / 2; x < width + GAP; x += GAP) {
+        const distance = Math.hypot(x - centerX, y - centerY);
+        const reach = clamp((radius - distance) / edge, 0, 1);
+        const ring = (distance - radius) / RING_WIDTH;
+        const band = started ? Math.exp(-ring * ring) : 0;
+        const swell = Math.sin(x * SWELL.x + y * SWELL.y - time * SWELL.time - scrollEased * SWELL.scroll);
+        const k = swell * 0.5 + 0.5;
+        const alpha = (0.07 + 0.05 * k + 0.2 * reach + 0.2 * band) * gain;
+        const dot = 1.1 + 0.4 * k + 0.4 * reach + 0.8 * band;
+        ctx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${alpha.toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(x, y + swell * SWELL.lift, dot, 0, TAU);
+        ctx.fill();
+      }
+    }
+  }
+
+  let frameId = 0;
+  let lastTime = 0;
+
+  function frame(time) {
+    const delta = lastTime ? time - lastTime : 16;
+    lastTime = time;
+    drawDots(time, delta);
+    frameId = requestAnimationFrame(frame);
+  }
+
+  function startLoop() {
+    if (reduceMotion.matches || frameId) return;
+    lastTime = 0;
+    frameId = requestAnimationFrame(frame);
+  }
+
+  function stopLoop() {
+    if (frameId) cancelAnimationFrame(frameId);
+    frameId = 0;
+  }
+
+  // ---------- Etapes ----------
+  // En colonne (apercu au-dessus du titre), l'ordre d'apparition suit l'ordre de lecture :
+  // data-mstep remplace data-step.
+  function applySteps(index, value) {
+    // Lecture normale (scene trop haute pour l'ecran) ou reduced-motion : tout est visible d'emblee.
+    const showAll = reduceMotion.matches || projects[index].classList.contains('is-flow');
+    stepsByProject[index].forEach((element) => {
+      const mobileStep = element.getAttribute('data-mstep');
+      const step = Number(stacked.matches && mobileStep ? mobileStep : element.getAttribute('data-step'));
+      const until = element.getAttribute('data-until');
+      const on = showAll || value >= THRESHOLDS[step - 1];
+      const gone = Boolean(until) && !showAll && value >= THRESHOLDS[Number(until) - 1];
+      element.classList.toggle('is-on', on);
+      element.classList.toggle('is-gone', gone);
+      element.inert = !on || (gone && stacked.matches);
+    });
+    projects[index].classList.toggle('is-done', value >= DONE_FROM);
+  }
+
+  // Une scene epinglee fait exactement un ecran : si son contenu est plus haut
+  // (petit mobile, barres du navigateur, zoom), le bas serait coupe. On mesure
+  // alors le projet a vide et on le bascule en lecture normale (classe is-flow).
+  function measureFlow() {
+    projects.forEach((project) => {
+      project.classList.remove('is-flow');
+      if (reduceMotion.matches) return;
+      const grid = project.querySelector('.project__grid');
+      if (grid.scrollHeight - grid.clientHeight > 1) project.classList.add('is-flow');
+    });
+  }
+
+  function setActive(index) {
+    links.forEach((link) => {
+      if (link.getAttribute('data-goto') === String(index)) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    });
+    barName.textContent = projects[index].getAttribute('data-short');
+  }
+
+  // ---------- Mise a jour au scroll ----------
+  function updateMenu(viewport) {
+    const box = section.getBoundingClientRect();
+    const showMenu = box.top < viewport * 0.5 && box.bottom > viewport * 0.5;
+    nav.classList.toggle('is-visible', showMenu);
+    bar.classList.toggle('is-visible', showMenu);
+    return box.top < viewport && box.bottom > 0;
+  }
+
+  // Applique les etapes de chaque projet ; le projet actif est le dernier dont le haut
+  // a passe la moitie de l'ecran. Retourne son index.
+  function updateProjects(viewport) {
+    let current = 0;
+    projects.forEach((project, index) => {
+      const rect = project.getBoundingClientRect();
+      const travel = rect.height - viewport;
+      const value = travel > 0 ? clamp(-rect.top / travel, 0, 1) : 0;
+      applySteps(index, value);
+      if (rect.top <= viewport * 0.5) {
+        current = index;
+        progress = value;
+      }
+    });
+    return current;
+  }
+
+  // Le cercle part du centre de l'apercu du projet actif.
+  function updateRippleCenter(current) {
+    const preview = projects[current].querySelector('.frame');
+    if (!preview) return;
+    const rect = preview.getBoundingClientRect();
+    if (rect.width === 0) return;
+    centerX = rect.left + rect.width / 2;
+    centerY = rect.top + rect.height / 2;
+    maxRadius = Math.max(
+      1,
+      Math.hypot(centerX, centerY),
+      Math.hypot(width - centerX, centerY),
+      Math.hypot(centerX, height - centerY),
+      Math.hypot(width - centerX, height - centerY),
+    );
+  }
+
+  let queued = false;
+
+  function update() {
+    queued = false;
+    const viewport = window.innerHeight;
+    const inView = updateMenu(viewport);
+    const current = updateProjects(viewport);
+    scrollTarget = window.scrollY;
+
+    if (current !== active) {
+      active = current;
+      progressEased = progress;
+      fade = 0;
+      setActive(current);
+    }
+    updateRippleCenter(current);
+
+    if (inView && !document.hidden) startLoop();
+    else stopLoop();
+
+    // Sous reduced-motion : pas de boucle, le fond est redessine a chaque mise a jour.
+    if (reduceMotion.matches) {
+      scrollEased = scrollTarget;
+      progressEased = progress;
+      fade = 1;
+      drawDots(0, 0);
+    }
+  }
+
+  function scheduleUpdate() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(update);
+  }
+
+  function onResize() {
+    measureFlow();
+    resizeCanvas();
+    scheduleUpdate();
+  }
+
+  window.addEventListener('scroll', scheduleUpdate, { passive: true });
+  window.addEventListener('resize', onResize);
+  document.addEventListener('visibilitychange', scheduleUpdate);
+  reduceMotion.addEventListener('change', onResize);
+  stacked.addEventListener('change', onResize);
+  document.fonts?.ready.then(onResize);
+
+  // ---------- Navigation ----------
+  // Menu : on atterrit sur le projet entierement revele (fin de scene).
+  // "Suite" : au debut du projet suivant.
+  function goTo(target, atStart) {
+    let top;
+    if (target === 'contact') {
+      const contact = document.querySelector('#contact');
+      if (!contact) return;
+      top = contact.getBoundingClientRect().top + window.scrollY;
+    } else {
+      const project = projects[Number(target)];
+      if (!project) return;
+      const start = project.getBoundingClientRect().top + window.scrollY;
+      top = atStart ? start : start + project.offsetHeight - window.innerHeight;
+    }
+    window.scrollTo({ top, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+  }
+
+  // ---------- Vue laterale (mobile) ----------
+  let lastFocus = null;
+  sheet.setAttribute('inert', '');
+
+  function openSheet(byKeyboard) {
+    lastFocus = document.activeElement;
+    sheet.removeAttribute('inert');
+    sheet.classList.add('is-open');
+    scrim.classList.add('is-open');
+    menuButton.setAttribute('aria-expanded', 'true');
+    if (byKeyboard) {
+      setTimeout(() => sheet.querySelector('.projets-nav__link')?.focus(), 30);
+    }
+  }
+
+  function closeSheet({ restoreFocus = true } = {}) {
+    sheet.classList.remove('is-open');
+    scrim.classList.remove('is-open');
+    menuButton.setAttribute('aria-expanded', 'false');
+    sheet.setAttribute('inert', '');
+    if (restoreFocus) lastFocus?.focus?.();
+    lastFocus = null;
+  }
+
+  menuButton.addEventListener('click', (event) => {
+    if (sheet.classList.contains('is-open')) closeSheet();
+    else openSheet(event.detail === 0);
   });
-  return true;
-}
+  sheetClose.addEventListener('click', () => closeSheet());
+  scrim.addEventListener('click', () => closeSheet());
 
-// CTA hero "Projets" : atterrit sur la carte n°1 avec son etape 1 deja
-// revelee, le reveal se jouant pendant la transition.
-const heroCta = document.querySelector('.hero__scroll');
-const firstReel = document.querySelector('.reel');
-if (heroCta && firstReel) {
-  heroCta.addEventListener('click', (event) => {
-    const { stepCount } = reelTriggers.get(firstReel.id) ?? {};
-    if (stepCount && scrollToReelProgress(firstReel.id, 1 / stepCount)) {
+  // Echap ferme la vue ; Tab reste dedans.
+  document.addEventListener('keydown', (event) => {
+    if (!sheet.classList.contains('is-open')) return;
+    if (event.key === 'Escape') {
+      closeSheet();
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = [...sheet.querySelectorAll('a[href], button')];
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
       event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
     }
   });
-}
 
-// Menu lateral : on vise la fin du timeline, donc la carte entierement
-// revelee, liens GitHub et Site compris. Le reveal des etapes se joue pendant
-// le trajet ScrollToPlugin : l'utilisateur voit tout apparaitre et n'a rien a
-// scroller pour lire la carte ou atteindre les liens.
-// href="#reel-N" est conserve : sans JS, ou si le CDN gsap tombe (garde en
-// tete de fichier), le saut d'ancre natif reste le comportement de repli.
-document.querySelectorAll('.reel-nav__link').forEach((link) => {
-  const reelId = link.getAttribute('href')?.slice(1);
-  if (!reelId || !reelTriggers.has(reelId)) return;
-  link.addEventListener('click', (event) => {
-    if (scrollToReelProgress(reelId, 1)) event.preventDefault();
+  // href="#projet-N" est conserve : sans JS, le saut d'ancre natif reste le repli.
+  section.querySelectorAll('[data-goto]').forEach((element) => {
+    element.addEventListener('click', (event) => {
+      event.preventDefault();
+      if (sheet.contains(element)) closeSheet({ restoreFocus: false });
+      goTo(element.getAttribute('data-goto'), element.getAttribute('data-at') === 'start');
+    });
   });
-});
 
-// Cree apres les triggers de pin ci-dessus : #projets n'a sa hauteur finale
-// (pin-spacers des reels inclus) qu'une fois ceux-ci en place. Cree avant,
-// "bottom bottom" se calculait sur la hauteur non-pinnee et se declenchait
-// bien trop tot (le menu ne restait visible que pendant le 1er projet).
-const projetsSection = document.querySelector('#projets');
-const reelNav = document.querySelector('.reel-nav');
-if (projetsSection && reelNav) {
-  ScrollTrigger.create({
-    trigger: projetsSection,
-    start: 'top top',
-    end: 'bottom bottom',
-    onToggle: (self) => reelNav.classList.toggle('is-visible', self.isActive),
-  });
+  measureFlow();
+  resizeCanvas();
+  update();
 }
