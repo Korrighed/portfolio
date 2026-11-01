@@ -13,11 +13,20 @@
 }
 
 .nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
   color: var(--color-ink-black);
   font-weight: 700;
   text-decoration: none;
   font-size: 1.25rem;
   font-family: 'Libre Caslon Text', serif;
+}
+
+.nav__logo {
+  display: block;
+  height: 2.5rem;
+  width: auto;
 }
 
 .nav__toggle {

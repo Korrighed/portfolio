@@ -93,7 +93,8 @@ Les états de focus ne sont pas stylés : le navigateur applique son contour par
 
 | Composant | États actuels | Notes |
 |---|---|---|
-| Barre de navigation | repos, survol (Yale vers Ink) | Burger sous 48rem, `aria-expanded` mis à jour |
+| Barre de navigation | repos, survol (Yale vers Ink) | Burger sous 48rem, `aria-expanded` mis à jour. La marque est le logo KA (hauteur 2,5 rem, se trace une fois au chargement) suivi de « Alex.dev » |
+| Logo KA | statique, intro (une fois), boucle de 6 s, favicon | Losange à double bord, lettres en Inria Serif Bold (glyphes convertis en tracés), double ligne horizontale qui naît du bord intérieur et s'arrête contre les lettres ; aucun trait n'en coupe un autre. Trait de 5 sur un dessin de 400. Yale Blue sur Platinum. Fichiers : `public/img/logo/logo-ka.svg`, `logo-ka-intro.svg`, `logo-ka-anime.svg` ; favicon plein (lettres Platinum en négatif) `public/favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`. En dessous de 56 px le double bord et la double ligne ne sont plus lisibles : on utilise le favicon plein |
 | Bouton « Projets » du hero | repos, survol (fond Powder), actif (échelle 0.94 + anneau 450 ms) | Pastille arrondie ; l'anneau est coupé sous `prefers-reduced-motion` |
 | Scène projet (`.project`) | repos (informations apparues ou non), fin de scène (`is-done`), lecture normale (`is-flow`) | Plein écran ; grille 5/7 colonnes sur desktop, une colonne sous 64rem |
 | Cadre de navigateur (`.frame`) | repos, survol du lien | Barre d'adresse = lien du site ; plaque Yale décalée en arrière-plan |
