@@ -1,0 +1,22 @@
+[
+  {
+    "q": "Quel est mon profil de développeur ?",
+    "a": "Je suis capable de travailler aussi bien sur le front que sur le back, avec une préférence marquée pour l'applicatif et le back. Mon objectif est toujours de traduire les règles et les besoins métier en un outil qui facilite le quotidien."
+  },
+  {
+    "q": "Est-ce que je suis capable de travailler en équipe ?",
+    "a": "Oui. J'ai assuré la gestion de différents projets en tant que développeur junior, ainsi que l'infrastructure de certains d'entre eux. Je maîtrise des outils comme Git Flow et GitLab pour faciliter au mieux le travail en équipe."
+  },
+  {
+    "q": "Est-ce que je travaille en architecture distribuée ?",
+    "a": "Oui. Je sais m'adapter aux différentes technologies, qu'il s'agisse de SOAP ou de REST. Concernant le MCP (Model Context Protocol), c'est une compétence que je suis encore en train de développer."
+  },
+  {
+    "q": "Est-ce que j'utilise l'IA pour coder ?",
+    "a": "Oui, principalement Claude Code. J'accorde un effort particulier au travail préparatoire : le choix de la technologie et l'identification du besoin, via des documents comme les PRD et les TRD, pour cadrer au mieux le développement avec ces nouveaux outils. J'essaie aussi d'exploiter les agents au mieux, en les répartissant entre plusieurs tâches et flux de travail."
+  },
+  {
+    "q": "Est-ce que je suis capable de respecter et de créer une identité visuelle ?",
+    "a": "Ce n'est pas mon domaine d'expertise. En revanche, je sais parfaitement créer ou respecter une identité visuelle propre et cohérente pour chaque projet."
+  }
+]

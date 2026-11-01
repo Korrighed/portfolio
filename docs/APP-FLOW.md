@@ -25,8 +25,8 @@ flowchart TD
 
 | Écran / vue | Rôle | Accès depuis |
 |---|---|---|
-| Accueil `/` | Hero, 5 projets, compétences, CV, pied de page | URL, lien du site |
-| Scène projet (dans l'accueil) | Un projet par écran : titre, tags, aperçu, résumé, points clés, liens | Bouton « Projets » du hero, menu des projets, « Suite » |
+| Accueil `/` | Hero, 5 projets, questions fréquentes, pied de page | URL, lien du site |
+| Scène projet (dans l'accueil) | Un projet par écran : titre, tags, aperçu, résumé, points clés, liens | Bouton « Projets » du hero, menu des projets |
 | Vue latérale des projets (mobile) | Liste des projets sur la moitié de l'écran | Bouton de la barre de section |
 | Connexion `/login.html` | Identifiant et mot de passe de l'enseignant | Lien « Espace enseignant » |
 | Fiches, fiche, PDF | Espace enseignant protégé | Connexion réussie |
@@ -41,12 +41,10 @@ flowchart LR
   B -->|bouton Projets| C["Scène projet 1"]
   C -->|défilement| D["Informations qui apparaissent sur place"]
   D -->|fin de scène| E["Scène projet suivant"]
-  E --> F["Compétences"]
-  F --> G["CV"]
-  G --> H["Pied de page : contact"]
+  E --> F["Questions fréquentes"]
+  F --> H["Pied de page"]
   C -->|menu des projets| E
-  D -->|Suite| E
-  E -->|Me contacter| H
+  E -->|QA| F
 ```
 
 | Étape | Action utilisateur | Réponse du système | Cas d'erreur |
@@ -55,7 +53,7 @@ flowchart LR
 | 2 | Défile dans un projet | Le contenu ne bouge pas ; les informations apparaissent dans l'ordre de lecture ; le cercle de points grandit depuis l'aperçu | Écran trop bas : le projet passe en lecture normale, tout est visible |
 | 3 | Atteint la fin du projet | Tout est affiché ; le trait de défilement disparaît ; le défilement reprend sur le projet suivant | — |
 | 4 | Clique un projet dans le menu | Défilement jusqu'à la fin de la scène choisie, tout révélé | — |
-| 5 | Clique « Suite : … » | Défilement jusqu'au début du projet suivant (ou « Me contacter » pour le dernier) | — |
+| 5 | Clique « Questions » dans la barre de navigation | Défilement lisse jusqu'à la FAQ : une scène d'un écran, première question ouverte ; clic ou flèches pour changer de question, la réponse change sur place | Sans JavaScript : saut d'ancre `#faq` |
 
 ### Parcours US-07 à US-09 : espace enseignant
 
@@ -119,7 +117,7 @@ stateDiagram-v2
 ## 5. Clavier et accessibilité du parcours
 
 - Les informations pas encore révélées sont `inert` : Tab ne les atteint pas. En lecture normale ou sous `prefers-reduced-motion`, tout est atteignable.
-- Ordre de tabulation d'un projet : titre (non focalisable), lien de l'adresse du cadre, liens Site et GitHub, « Suite ».
+- Ordre de tabulation d'un projet : titre (non focalisable), lien de l'adresse du cadre, liens Site et GitHub.
 - Vue latérale : à l'ouverture au clavier, le focus va au premier projet ; Tab et Maj+Tab restent dans la vue ; `Échap` ferme et rend le focus au bouton menu.
 - Le fond de points est décoratif (`aria-hidden`). La progression n'est donnée que visuellement.
 

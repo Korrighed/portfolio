@@ -286,18 +286,17 @@ if (section && canvas) {
 
   // ---------- Navigation ----------
   // Menu : on atterrit sur le projet entierement revele (fin de scene).
-  // "Suite" : au debut du projet suivant.
-  function goTo(target, atStart) {
+  function goTo(target) {
     let top;
-    if (target === 'contact') {
-      const contact = document.querySelector('#contact');
-      if (!contact) return;
-      top = contact.getBoundingClientRect().top + window.scrollY;
+    if (target === 'faq') {
+      const faq = document.querySelector('#faq');
+      if (!faq) return;
+      top = faq.getBoundingClientRect().top + window.scrollY;
     } else {
       const project = projects[Number(target)];
       if (!project) return;
       const start = project.getBoundingClientRect().top + window.scrollY;
-      top = atStart ? start : start + project.offsetHeight - window.innerHeight;
+      top = start + project.offsetHeight - window.innerHeight;
     }
     window.scrollTo({ top, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
   }
@@ -358,7 +357,7 @@ if (section && canvas) {
     element.addEventListener('click', (event) => {
       event.preventDefault();
       if (sheet.contains(element)) closeSheet({ restoreFocus: false });
-      goTo(element.getAttribute('data-goto'), element.getAttribute('data-at') === 'start');
+      goTo(element.getAttribute('data-goto'));
     });
   });
 

@@ -14,7 +14,7 @@ Alex, développeur full stack, n'a pas de vitrine publique de ses projets, de se
 | ID | Objectif | Mesure de succès |
 |---|---|---|
 | O-01 | Présenter les 5 projets de façon lisible et mémorable | Chaque projet affiche synopsis, stack, points clés, liens et un aperçu animé |
-| O-02 | Donner accès au CV et aux moyens de contact | Le CV se télécharge ; l'email et GitHub sont à un clic |
+| O-02 | Donner accès aux moyens de contact | GitHub est à un clic ; le CV reste hors ligne et le formulaire de contact viendra plus tard (l'adresse email n'est jamais affichée) |
 | O-03 | Donner à l'enseignant un accès privé aux fiches réflexives | Sans session, aucune fiche ni aucun PDF n'est servi |
 | O-04 | Rester maintenable seul | Ajouter un projet ou une fiche ne demande aucun outil hors dépôt et CLI Netlify |
 
@@ -41,9 +41,9 @@ Alex, développeur full stack, n'a pas de vitrine publique de ses projets, de se
 | US-01 | Visiteur | parcourir les projets un par un | voir leur contexte, leur stack et leurs points clés | P1 |
 | US-02 | Visiteur | voir une vidéo ou un gif de démo de chaque projet | comprendre le résultat sans ouvrir le site | P1 |
 | US-03 | Visiteur | ouvrir le dépôt GitHub et le site en ligne d'un projet | vérifier le code et tester le produit | P1 |
-| US-04 | Visiteur | lire les compétences et technologies | situer le profil | P1 |
-| US-05 | Visiteur | télécharger le CV | le transmettre ou l'archiver | P1 |
-| US-06 | Visiteur | contacter Alex | engager un échange | P1 |
+| US-04 | Visiteur | lire les réponses aux questions fréquentes sur le profil d'Alex | situer le profil | P1 |
+| US-05 | Visiteur | télécharger le CV | le transmettre ou l'archiver | reporté (le CV reste en local) |
+| US-06 | Visiteur | contacter Alex | engager un échange | reporté (formulaire à venir ; GitHub en attendant) |
 | US-07 | Enseignant | me connecter | accéder à l'espace privé | P1 |
 | US-08 | Enseignant | lister puis ouvrir une fiche | lire le PDF | P1 |
 | US-09 | Enseignant | me déconnecter | fermer ma session | P1 |
@@ -57,15 +57,15 @@ Statut : **livré** ou **à livrer**.
 
 | ID | Exigence | User story | Critère d'acceptation | Statut |
 |---|---|---|---|---|
-| F-01 | Barre de navigation : ancres Projets, Compétences, CV, lien Espace enseignant ; menu repliable sous 48rem | US-04, US-07 | AC-01 : Étant donné un écran < 48rem, quand je touche le bouton de menu, alors les liens s'affichent et `aria-expanded` vaut `true` | livré |
+| F-01 | Barre de navigation : logo et marque « korrighed.dev », ancres Projets et Questions, lien Espace enseignant ; menu repliable sous 48rem | US-04, US-07 | AC-01 : Étant donné un écran < 48rem, quand je touche le bouton de menu, alors les liens s'affichent et `aria-expanded` vaut `true` | livré |
 | F-02 | Hero avec bouton « Projets » menant au projet 1 (ancre `#projets`, défilement lisse du navigateur) | US-01 | AC-02 : Quand je clique le bouton, alors la page défile jusqu'à la scène du projet 1 | livré |
 | F-03 | Section Projets : une scène plein écran par projet ; le contenu ne bouge pas, les informations (titre, tags, aperçu, résumé, points clés, liens) apparaissent sur place selon la progression du défilement dans le projet ; aucune bibliothèque d'animation | US-01, US-03 | AC-03 : Étant donné une scène épinglée, quand je défile, alors les informations apparaissent dans l'ordre de lecture, puis la scène se libère. Sur mobile, l'aperçu apparaît avant le titre | livré (branche `feature/projets-scenes`) |
-| F-04 | Menu des projets : fixe à gauche dès 48rem, visible tant que la section est à l'écran, projet en cours marqué ; clic = scène entièrement révélée ; « Suite : … » en pied de scène mène au début du projet suivant ; dernier lien « Me contacter » vers le pied de page | US-01, US-06 | AC-04 : Quand je clique un titre, alors la scène s'affiche avec ses liens sans défilement manuel supplémentaire | livré (branche `feature/projets-scenes`) |
+| F-04 | Menu des projets : fixe à gauche dès 48rem, visible tant que la section est à l'écran, projet en cours marqué ; clic = scène entièrement révélée ; dernier lien « QA » vers la section Questions (pas de lien « Suite » dans les scènes) | US-01, US-06 | AC-04 : Quand je clique un titre, alors la scène s'affiche avec ses liens sans défilement manuel supplémentaire | livré (branche `feature/projets-scenes`) |
 | F-05 | Chaque scène affiche un aperçu média dans un cadre de navigateur dont la barre d'adresse est le lien du site | US-02 | AC-05 : Étant donné la scène d'un projet, quand elle est visible, alors son aperçu est affiché et chargé en différé | livré : GIF Twitch ; vidéos MP4 (bureau + mobile) pour GW2, Hyperloop, Dice Roller, Safe Campus |
 | F-06 | Le fond de la section est l'indicateur de progression du projet : un cercle de points lumineux part de l'aperçu et grandit avec le défilement, remis à zéro à chaque projet | US-01 | AC-06 : À 0 % seul l'aperçu est entouré de points ternes ; à 100 % tout l'écran est allumé ; rien ne descend dans la scène | livré (branche `feature/projets-scenes`) |
-| F-07 | Section Compétences : liste de compétences et technologies groupées Front / Back / Outils | US-04 | AC-07 : Les trois groupes s'affichent ; sous 48rem ils s'empilent | livré |
-| F-08 | Section CV avec lien de téléchargement PDF | US-05 | AC-08 : Quand je clique le lien, alors le PDF se télécharge (pas de 404) | à livrer (fichier absent) |
-| F-09 | Pied de page : email, GitHub, lien Espace enseignant | US-06 | AC-09 : Les trois liens sont présents et fonctionnent | livré |
+| F-07 | Section Questions fréquentes : 5 questions sur le profil d'Alex, rendues depuis `src/data/faq.json` (même source pour le HTML et pour les données structurées `FAQPage`) ; onglets au clavier et à la souris ; sans JavaScript les 5 réponses restent lisibles à la suite | US-04 | AC-07 : Étant donné l'accueil, alors la section affiche 5 questions avec leur réponse et `public/index.html` contient un bloc `application/ld+json` de 5 `Question` | à livrer |
+| F-08 | Section CV retirée du site : le CV reste en local | US-05 | AC-08 : `public/index.html` ne contient ni `id="cv"` ni lien vers un PDF de CV | à livrer |
+| F-09 | Pied de page : GitHub et lien Espace enseignant ; aucune adresse email | US-06 | AC-09 : Le pied de page contient ces deux liens et aucun `mailto:` | à livrer |
 | F-10 | Connexion : `POST /api/login` ; succès vers `/fiches-reflexives`, échec vers `/login.html?error=1` avec message | US-07 | AC-10 : Étant donné de mauvais identifiants, quand je valide, alors « Identifiants incorrects. » s'affiche | livré |
 | F-11 | Liste des fiches (page protégée) | US-08 | AC-11 : Sans session, alors redirection vers `/login.html` | livré |
 | F-12 | Détail d'une fiche avec lien vers le PDF | US-08 | AC-12 : Un `id` inconnu renvoie 404 | livré |
@@ -75,6 +75,7 @@ Statut : **livré** ou **à livrer**.
 | F-16 | Sous `prefers-reduced-motion`, aucun épinglage ni révélation progressive : le contenu des scènes est lisible d'emblée. Même repli si la scène ne tient pas dans l'écran (petit mobile, paysage, zoom) | US-11 | AC-16 : Étant donné la préférence activée, ou un écran trop bas, alors tout le contenu de chaque projet est visible sans scène épinglée | livré (branche `feature/projets-scenes`) |
 | F-17 | Sous 48rem : barre de section « Projets \| projet en cours » au-dessus du projet, et menu en vue latérale (moitié de l'écran, pleine hauteur, fond plein, reste assombri) | US-10 | AC-17 : Étant donné un écran < 48rem, alors un bouton visible ouvre la liste des projets ; un clic sur un projet ferme la vue et défile ; `Esc` la ferme | livré (branche `feature/projets-scenes`) |
 | F-18 | Ajout d'une fiche : PDF déposé dans le store Blobs puis entrée ajoutée à la liste des fiches | US-12 | AC-18 : Après dépôt et déploiement, la fiche apparaît dans la liste et son PDF s'ouvre | livré (procédure à documenter) |
+| F-19 | La section Questions tient dans un seul écran : une question choisie à la fois, sa réponse change sur place sans décalage ; fond de points très pâle et fixe, avec une onde légère partant du bloc de réponse à chaque changement de question (aucun point sous le texte) | US-04 | AC-19 : Étant donné 1280×720, 1024×768 et 390×844, alors la section mesure la hauteur de l'écran, une seule réponse est visible, la changer ne déplace rien, aucun point ne passe sous le texte ; sous `prefers-reduced-motion`, la grille est fixe et il n'y a pas d'onde | à livrer |
 
 ## 7. Exigences non fonctionnelles
 
@@ -88,10 +89,11 @@ Statut : **livré** ou **à livrer**.
 | NF-06 | Performance | Les médias de démo se chargent en différé et ne bloquent pas le premier affichage ; budget de poids par média à fixer | à livrer |
 | NF-07 | Accessibilité | Texte ≥ 4.5:1, éléments d'interface ≥ 3:1 ; focus visible partout ; une information non révélée n'est pas atteignable au clavier (`inert`) | partiel (section Projets traitée, voir `DESIGN-BRIEF.md`) |
 | NF-08 | Compatibilité | Utilisable sur desktop et mobile ; ruptures à 48rem et 64rem ; navigateurs récents (usage de `color-mix`) | livré |
-| NF-09 | Référencement | `title` et `meta description` propres, Open Graph, favicon ; `noindex` sur login, fiches et API | à livrer |
+| NF-09 | Référencement | `title` et `meta description` propres, Open Graph, favicon, données structurées `FAQPage` ; `noindex` sur login, fiches et API | partiel : titre, description, Open Graph, favicon et FAQPage à livrer avec le lot FAQ ; reste `noindex` |
 | NF-10 | Dégradation | Si Vanta ne se charge pas, le contenu reste lisible ; la section Projets ne dépend d'aucun CDN et reste lisible sans JavaScript | partiel (section Projets traitée ; pas de garde Vanta) |
 | NF-11 | Confidentialité | Aucun PDF de fiche dans le dépôt ni sous `public/` ; accès uniquement par la fonction protégée | livré |
 | NF-12 | Démarrage local | `npm run dev` rend la main en moins de 15 s sur le poste d'Alex, connexion Netlify valide ou non | partiel : `npx` retiré ; reste environ 9 s de démarrage du CLI avec session expirée |
+| NF-13 | Confidentialité | L'adresse email d'Alex n'apparaît dans aucun fichier servi (`public/`, `src/`, JavaScript, données structurées) | à livrer |
 
 ## 8. Contraintes
 
@@ -124,6 +126,6 @@ flowchart LR
 - Où stocker ces médias : dans le dépôt (`public/media/`) ou hors dépôt ? Recommandation : dans le dépôt tant que le total reste modeste.
 - Aperçus : le GIF Twitch (1,7 Mo) pourrait passer en MP4 comme les autres. La barre du cadre de Safe Campus pointe vers le dépôt front, le site en ligne étant protégé par un code d'accès.
 - `public/projets/` (gabarits vides, non liés) : je les classe hors périmètre et à supprimer avant la V1. À confirmer.
-- CV : quand le fichier sera prêt, le dépose-t-on dans `public/` (versionné) ou dans Blobs ?
+- CV et contact : le CV reste en local ; le formulaire de contact (adresse jamais affichée) sera traité dans un lot ultérieur.
 - Limite de tentatives de connexion : quel seuil, et quel mécanisme (Netlify n'offre pas de limiteur dédié aux Functions classiques, à vérifier) ?
 - Formulaire de contact ou statistiques de visite : souhaités un jour ? Aucun n'est prévu pour l'instant.
