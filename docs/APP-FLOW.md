@@ -60,7 +60,7 @@ flowchart LR
 ```mermaid
 flowchart LR
   A([Début]) --> B["Espace enseignant"]
-  B --> C["Saisie du code d'accès"]
+  B --> C["Fenêtre de connexion sur l'accueil : saisie du code d'accès"]
   C --> D{Valides ?}
   D -- oui --> E["Liste des fiches"]
   D -- non --> F["Message d'erreur"]
