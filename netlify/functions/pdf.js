@@ -1,10 +1,13 @@
 import { withAuth } from './lib/auth.js';
-import { findFiche } from './lib/fiche-repository.js';
+import { ficheIds, findFiche } from './lib/fiche-repository.js';
 import { getPdfBuffer } from './lib/storage.js';
 
 export const handler = withAuth(async (event) => {
   const fiche = findFiche(event);
   if (!fiche) {
+    console.error(
+      `Fiche inconnue : ids=${JSON.stringify(ficheIds(event))} path=${JSON.stringify(event.path)} rawUrl=${JSON.stringify(event.rawUrl)} query=${JSON.stringify(event.queryStringParameters)}`
+    );
     return { statusCode: 404, body: 'Introuvable' };
   }
 
