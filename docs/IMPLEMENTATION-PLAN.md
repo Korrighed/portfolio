@@ -37,7 +37,7 @@ Aucun fichier `docs/tasks/` : le travail a été mené directement en session, s
 | T003 | CSS : scènes, grille, menu, mobile, repli | US-01, US-10, US-11 | `public/css/projets.css` | T002 | | fait |
 | T004 | JS : progression, apparition, fond de points, menu, vue latérale, mesure `is-flow` | US-01, US-10, US-11 | `public/js/projets-scroll.js` | T002 | [P] avec T003 | fait |
 | T005 | Retrait des 3 scripts GSAP, commentaire CSP | — | `src/index.template.html`, `netlify.toml` | T004 | | fait |
-| T006 | Aperçus provisoires | US-02 | `public/img/projets/` | — | [P] | fait (à remplacer) |
+| T006 | Aperçus : captures vidéo synchronisées bureau + mobile (MP4 + affiche JPG) | US-02 | `public/video/`, `public/img/projets/`, `public/js/projets-scroll.js` | — | [P] | fait |
 | T007 | Mise à jour des docs | — | `docs/*.md` | T005 | | fait |
 
 ## 5. Graphe de dépendances
@@ -83,7 +83,7 @@ Non vérifié : appareils réels, encoche (marges prévues dans le CSS), perform
 | `scroll-behavior: smooth` global + `sticky` : saut sur certains navigateurs | Faible | Moyen | Tester Safari et Firefox avant la mise en ligne |
 | Canvas lent sur appareil modeste | Faible | Faible | Boucle pausée hors section ; réduire l'espacement ou le nombre de points |
 | Textes provisoires « [période à préciser] » visibles dans les scènes | Certaine | Faible | PRD F-15 : à remplacer par Alex |
-| Captures provisoires, Safe Campus sans aperçu | Certaine | Faible | Alex fournit des captures ; garder les noms de fichier |
+| Montage des vidéos (mobile incrusté en bas à droite) refait par Alex | Possible | Faible | Remplacer `public/video/<slug>.mp4` en gardant le nom ; affiche à régénérer |
 
 ## 8. Suivi
 
