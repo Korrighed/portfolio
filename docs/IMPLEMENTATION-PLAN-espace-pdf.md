@@ -36,8 +36,11 @@ Mettre l'espace enseignant en état d'être distribué sur Netlify : PDF dépos�
 | T801 | Mentions légales | `public/mentions-legales.html`, `public/css/legal.css`, `footer.html`, `page.js` | fait |
 | T901 | Logo de l'IUT devant le portail enseignant | `fiches-view.js`, `fiches.css`, `login-dialog.html`, `login-dialog.css` | fait |
 | T902 | Logo de l'IUT : taille et cadre | `fiches.css`, `login-dialog.css` | fait |
+| T903 | Logo de l'IUT à la place du carré du menu | `nav.html`, `nav.css` | fait |
+| T904 | Nettoyage des commentaires redondants | 10 fichiers JS et CSS | fait |
+| T1001 | Logos des technologies devant les tags des projets | `public/img/tech/`, `projets.html`, `projets.css`, `mentions-legales.html` | fait |
 
-Hors tâche : envoi des trois PDF dans le store Blobs `fiches-reflexives` (`netlify blobs:set`), relecture par empreinte SHA-256 identique à l'original.
+Hors tâche : `npm audit fix` (43 vulnérabilités ramenées à 21, 0 en production) ; envoi des trois PDF dans le store Blobs `fiches-reflexives` (`netlify blobs:set`), relecture par empreinte SHA-256 identique à l'original.
 
 ## 4. Vérification du lot
 
