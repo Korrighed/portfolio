@@ -44,6 +44,7 @@ flowchart LR
 | T105 | Rendu de la FAQ en onglets et panneaux au build | US-04 | `scripts/build-index.js` | T101 | | fait |
 | T106 | FAQ en une scène d'un écran (onglets, panneaux, script) | US-04 | `src/sections/faq.html`, `public/css/faq.css`, `public/js/faq.js`, `src/index.template.html` | T105 | | fait |
 | T107 | Retirer les points du fond et le losange | US-04 | `src/sections/faq.html`, `public/css/faq.css` | T106 | | fait |
+| T109 | Lien « QA » à la place de « Me contacter » dans le menu des projets | US-01 | `src/sections/projets.html`, `public/js/projets-scroll.js` | — | | fait |
 | T108 | Fond de points pâle et onde depuis le bloc de réponse | US-04 | `src/sections/faq.html`, `public/css/faq.css`, `public/js/faq.js`, `public/js/faq-ripple.js`, `src/index.template.html` | T107 | | fait |
 
 Fichier détaillé de chaque tâche : `docs/tasks/Txxx-slug.md`.
@@ -76,7 +77,7 @@ T103 et T104 ne partagent aucun fichier avec T101 et T102 ni entre eux : ils s'e
 | Risque | Probabilité | Impact | Parade |
 |---|---|---|---|
 | Chevrons qui chevauchent le texte sur écran étroit | Moyenne | Moyen | Marges internes en `%` supérieures à la taille des chevrons ; contrôle à 390 px |
-| Lien « Me contacter » du menu des projets mène au pied de page, qui n'a plus d'email | Certaine | Faible | Accepté jusqu'au lot « contact » ; à signaler à Alex |
+| Lien « Me contacter » du menu des projets menait à un pied de page sans email | Certaine | Faible | Remplacé par « QA » vers la FAQ (T109) |
 | L'adresse reste dans l'historique git et dans les copies déjà déployées | Certaine | Moyen | Hors périmètre du code ; à signaler à Alex |
 
 ## 8. Suivi
@@ -87,4 +88,3 @@ T103 et T104 ne partagent aucun fichier avec T101 et T102 ni entre eux : ils s'e
 ## Questions ouvertes
 
 - Faut-il supprimer l'Espace enseignant, la connexion et le service du PDF, maintenant que le CV n'est plus en ligne ? Ils servent aux fiches réflexives, pas au CV.
-- Le lien « Me contacter » du menu des projets doit-il être retiré en attendant le formulaire ?

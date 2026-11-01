@@ -44,7 +44,7 @@ flowchart LR
   E --> F["Questions fréquentes"]
   F --> H["Pied de page"]
   C -->|menu des projets| E
-  E -->|Me contacter| H
+  E -->|QA| F
 ```
 
 | Étape | Action utilisateur | Réponse du système | Cas d'erreur |

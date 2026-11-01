@@ -288,10 +288,10 @@ if (section && canvas) {
   // Menu : on atterrit sur le projet entierement revele (fin de scene).
   function goTo(target) {
     let top;
-    if (target === 'contact') {
-      const contact = document.querySelector('#contact');
-      if (!contact) return;
-      top = contact.getBoundingClientRect().top + window.scrollY;
+    if (target === 'faq') {
+      const faq = document.querySelector('#faq');
+      if (!faq) return;
+      top = faq.getBoundingClientRect().top + window.scrollY;
     } else {
       const project = projects[Number(target)];
       if (!project) return;
