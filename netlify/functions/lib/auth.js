@@ -1,5 +1,6 @@
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { sealData, unsealData } from 'iron-session';
+import { secure } from './security-headers.js';
 
 const SESSION_COOKIE = 'session';
 const TTL_SECONDS = 60 * 60 * 8; // 8h
@@ -91,9 +92,9 @@ export function withAuth(handler, { onFail = 'redirect' } = {}) {
 
     // Les [[headers]] de netlify.toml ne s'appliquent pas aux reponses des
     // fonctions : le cache prive est donc pose ici, pour pages et PDF.
-    return {
+    return secure({
       ...response,
       headers: { ...response.headers, 'Cache-Control': 'private, no-store' },
-    };
+    });
   };
 }

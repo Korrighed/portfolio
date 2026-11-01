@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
     <title>Connexion - Espace enseignant</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
@@ -10,10 +11,7 @@
     <link rel="stylesheet" href="/css/main.css" />
   </head>
   <body>
-    <script>
-      // Avec JavaScript : la connexion se fait dans la fenetre de l'accueil.
-      location.replace('/?connexion=1');
-    </script>
+    <script src="/js/login-redirect.js"></script>
     <header>
       <nav>
         <a href="/">Accueil</a>
@@ -22,7 +20,6 @@
 
     <main>
       <h1>Connexion</h1>
-      <p class="error" id="error-msg" hidden>Code incorrect.</p>
       <form method="post" action="/api/login">
         <label for="code">Code d'accès</label>
         <input type="password" id="code" name="code" required autocomplete="current-password" />
@@ -31,13 +28,5 @@
       </form>
     </main>
 
-    <script>
-      const error = new URLSearchParams(location.search).get('error');
-      if (error) {
-        const message = document.getElementById('error-msg');
-        if (error === '2') message.textContent = 'Trop de tentatives. Réessayez dans quelques minutes.';
-        message.hidden = false;
-      }
-    </script>
   </body>
 </html>

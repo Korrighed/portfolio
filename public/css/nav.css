@@ -100,3 +100,14 @@
   width: auto;
   height: 1.5rem;
 }
+
+/* Lien GitHub : logo monochrome a la couleur du lien, texte = chemin du profil */
+.nav__github {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav__github svg {
+  flex: none;
+}

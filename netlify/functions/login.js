@@ -6,10 +6,11 @@ import {
   openAttemptsStore,
   recordFailure,
 } from './lib/rate-limit.js';
+import { secure } from './lib/security-headers.js';
 
 const redirect = (location) => ({ statusCode: 302, headers: { Location: location }, body: '' });
 
-export const handler = async (event) => {
+const handle = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
@@ -43,3 +44,5 @@ export const handler = async (event) => {
   await recordFailure(store, key);
   return redirect('/login.html?error=1');
 };
+
+export const handler = async (event) => secure(await handle(event));

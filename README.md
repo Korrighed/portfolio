@@ -28,6 +28,7 @@ cp .env.example .env # puis renseigner AUTH_CODE et SESSION_SECRET
 | Commande | Usage |
 |---|---|
 | `npm run build` | Régénère `public/index.html` depuis `src/` |
+| `SITE_URL` (variable, optionnelle) | Domaine du site, défaut `https://kaporfolio.netlify.app` : alimente `canonical`, `og:url`, `sitemap.xml` et `robots.txt` à chaque build. À poser dans les variables Netlify quand le domaine change |
 | `npm run dev` | Régénère `public/index.html` puis `netlify dev` — lance Vite (HMR, port 5173 strict) et exécute les fonctions localement, avec les redirects de `netlify.toml`. Un seul `npm run dev` à la fois : un second échoue avec « Port 5173 is already in use » |
 
 Démarrage lent : `netlify dev` interroge l'API Netlify au lancement. Avec une session expirée (`netlify status`), compter environ 9 s de plus. Relancer `netlify login`, ou démarrer sans réseau avec `npm run dev -- --offline`.
