@@ -1,6 +1,7 @@
 import { destroySessionCookieHeader } from './lib/auth.js';
+import { secure } from './lib/security-headers.js';
 
-export const handler = async (event) => {
+const handle = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
@@ -14,3 +15,5 @@ export const handler = async (event) => {
     body: '',
   };
 };
+
+export const handler = async (event) => secure(await handle(event));
