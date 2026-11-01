@@ -6,6 +6,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Portfolio</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="stylesheet" href="/css/main.css" />
   <link rel="stylesheet" href="/css/nav.css" />
   <link rel="stylesheet" href="/css/hero.css" />
@@ -18,7 +21,10 @@
 <body>
   <header class="nav">
     <div class="nav__inner">
-      <a class="nav__brand" href="/">Alex.dev</a>
+      <a class="nav__brand" href="/" aria-label="Alex.dev, accueil">
+        <img class="nav__logo" src="/img/logo/logo-ka-intro.svg" alt="" width="43" height="40">
+        <span>Alex.dev</span>
+      </a>
 
       <button class="nav__toggle" type="button" aria-controls="nav-menu" aria-expanded="false"
         aria-label="Ouvrir le menu">
