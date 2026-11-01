@@ -14,34 +14,35 @@ if (section && canvas) {
   const GROW = 1.6; // rayon supplementaire au pic de l'onde
   const IDLE_ALPHA = 0.1;
   const PEAK_ALPHA = 0.42;
-  const RING = 40; // largeur de l'anneau, comme les projets
+  const RING = 40; // largeur de l'anneau
   const MASK_PAD = 16; // marge autour des textes sans point
   const CHANGE_MS = 1900;
   const ENTRY_MS = 3000;
   const COLOR = '52, 73, 102'; // Yale Blue
+  const TAU = Math.PI * 2;
   const dpr = Math.min(2, window.devicePixelRatio || 1);
+
+  const restStyle = `rgba(${COLOR}, ${IDLE_ALPHA})`;
 
   let width = 0;
   let height = 0;
-  let wave = null; // { start, duration, x, y, maxR }
+  let points = new Float32Array(0); // x, y des points visibles (hors zones de texte)
+  let ringIndex = new Int32Array(0); // points touches par l'anneau a l'image courante
+  let origin = { x: 0, y: 0 };
+  let maxRadius = 1;
+  let wave = null; // { start, duration }
   let frameId = 0;
 
   const easeOut = (t) => 1 - (1 - t) ** 1.6;
 
-  function resize() {
-    const rect = canvas.getBoundingClientRect();
-    width = rect.width;
-    height = rect.height;
-    canvas.width = Math.round(width * dpr);
-    canvas.height = Math.round(height * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    draw(performance.now());
-  }
-
-  // Zones sans point : titre, liste des questions, reponse affichee.
-  function masks() {
+  // Geometrie : calculee au redimensionnement et au demarrage d'une onde, jamais pendant le dessin.
+  function layout() {
     const base = canvas.getBoundingClientRect();
-    return ['.faq__head', '.faq__tabs', '.faq__panel.is-active']
+    width = base.width;
+    height = base.height;
+
+    // Zones sans point : titre, liste des questions, reponse affichee.
+    const zones = ['.faq__head', '.faq__tabs', '.faq__panel.is-active']
       .map((selector) => section.querySelector(selector))
       .filter(Boolean)
       .map((element) => {
@@ -54,51 +55,102 @@ if (section && canvas) {
         };
       })
       .filter((m) => m.right > m.left && m.bottom > m.top);
-  }
 
-  function origin() {
-    const plate = section.querySelector('.faq__plate');
-    const base = canvas.getBoundingClientRect();
-    if (!plate) return { x: width / 2, y: height / 2 };
-    const r = plate.getBoundingClientRect();
-    return { x: r.left - base.left + r.width / 2, y: r.top - base.top + r.height / 2 };
-  }
-
-  function draw(now) {
-    ctx.clearRect(0, 0, width, height);
-    const zones = masks();
-    let radius = -1;
-    let fade = 0;
-    if (wave) {
-      const t = Math.min(1, (now - wave.start) / wave.duration);
-      radius = easeOut(t) * wave.maxR;
-      fade = 1 - t * t;
-    }
     const cols = Math.ceil(width / GAP) + 1;
     const rows = Math.ceil(height / GAP) + 1;
     const offsetX = (width - (cols - 1) * GAP) / 2;
     const offsetY = (height - (rows - 1) * GAP) / 2;
+    const visible = [];
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
         const x = offsetX + col * GAP;
         const y = offsetY + row * GAP;
-        if (zones.some((m) => x > m.left && x < m.right && y > m.top && y < m.bottom)) continue;
-        let k = 0;
-        if (wave) {
-          const delta = Math.abs(Math.hypot(x - wave.x, y - wave.y) - radius);
-          if (delta < RING) k = (1 - delta / RING) * fade;
-        }
-        ctx.fillStyle = `rgba(${COLOR}, ${IDLE_ALPHA + (PEAK_ALPHA - IDLE_ALPHA) * k})`;
-        ctx.beginPath();
-        ctx.arc(x, y, DOT + GROW * k, 0, Math.PI * 2);
-        ctx.fill();
+        if (!zones.some((m) => x > m.left && x < m.right && y > m.top && y < m.bottom)) visible.push(x, y);
       }
+    }
+    points = Float32Array.from(visible);
+    ringIndex = new Int32Array(points.length / 2);
+
+    // Origine de l'onde : centre du bloc de reponse ; rayon final : coin le plus eloigne.
+    const plate = section.querySelector('.faq__plate');
+    const r = plate?.getBoundingClientRect();
+    origin = r ? { x: r.left - base.left + r.width / 2, y: r.top - base.top + r.height / 2 } : { x: width / 2, y: height / 2 };
+    const far = Math.max(
+      Math.hypot(origin.x, origin.y),
+      Math.hypot(width - origin.x, origin.y),
+      Math.hypot(origin.x, height - origin.y),
+      Math.hypot(width - origin.x, height - origin.y),
+    );
+    maxRadius = far + RING;
+  }
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    const w = Math.round(rect.width * dpr);
+    const h = Math.round(rect.height * dpr);
+    // Reaffecter width/height reinitialise le canvas : seulement si la taille change.
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    layout();
+    draw(performance.now());
+  }
+
+  function draw(now) {
+    ctx.clearRect(0, 0, width, height);
+
+    let radius = 0;
+    let fade = 0;
+    let innerSq = -1;
+    let outerSq = -1;
+    if (wave) {
+      const t = Math.min(1, (now - wave.start) / wave.duration);
+      radius = easeOut(t) * maxRadius;
+      fade = 1 - t * t;
+      innerSq = radius > RING ? (radius - RING) ** 2 : -1;
+      outerSq = (radius + RING) ** 2;
+    }
+
+    // Points au repos : un seul trace, un seul remplissage.
+    let ringCount = 0;
+    ctx.fillStyle = restStyle;
+    ctx.beginPath();
+    for (let i = 0; i < points.length; i += 2) {
+      const x = points[i];
+      const y = points[i + 1];
+      if (wave) {
+        const dx = x - origin.x;
+        const dy = y - origin.y;
+        const distSq = dx * dx + dy * dy;
+        if (distSq > innerSq && distSq < outerSq) {
+          ringIndex[ringCount++] = i;
+          continue;
+        }
+      }
+      ctx.moveTo(x + DOT, y);
+      ctx.arc(x, y, DOT, 0, TAU);
+    }
+    ctx.fill();
+
+    // Points de l'anneau : taille et opacite propres a chacun.
+    for (let n = 0; n < ringCount; n++) {
+      const i = ringIndex[n];
+      const x = points[i];
+      const y = points[i + 1];
+      const delta = Math.abs(Math.hypot(x - origin.x, y - origin.y) - radius);
+      const k = delta < RING ? (1 - delta / RING) * fade : 0;
+      ctx.fillStyle = `rgba(${COLOR}, ${IDLE_ALPHA + (PEAK_ALPHA - IDLE_ALPHA) * k})`;
+      ctx.beginPath();
+      ctx.arc(x, y, DOT + GROW * k, 0, TAU);
+      ctx.fill();
     }
   }
 
   function tick(now) {
-    draw(now);
     if (wave && now - wave.start < wave.duration) {
+      draw(now);
       frameId = requestAnimationFrame(tick);
     } else {
       wave = null;
@@ -109,9 +161,8 @@ if (section && canvas) {
 
   function start(duration) {
     if (reduceMotion.matches) return;
-    const o = origin();
-    const far = Math.max(Math.hypot(o.x, o.y), Math.hypot(width - o.x, o.y), Math.hypot(o.x, height - o.y), Math.hypot(width - o.x, height - o.y));
-    wave = { start: performance.now(), duration, x: o.x, y: o.y, maxR: far + RING };
+    layout();
+    wave = { start: performance.now(), duration };
     if (!frameId) frameId = requestAnimationFrame(tick);
   }
 
@@ -129,11 +180,14 @@ if (section && canvas) {
   );
   entry.observe(section);
 
+  // Le ResizeObserver appelle resize() des l'observation : pas d'appel direct.
   new ResizeObserver(resize).observe(canvas);
   reduceMotion.addEventListener('change', () => {
     wave = null;
     draw(performance.now());
   });
-  document.fonts?.ready.then(() => draw(performance.now()));
-  resize();
+  document.fonts?.ready.then(() => {
+    layout();
+    draw(performance.now());
+  });
 }

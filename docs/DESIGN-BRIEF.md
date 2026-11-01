@@ -25,8 +25,7 @@ International Typographic Style : colonnes et modules réguliers, marges et gout
 | Largeur de contenu | `72rem` (accueil), `48rem` (pages génériques `main`) |
 | Gouttière | `--space-md` (1.5rem) |
 | Marge latérale | `--space-lg` (2.5rem) |
-| En-tête de section | eyebrow colonnes 1 à 3, titre colonnes 4 à 10 |
-| Questions fréquentes | cadre de 72 rem au plus ; liste centrée de 48 rem au plus ; en-tête de section sur la grille de 12 colonnes |
+| Questions fréquentes | contenu de 72 rem au plus ; dès 64 rem, liste des questions colonnes 1 à 5 et réponse colonnes 7 à 12 |
 
 ## 3. Fondations
 
@@ -109,7 +108,8 @@ Les états de focus ne sont pas stylés : le navigateur applique son contour par
 | Liste à puces rondes (`.list-dotted`) | repos | Puce 6 px, Yale ; plus utilisée dans les sections de l'accueil |
 | Lien Espace enseignant (`.private-link`) | repos, survol | Carré creux 8 px devant le libellé |
 | Eyebrow (`.text-eyebrow`) | repos | Partagé entre les sections |
-$1| Indice de défilement (`.project__cue`) | visible, masqué en fin de scène | Trait de 1 px qui s'estompe, comme sur le bouton du hero |
+| Fond de points (`#projets-bg`) | progression 0 à 100 % par projet | Indicateur de progression : cercle lumineux depuis l'aperçu ; remplace la barre en onde |
+| Indice de défilement (`.project__cue`) | visible, masqué en fin de scène | Trait de 1 px qui s'estompe, comme sur le bouton du hero |
 
 ## 5. Mise en page et responsive
 
@@ -129,7 +129,8 @@ $1| Indice de défilement (`.project__cue`) | visible, masqué en fin de scène 
 |---|---|
 | Scène projet | Épinglée (`sticky`) sur 190 % de la hauteur de l'écran en plus. Les informations ne se déplacent pas : elles passent de 0 à 1 d'opacité et d'un flou de 6 px à net en 700 ms, quand la progression atteint 0, 0,2, 0,4, 0,62 et 0,82 (seuils, pas de `scrub`). Sur mobile l'aperçu apparaît avant le titre |
 | Fond de points | Boucle `requestAnimationFrame` active seulement quand la section est à l'écran et l'onglet visible. Cercle lumineux : rayon proportionnel à la progression du projet (lissé), anneau plus gros à son bord ; houle douce dont la phase suit le scroll, sans dérive ; 700 ms de fondu au changement de projet |
-$1| FAQ | Panneau : flou de 6 px vers net et opacité en 300 ms au changement de question (sous `no-preference`). Fond : onde de 1,9 s au changement, onde d'arrivée de 3 s une seule fois quand la section est à moitié visible ; boucle active seulement pendant l'onde |
+| Défilement vers un projet | Défilement lisse du navigateur ; menu : fin de scène (tout révélé) |
+| FAQ | Panneau : flou de 6 px vers net et opacité en 300 ms au changement de question (sous `no-preference`). Fond : onde de 1,9 s au changement, onde d'arrivée de 3 s une seule fois quand la section est à moitié visible ; boucle active seulement pendant l'onde |
 | Menu des projets | Fondu 300 ms ; liens 200 ms |
 | Vue latérale (mobile) | Glissement 300 ms depuis la droite ; fond assombri 300 ms |
 | Bouton « Projets » | 200 ms ; anneau 450 ms |

@@ -28,21 +28,11 @@
 }
 
 /* ---------- FAQ : une scene d'un ecran, fond uni (aucun point) ---------- */
-/* Au-dessus du canvas #projets-bg (sticky, z-index 0) qui deborde sur cette section */
 .faq {
-  --faq-vh: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: var(--faq-vh);
+  min-height: var(--vh-screen);
   background: var(--color-platinum);
-  position: relative;
-  z-index: 1;
-}
-
-@supports (height: 100svh) {
-  .faq {
-    --faq-vh: 100svh;
-  }
 }
 
 .faq :focus-visible {
@@ -132,11 +122,6 @@
   font-size: 0.8125rem;
 }
 
-.faq__num::before {
-  content: '';
-  display: none;
-}
-
 /* Sous 64rem le libelle n'est lu que par les lecteurs d'ecran */
 .faq__label {
   position: absolute;
@@ -149,7 +134,6 @@
 
 /* Panneau de reponse */
 .faq__plate {
-  position: relative;
   grid-column: 1 / -1;
   padding: var(--space-md) 0;
 }
@@ -248,7 +232,6 @@
     height: auto;
     min-height: 44px;
     padding: var(--space-sm) 0;
-    background: none;
     border: 0;
     border-top: 1px solid var(--color-powder-blue);
     color: var(--color-slate-dark);
@@ -274,6 +257,7 @@
   }
 
   .faq__num::before {
+    content: '';
     display: inline-block;
     width: 6px;
     height: 6px;

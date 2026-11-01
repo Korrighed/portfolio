@@ -23,7 +23,7 @@ export function renderFaqTabs(items) {
   return items
     .map(
       ({ q }, i) =>
-        `        <button class="faq__tab" type="button" data-faq="${i + 1}"><span class="faq__num" aria-hidden="true">${pad(i + 1)}</span><span class="faq__label">${escapeHtml(q)}</span></button>`,
+        `        <button class="faq__tab" type="button"><span class="faq__num" aria-hidden="true">${pad(i + 1)}</span><span class="faq__label">${escapeHtml(q)}</span></button>`,
     )
     .join('\n');
 }
@@ -33,7 +33,7 @@ export function renderFaqPanels(items) {
   return items
     .map(
       ({ q, a }, i) =>
-        `          <article class="faq__panel" id="faq-panel-${i + 1}" data-faq="${i + 1}">\n            <p class="faq__count" aria-hidden="true">${pad(i + 1)} / ${pad(items.length)}</p>\n            <h3 class="faq__q">${escapeHtml(q)}</h3>\n            <p class="faq__a">${escapeHtml(a)}</p>\n          </article>`,
+        `          <article class="faq__panel" id="faq-panel-${i + 1}">\n            <p class="faq__count" aria-hidden="true">${pad(i + 1)} / ${pad(items.length)}</p>\n            <h3 class="faq__q">${escapeHtml(q)}</h3>\n            <p class="faq__a">${escapeHtml(a)}</p>\n          </article>`,
     )
     .join('\n');
 }
@@ -53,17 +53,26 @@ export function renderFaqJsonLd(items) {
   return `<script type="application/ld+json">\n${json}\n  </script>`;
 }
 
+// Marqueurs <!-- faq:xxx --> : chacun doit exister dans les sources, une seule fois.
+const faqSlots = { tabs: renderFaqTabs, panels: renderFaqPanels, jsonld: renderFaqJsonLd };
+
 export function buildIndex() {
   const template = toLf(readFileSync(templatePath, 'utf8'));
-
   const faq = JSON.parse(readFileSync(faqPath, 'utf8'));
+  const seen = new Set();
+
   const html = template
     .replace(/<!-- include:(.+?) -->/g, (_match, file) =>
       toLf(readFileSync(join(sectionsDir, file.trim()), 'utf8')).trimEnd(),
     )
-    .replace('<!-- faq:tabs -->', () => renderFaqTabs(faq))
-    .replace('<!-- faq:panels -->', () => renderFaqPanels(faq))
-    .replace('<!-- faq:jsonld -->', () => renderFaqJsonLd(faq));
+    .replace(/<!-- faq:(\w+) -->/g, (_match, key) => {
+      if (!faqSlots[key]) throw new Error(`Marqueur inconnu : faq:${key}`);
+      seen.add(key);
+      return faqSlots[key](faq);
+    });
+
+  const missing = Object.keys(faqSlots).filter((key) => !seen.has(key));
+  if (missing.length > 0) throw new Error(`Marqueur absent des sources : ${missing.map((key) => 'faq:' + key).join(', ')}`);
 
   writeFileSync(outPath, html);
   return outPath;

@@ -74,7 +74,8 @@ Statut : **livré** ou **à livrer**.
 | F-15 | Aucun texte provisoire visible (« [période à préciser] ») | US-01 | AC-15 : Aucune occurrence de `[` suivi de « période » dans `public/index.html` | à livrer |
 | F-16 | Sous `prefers-reduced-motion`, aucun épinglage ni révélation progressive : le contenu des scènes est lisible d'emblée. Même repli si la scène ne tient pas dans l'écran (petit mobile, paysage, zoom) | US-11 | AC-16 : Étant donné la préférence activée, ou un écran trop bas, alors tout le contenu de chaque projet est visible sans scène épinglée | livré (branche `feature/projets-scenes`) |
 | F-17 | Sous 48rem : barre de section « Projets \| projet en cours » au-dessus du projet, et menu en vue latérale (moitié de l'écran, pleine hauteur, fond plein, reste assombri) | US-10 | AC-17 : Étant donné un écran < 48rem, alors un bouton visible ouvre la liste des projets ; un clic sur un projet ferme la vue et défile ; `Esc` la ferme | livré (branche `feature/projets-scenes`) |
-$1| F-19 | La section Questions tient dans un seul écran : une question choisie à la fois, sa réponse change sur place sans décalage ; fond de points très pâle et fixe, avec une onde légère partant du bloc de réponse à chaque changement de question (aucun point sous le texte) | US-04 | AC-19 : Étant donné 1280×720, 1024×768 et 390×844, alors la section mesure la hauteur de l'écran, une seule réponse est visible, la changer ne déplace rien, aucun point ne passe sous le texte ; sous `prefers-reduced-motion`, la grille est fixe et il n'y a pas d'onde | à livrer |
+| F-18 | Ajout d'une fiche : PDF déposé dans le store Blobs puis entrée ajoutée à la liste des fiches | US-12 | AC-18 : Après dépôt et déploiement, la fiche apparaît dans la liste et son PDF s'ouvre | livré (procédure à documenter) |
+| F-19 | La section Questions tient dans un seul écran : une question choisie à la fois, sa réponse change sur place sans décalage ; fond de points très pâle et fixe, avec une onde légère partant du bloc de réponse à chaque changement de question (aucun point sous le texte) | US-04 | AC-19 : Étant donné 1280×720, 1024×768 et 390×844, alors la section mesure la hauteur de l'écran, une seule réponse est visible, la changer ne déplace rien, aucun point ne passe sous le texte ; sous `prefers-reduced-motion`, la grille est fixe et il n'y a pas d'onde | à livrer |
 
 ## 7. Exigences non fonctionnelles
 
@@ -91,7 +92,8 @@ $1| F-19 | La section Questions tient dans un seul écran : une question choisie
 | NF-09 | Référencement | `title` et `meta description` propres, Open Graph, favicon, données structurées `FAQPage` ; `noindex` sur login, fiches et API | partiel : titre, description, Open Graph, favicon et FAQPage à livrer avec le lot FAQ ; reste `noindex` |
 | NF-10 | Dégradation | Si Vanta ne se charge pas, le contenu reste lisible ; la section Projets ne dépend d'aucun CDN et reste lisible sans JavaScript | partiel (section Projets traitée ; pas de garde Vanta) |
 | NF-11 | Confidentialité | Aucun PDF de fiche dans le dépôt ni sous `public/` ; accès uniquement par la fonction protégée | livré |
-$1| NF-13 | Confidentialité | L'adresse email d'Alex n'apparaît dans aucun fichier servi (`public/`, `src/`, JavaScript, données structurées) | à livrer |
+| NF-12 | Démarrage local | `npm run dev` rend la main en moins de 15 s sur le poste d'Alex, connexion Netlify valide ou non | partiel : `npx` retiré ; reste environ 9 s de démarrage du CLI avec session expirée |
+| NF-13 | Confidentialité | L'adresse email d'Alex n'apparaît dans aucun fichier servi (`public/`, `src/`, JavaScript, données structurées) | à livrer |
 
 ## 8. Contraintes
 

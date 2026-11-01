@@ -44,6 +44,7 @@ flowchart LR
 | T105 | Rendu de la FAQ en onglets et panneaux au build | US-04 | `scripts/build-index.js` | T101 | | fait |
 | T106 | FAQ en une scène d'un écran (onglets, panneaux, script) | US-04 | `src/sections/faq.html`, `public/css/faq.css`, `public/js/faq.js`, `src/index.template.html` | T105 | | fait |
 | T107 | Retirer les points du fond et le losange | US-04 | `src/sections/faq.html`, `public/css/faq.css` | T106 | | fait |
+| T110 | Nettoyage : code mort, onde de la FAQ moins coûteuse, canvas confiné à `#projets`, marqueurs de build vérifiés | US-04 | `public/css/*.css`, `public/js/faq*.js`, `scripts/build-index.js` | T109 | | fait |
 | T109 | Lien « QA » à la place de « Me contacter » dans le menu des projets | US-01 | `src/sections/projets.html`, `public/js/projets-scroll.js` | — | | fait |
 | T108 | Fond de points pâle et onde depuis le bloc de réponse | US-04 | `src/sections/faq.html`, `public/css/faq.css`, `public/js/faq.js`, `public/js/faq-ripple.js`, `src/index.template.html` | T107 | | fait |
 
