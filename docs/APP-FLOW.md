@@ -12,7 +12,7 @@ flowchart TD
   Accueil["Accueil /"]
   Login["Connexion /login.html"]
   Liste["Fiches /fiches-reflexives"]
-  Fiche["Fiche /fiches-reflexives/:id"]
+  Fiche["Détail /fiches-reflexives/:id (redirige vers la liste)"]
   Pdf["PDF /api/pdf/:id"]
   Accueil -->|Espace enseignant| Login
   Login -->|identifiants valides| Liste
@@ -65,8 +65,9 @@ flowchart LR
   D -- oui --> E["Liste des fiches"]
   D -- non --> F["Message d'erreur"]
   F --> C
-  E --> G["Fiche"]
-  G --> H["Ouverture du PDF"]
+  E --> G["Choix d'une fiche dans le menu (titre du document)"]
+  G --> H["Compétences, livrables, statut"]
+  H --> J["Ouverture du PDF"]
   E --> I([Déconnexion])
 ```
 

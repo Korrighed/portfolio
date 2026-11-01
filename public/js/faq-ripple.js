@@ -2,7 +2,7 @@
 // projets) ; a chaque changement de question, un anneau de points part du centre du bloc
 // de reponse puis s'eteint. Aucun point sous le texte. La boucle ne tourne que pendant
 // une onde. Sous prefers-reduced-motion : grille fixe, pas d'onde.
-const section = document.querySelector('#faq');
+const section = document.querySelector('.faq');
 const canvas = section?.querySelector('.faq__bg');
 
 if (section && canvas) {
@@ -18,7 +18,8 @@ if (section && canvas) {
   const MASK_PAD = 16; // marge autour des textes sans point
   const CHANGE_MS = 1900;
   const ENTRY_MS = 3000;
-  const COLOR = '52, 73, 102'; // Yale Blue
+  // Couleur des points (rgb) : jeton --faq-dot du theme (Yale Blue en clair, Powder Blue en sombre)
+  const COLOR = getComputedStyle(section).getPropertyValue('--faq-dot').trim() || '52, 73, 102';
   const TAU = Math.PI * 2;
   const dpr = Math.min(2, window.devicePixelRatio || 1);
 

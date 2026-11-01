@@ -28,15 +28,38 @@
 }
 
 /* ---------- FAQ : une scene d'un ecran, fond uni (aucun point) ---------- */
+/* Jetons de theme : clair par defaut (accueil), sombre avec .faq--dark (espace enseignant) */
 .faq {
+  --faq-bg: var(--color-platinum);
+  --faq-fg: var(--color-ink-black);
+  --faq-muted: var(--color-slate-dark);
+  --faq-accent: var(--color-yale-blue);
+  --faq-on-accent: var(--color-platinum);
+  --faq-line: var(--color-powder-blue);
+  --faq-dot: 52, 73, 102; /* Yale Blue, en rgb pour le canvas */
   display: flex;
   flex-direction: column;
   min-height: var(--vh-screen);
-  background: var(--color-platinum);
+  background: var(--faq-bg);
+  color: var(--faq-fg);
+}
+
+.faq--dark {
+  --faq-bg: var(--color-ink-black);
+  --faq-fg: var(--color-platinum);
+  --faq-muted: var(--color-powder-blue);
+  --faq-accent: var(--color-powder-blue);
+  --faq-on-accent: var(--color-ink-black);
+  --faq-line: color-mix(in srgb, var(--color-powder-blue) 28%, transparent);
+  --faq-dot: 180, 205, 237; /* Powder Blue */
+}
+
+.faq .text-eyebrow {
+  color: var(--faq-accent);
 }
 
 .faq :focus-visible {
-  outline: 2px solid var(--color-yale-blue);
+  outline: 2px solid var(--faq-accent);
   outline-offset: 3px;
 }
 
@@ -101,20 +124,20 @@
   height: 44px;
   padding: 0;
   background: none;
-  border: 1px solid var(--color-powder-blue);
-  color: var(--color-yale-blue);
+  border: 1px solid var(--faq-line);
+  color: var(--faq-accent);
   font: inherit;
   cursor: pointer;
 }
 
 .faq__tab:hover {
-  border-color: var(--color-yale-blue);
+  border-color: var(--faq-accent);
 }
 
 .faq__tab[aria-selected='true'] {
-  background: var(--color-yale-blue);
-  border-color: var(--color-yale-blue);
-  color: var(--color-platinum);
+  background: var(--faq-accent);
+  border-color: var(--faq-accent);
+  color: var(--faq-on-accent);
 }
 
 .faq__num {
@@ -173,7 +196,7 @@
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   letter-spacing: 0.14em;
-  color: var(--color-yale-blue);
+  color: var(--faq-accent);
 }
 
 .faq__q {
@@ -185,7 +208,7 @@
   margin: 0;
   font-size: 1rem;
   line-height: 1.65;
-  color: var(--color-slate-dark);
+  color: var(--faq-muted);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -233,27 +256,27 @@
     min-height: 44px;
     padding: var(--space-sm) 0;
     border: 0;
-    border-top: 1px solid var(--color-powder-blue);
-    color: var(--color-slate-dark);
+    border-top: 1px solid var(--faq-line);
+    color: var(--faq-muted);
     text-align: left;
   }
 
   .faq__tab:last-child {
-    border-bottom: 1px solid var(--color-powder-blue);
+    border-bottom: 1px solid var(--faq-line);
   }
 
   .faq__tab:hover {
-    color: var(--color-ink-black);
+    color: var(--faq-fg);
   }
 
   .faq__tab[aria-selected='true'] {
     background: none;
-    border-top-color: var(--color-yale-blue);
-    color: var(--color-ink-black);
+    border-top-color: var(--faq-accent);
+    color: var(--faq-fg);
   }
 
   .faq__num {
-    color: var(--color-yale-blue);
+    color: var(--faq-accent);
   }
 
   .faq__num::before {

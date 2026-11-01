@@ -45,7 +45,7 @@ Alex, développeur full stack, n'a pas de vitrine publique de ses projets, de se
 | US-05 | Visiteur | télécharger le CV | le transmettre ou l'archiver | reporté (le CV reste en local) |
 | US-06 | Visiteur | contacter Alex | engager un échange | reporté (formulaire à venir ; GitHub en attendant) |
 | US-07 | Enseignant | me connecter | accéder à l'espace privé | P1 |
-| US-08 | Enseignant | lister puis ouvrir une fiche | lire le PDF | P1 |
+| US-08 | Enseignant | parcourir les fiches par titre et voir leurs compétences | évaluer chaque projet, puis ouvrir le PDF | P1 |
 | US-09 | Enseignant | me déconnecter | fermer ma session | P1 |
 | US-10 | Visiteur mobile | atteindre n'importe quel projet sans tout faire défiler | gagner du temps | P2 |
 | US-11 | Visiteur sensible au mouvement | un site sans animation imposée | lire sans gêne | P2 |
@@ -67,8 +67,8 @@ Statut : **livré** ou **à livrer**.
 | F-08 | Section CV retirée du site : le CV reste en local | US-05 | AC-08 : `public/index.html` ne contient ni `id="cv"` ni lien vers un PDF de CV | à livrer |
 | F-09 | Pied de page : GitHub et lien Espace enseignant ; aucune adresse email | US-06 | AC-09 : Le pied de page contient ces deux liens et aucun `mailto:` | à livrer |
 | F-10 | Connexion : `POST /api/login` ; succès vers `/fiches-reflexives`, échec vers `/login.html?error=1` avec message | US-07 | AC-10 : Étant donné de mauvais identifiants, quand je valide, alors « Identifiants incorrects. » s'affiche | livré |
-| F-11 | Liste des fiches (page protégée) | US-08 | AC-11 : Sans session, alors redirection vers `/login.html` | livré |
-| F-12 | Détail d'une fiche avec lien vers le PDF | US-08 | AC-12 : Un `id` inconnu renvoie 404 | livré |
+| F-11 | Page des fiches (protégée) : une scène sombre à onglets, le titre de chaque fiche dans le menu | US-08 | AC-11 : Sans session, alors redirection vers `/login.html` ; avec session, trois onglets et trois panneaux | à livrer |
+| F-12 | Panneau d'une fiche : sous-titre, compétences visées, livrables, statut, date, liens et lien vers le PDF ; l'ancienne page de détail redirige vers la liste | US-08 | AC-12 : Un `id` inconnu renvoie 404 sur `/fiches-reflexives/:id` ; un `id` connu redirige vers `/fiches-reflexives` | à livrer |
 | F-13 | Service du PDF réservé aux sessions valides | US-08 | AC-13 : Sans session, `GET /api/pdf/:id` renvoie 401 | livré |
 | F-14 | Déconnexion : `POST /api/logout` détruit le cookie et renvoie à `/` | US-09 | AC-14 : Après déconnexion, `/fiches-reflexives` redirige vers le login | livré |
 | F-15 | Aucun texte provisoire visible (« [période à préciser] ») | US-01 | AC-15 : Aucune occurrence de `[` suivi de « période » dans `public/index.html` | à livrer |
@@ -76,6 +76,7 @@ Statut : **livré** ou **à livrer**.
 | F-17 | Sous 48rem : barre de section « Projets \| projet en cours » au-dessus du projet, et menu en vue latérale (moitié de l'écran, pleine hauteur, fond plein, reste assombri) | US-10 | AC-17 : Étant donné un écran < 48rem, alors un bouton visible ouvre la liste des projets ; un clic sur un projet ferme la vue et défile ; `Esc` la ferme | livré (branche `feature/projets-scenes`) |
 | F-18 | Ajout d'une fiche : PDF déposé dans le store Blobs puis entrée ajoutée à la liste des fiches | US-12 | AC-18 : Après dépôt et déploiement, la fiche apparaît dans la liste et son PDF s'ouvre | livré (procédure à documenter) |
 | F-19 | La section Questions tient dans un seul écran : une question choisie à la fois, sa réponse change sur place sans décalage ; fond de points très pâle et fixe, avec une onde légère partant du bloc de réponse à chaque changement de question (aucun point sous le texte) | US-04 | AC-19 : Étant donné 1280×720, 1024×768 et 390×844, alors la section mesure la hauteur de l'écran, une seule réponse est visible, la changer ne déplace rien, aucun point ne passe sous le texte ; sous `prefers-reduced-motion`, la grille est fixe et il n'y a pas d'onde | à livrer |
+| F-20 | La page des fiches reprend la scène de la FAQ en thème sombre (fond Ink Black, texte Platinum, accent Powder Blue), même fond de points et même onde, sans décalage au changement de fiche | US-08 | AC-20 : Étant donné 1280×720, 1024×768 et 390×844, alors une seule fiche est visible, en changer ne déplace rien, aucun point ne passe sous le texte ; la FAQ de l'accueil reste en thème clair | à livrer |
 
 ## 7. Exigences non fonctionnelles
 
