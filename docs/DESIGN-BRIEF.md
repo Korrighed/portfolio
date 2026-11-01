@@ -44,7 +44,7 @@ Palette validée par Alex : Ink Black, Yale Blue, Powder Blue, Platinum. Les aut
 | `--color-platinum` | `#f0f4ef` | Fond clair principal, texte sur fond sombre | 16.15:1 avec Ink Black |
 | `--color-slate` | `#6d7d8e` | Titres de groupe techno, lien Espace enseignant | **3.80:1 sur Platinum, 4.25:1 sur Ink Black : sous 4.5:1** |
 | `--color-slate-dark` | `#3c4a56` | Texte courant sur fond clair | 8.19:1 sur Platinum |
-| (en dur) `#b3261e` | erreur | Message « Identifiants incorrects. » | 5.88:1 sur Platinum ; à promouvoir en token |
+| (en dur) `#b3261e` | erreur | Message « Code incorrect. » | 5.88:1 sur Platinum ; à promouvoir en token |
 
 Points sous le seuil (texte ≥ 4.5:1) :
 

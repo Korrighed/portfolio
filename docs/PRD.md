@@ -31,7 +31,7 @@ Alex, développeur full stack, n'a pas de vitrine publique de ses projets, de se
 | Persona | Contexte | Besoin principal |
 |---|---|---|
 | Visiteur (recruteur, client, pair) | Arrive par un lien, desktop ou mobile, peu de temps | Comprendre vite ce qu'Alex sait faire et le contacter |
-| Enseignant | Se connecte avec un identifiant unique fourni par Alex | Lire les fiches réflexives sans friction |
+| Enseignant | Se connecte avec un code d'accès unique fourni par Alex | Lire les fiches réflexives sans friction |
 | Alex (mainteneur) | Développe seul, déploie sur Netlify | Modifier le contenu sans casser le site |
 
 ## 5. User stories
@@ -66,7 +66,7 @@ Statut : **livré** ou **à livrer**.
 | F-07 | Section Questions fréquentes : 5 questions sur le profil d'Alex, rendues depuis `src/data/faq.json` (même source pour le HTML et pour les données structurées `FAQPage`) ; onglets au clavier et à la souris ; sans JavaScript les 5 réponses restent lisibles à la suite | US-04 | AC-07 : Étant donné l'accueil, alors la section affiche 5 questions avec leur réponse et `public/index.html` contient un bloc `application/ld+json` de 5 `Question` | à livrer |
 | F-08 | Section CV retirée du site : le CV reste en local | US-05 | AC-08 : `public/index.html` ne contient ni `id="cv"` ni lien vers un PDF de CV | à livrer |
 | F-09 | Pied de page : GitHub et lien Espace enseignant ; aucune adresse email | US-06 | AC-09 : Le pied de page contient ces deux liens et aucun `mailto:` | à livrer |
-| F-10 | Connexion : `POST /api/login` ; succès vers `/fiches-reflexives`, échec vers `/login.html?error=1` avec message | US-07 | AC-10 : Étant donné de mauvais identifiants, quand je valide, alors « Identifiants incorrects. » s'affiche | livré |
+| F-10 | Connexion par code d'accès seul (pas d'identifiant) : `POST /api/login` ; succès vers `/fiches-reflexives`, échec vers `/login.html?error=1` avec message | US-07 | AC-10 : Étant donné un mauvais code, quand je valide, alors « Code incorrect. » s'affiche | livré |
 | F-11 | Page des fiches (protégée) : une scène sombre à onglets, le titre de chaque fiche dans le menu | US-08 | AC-11 : Sans session, alors redirection vers `/login.html` ; avec session, trois onglets et trois panneaux | à livrer |
 | F-12 | Panneau d'une fiche : sous-titre, compétences visées, livrables, statut, date, liens et lien vers le PDF ; l'ancienne page de détail redirige vers la liste | US-08 | AC-12 : Un `id` inconnu renvoie 404 sur `/fiches-reflexives/:id` ; un `id` connu redirige vers `/fiches-reflexives` | à livrer |
 | F-13 | Service du PDF réservé aux sessions valides | US-08 | AC-13 : Sans session, `GET /api/pdf/:id` renvoie 401 | livré |
