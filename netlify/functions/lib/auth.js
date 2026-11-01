@@ -1,5 +1,5 @@
+import { createHash, timingSafeEqual } from 'node:crypto';
 import { sealData, unsealData } from 'iron-session';
-import bcrypt from 'bcryptjs';
 
 const SESSION_COOKIE = 'session';
 const TTL_SECONDS = 60 * 60 * 8; // 8h
@@ -12,13 +12,19 @@ function getSessionSecret() {
   return secret;
 }
 
-// Code d'acces unique : seul le hash bcrypt (AUTH_PASSWORD_HASH) est stocke, jamais le code en clair.
-export async function verifyCode(code) {
-  const expectedHash = process.env.AUTH_PASSWORD_HASH;
-  if (!expectedHash) return false;
+// Les deux valeurs sont reduites a une empreinte SHA-256 (32 octets) : timingSafeEqual exige des
+// longueurs egales, et la duree de comparaison ne depend plus du nombre de caracteres justes.
+function digest(value) {
+  return createHash('sha256').update(value).digest();
+}
+
+// Code d'acces unique, lu en clair dans AUTH_CODE (.env local, variables Netlify).
+export function verifyCode(code) {
+  const expected = process.env.AUTH_CODE;
+  if (!expected) return false;
   if (typeof code !== 'string' || code.length === 0) return false;
 
-  return bcrypt.compare(code, expectedHash);
+  return timingSafeEqual(digest(code), digest(expected));
 }
 
 // CONTEXT est une variable de build Netlify, pas du runtime des fonctions :

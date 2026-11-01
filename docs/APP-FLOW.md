@@ -65,6 +65,7 @@ flowchart LR
   D -- oui --> E["Liste des fiches"]
   D -- non --> F["Message d'erreur"]
   F --> C
+  D -- 5 échecs en 15 min --> L["Trop de tentatives : connexion refusée 15 minutes"]
   E --> G["Choix d'une fiche dans le menu (titre du document)"]
   G --> H["Compétences, livrables, statut"]
   H --> J["Ouverture du PDF"]

@@ -13,7 +13,7 @@ Couvre : PRD F-01 … F-20, NF-01 … NF-13
 | CLI | `netlify-cli` | 27.0.1 | Dev local, upload Blobs |
 | Back | Netlify Functions classiques (handler `event`) | — | C-02 |
 | Session | `iron-session` | ^8.0.0 | Cookie scellé, sans base |
-| Mot de passe | `bcryptjs` | ^2.4.3 | Hash du compte unique |
+| Code d'accès | Variable `AUTH_CODE` ; `crypto.timingSafeEqual` (Node) | — | Un seul code, comparaison en temps constant ; `bcryptjs` retiré le 2026-11-01 |
 | Fichiers | `@netlify/blobs` | ^10.7.10 | Stockage des PDF hors dépôt |
 | Animation des projets | Aucune bibliothèque : `position: sticky`, canvas 2D, `matchMedia`, transitions CSS | — | Scènes épinglées ; GSAP retiré le 2026-10-31 (voir §9) |
 | Hero | Three.js + Vanta (dots), via CDN | 0.134.0 / 0.5.24 | Fond animé |
@@ -36,12 +36,15 @@ flowchart TD
     A["lib/auth.js"]
     R["lib/fiche-repository.js"]
     ST["lib/storage.js"]
+    RL["lib/rate-limit.js"]
   end
-  BL[("Netlify Blobs : fiches-reflexives")]
+  BL[("Netlify Blobs : fiches-reflexives, login-attempts")]
   H --> A
   H --> R
   H --> ST
+  H --> RL
   ST --> BL
+  RL --> BL
 ```
 
 - **Build** : assemble l'accueil. Netlify l'exécute à chaque déploiement (`npm run build`).
@@ -55,11 +58,11 @@ flowchart TD
 |---|---|---|
 | `src/index.template.html`, `src/sections/` | Source de l'accueil | — |
 | `scripts/build-index.js` | Remplace les marqueurs `<!-- include:… -->` | `src/` |
-| `scripts/hash-password.js` | Produit le hash bcrypt à coller dans `.env` | `bcryptjs` |
 | `public/js/nav.js` | Menu repliable | DOM |
 | `public/js/projets-scroll.js` | Progression par projet, apparition des informations (`is-on`, `inert`), fond de points (`#projets-bg`), menu des projets, vue latérale mobile, mesure du repli en lecture normale (`is-flow`) | DOM, `matchMedia`, canvas 2D |
 | `public/css/projets.css` | Scènes (`sticky`), grille, menu, barre de section, vue latérale ; repli sans JS et sous `prefers-reduced-motion` | Tokens de `main.css` |
-| `netlify/functions/lib/auth.js` | Vérification du code d'accès, scellement et lecture du cookie, garde `withAuth` | `iron-session`, `bcryptjs` |
+| `netlify/functions/lib/auth.js` | Vérification du code d'accès, scellement et lecture du cookie, garde `withAuth` | `iron-session`, `node:crypto` |
+| `netlify/functions/lib/rate-limit.js` | Compteur d'échecs de connexion par adresse IP (blocage, remise à zéro) | `@netlify/blobs` |
 | `netlify/functions/lib/fiche-repository.js` | Auteur, fiches (métadonnées en dur) et recherche par `id` | — |
 | `netlify/functions/lib/fiches-view.js` | Rendu HTML de la scène à onglets des fiches | — |
 | `netlify/functions/lib/storage.js` | Lecture d'un PDF dans Blobs | `@netlify/blobs` |
@@ -71,7 +74,7 @@ flowchart TD
 
 | Service | Usage | Auth | Limites, erreurs connues |
 |---|---|---|---|
-| Netlify Blobs | Lecture des PDF (`getStore('fiches-reflexives')`, `connectLambda(event)`) | Contexte Netlify | Lecture entière en mémoire (pas de stream) ; échec = 404 générique, détail dans les logs |
+| Netlify Blobs | Lecture des PDF (`getStore('fiches-reflexives')`, `connectLambda(event)`) ; compteur d'échecs de connexion (`getStore('login-attempts')`) | Contexte Netlify | PDF lus en entier en mémoire (pas de stream) ; échec = 404 générique, détail dans les logs. Compteur : si Blobs est indisponible, la connexion reste possible et l'erreur est journalisée |
 | jsDelivr | Three.js, Vanta (hero) | Aucune | Pas de SRI ; CDN indisponible = fond du hero absent. La section Projets n'en dépend plus |
 | API Netlify (CLI) | Variables d'environnement et état du site au `netlify dev` | Session `netlify login` | Session expirée : appels réseau lents (voir §10) |
 
@@ -99,8 +102,8 @@ sequenceDiagram
 |---|---|---|---|
 | T-01 | `parseCookies` ne lève jamais : `decodeURIComponent` dans un `try/catch`, cookie invalide traité comme absent | NF-02 | `curl -H "Cookie: session=%E0%A4%A" /api/pdf/fiche-1` renvoie 401, pas 500 |
 | T-02 | `verifyCode` refuse tout `code` qui n'est pas une chaîne non vide (corps vide ou ancien format : 302 vers `/login.html?error=1`, jamais 500) | NF-02, F-10 | `curl -X POST /api/login` sans corps renvoie 302 vers `/login.html?error=1` |
-| T-03 | Comparaison asynchrone du code (`bcrypt.compare`, qui ne bloque pas la boucle d'événements) | NF-03 | Lecture du code ; test T-02 inchangé |
-| T-04 | Limitation des tentatives de connexion ; mécanisme à trancher (voir §11) | NF-03 | Après N échecs, réponse refusée pendant une durée donnée |
+| T-03 | Comparaison du code en temps constant : `crypto.timingSafeEqual` sur les empreintes SHA-256 du code reçu et de `AUTH_CODE` (longueurs égales, durée indépendante du nombre de caractères justes) | NF-03 | Code juste, faux, plus court, plus long, vide, `null` : `true` seulement pour le code juste ; `AUTH_CODE` absent : `false` |
+| T-04 | Limitation des tentatives : `lib/rate-limit.js` compte les échecs par IP (en-tête `x-nf-client-connection-ip`, posé par Netlify) dans le store Blobs `login-attempts` ; 5 échecs bloquent 15 minutes à partir du premier de la série, même avec le bon code (302 vers `/login.html?error=2`) ; un succès supprime le compteur ; Blobs indisponible : connexion permise, erreur journalisée | NF-03 | 5 codes faux : `error=1` ; 6e tentative : `error=2`, même avec le bon code ; une autre IP n'est pas touchée ; un succès remet à zéro |
 | T-05 | En-têtes de sécurité via `[[headers]]` dans `netlify.toml` : `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `frame-ancestors` (CSP), CSP complète autorisant jsDelivr | NF-04 | `curl -I` sur `/` et `/login.html` |
 | T-06 | `Cache-Control: private, no-store` sur `fiche-list`, `fiche-detail`, `pdf` | NF-04, NF-11 | `curl -I` avec cookie valide |
 | T-07 | `Secure` posé dès que la connexion est HTTPS (ne plus dépendre de `CONTEXT === 'production'`), y compris sur le cookie de déconnexion | NF-01 | Test sur un deploy-preview |
@@ -129,6 +132,7 @@ sequenceDiagram
 | Pas de session sur page protégée | 302 vers `/login.html` |
 | Pas de session sur `/api/pdf/:id` | 401 |
 | Code faux ou champ absent | 302 vers `/login.html?error=1` |
+| 5 échecs en 15 minutes depuis la même adresse | 302 vers `/login.html?error=2` (« Trop de tentatives. Réessayez dans quelques minutes. »), même avec le bon code |
 | `id` de fiche inconnu | 404 « Introuvable » |
 | PDF absent de Blobs | 404 générique ; détail dans les logs serveur uniquement |
 | `SESSION_SECRET` absent ou court | Erreur serveur explicite dans les logs |
@@ -138,10 +142,10 @@ sequenceDiagram
 
 ## 7. Sécurité et vie privée
 
-- Le code d'accès n'est jamais stocké en clair : hash bcrypt dans `AUTH_PASSWORD_HASH`. Sans identifiant, le code est le seul secret : il doit être long (au moins 12 caractères) tant que les tentatives ne sont pas limitées (NF-03).
+- Le code d'accès est lu en clair dans `AUTH_CODE` (`.env` local, variables Netlify), jamais dans le dépôt. Sans identifiant, il est le seul secret : au moins 12 caractères. Une fuite de la variable donne l'accès (le hash bcrypt a été retiré le 2026-11-01, voir §9). Les tentatives sont limitées par adresse IP (T-04).
 - Le cookie est scellé par `iron-session` ; sa lecture échoue proprement si le secret change.
-- `.env` est ignoré par git. `.env.example` donne les noms attendus. Les mêmes variables doivent exister côté Netlify : `SESSION_SECRET`, `AUTH_PASSWORD_HASH`, `PDF_BLOB_STORE` (optionnel) ; `AUTH_USERNAME` n'est plus utilisée et peut être supprimée.
-- Menaces connues : force brute sur le login (T-04), contenu tiers non vérifié (T-08), mise en cache d'une page protégée par un intermédiaire (T-06), XSS latent si la liste devient dynamique (T-13).
+- `.env` est ignoré par git. `.env.example` donne les noms attendus. Les mêmes variables doivent exister côté Netlify : `SESSION_SECRET`, `AUTH_CODE`, `PDF_BLOB_STORE` (optionnel) ; `AUTH_PASSWORD_HASH` et `AUTH_USERNAME` ne sont plus utilisées et se suppriment une fois ce lot déployé.
+- Menaces connues : force brute sur le login (limitée par T-04, contournable avec plusieurs adresses IP : d'où le code long), contenu tiers non vérifié (T-08), mise en cache d'une page protégée par un intermédiaire (T-06), XSS latent si la liste devient dynamique (T-13).
 
 ## 8. Qualité
 
@@ -163,13 +167,14 @@ sequenceDiagram
 | 2026-10-26 | PRD = état cible ; pas de `DATA-MODEL` ; `APP-FLOW` réduit à des schémas ; direction artistique déplacée dans `DESIGN-BRIEF` | PRD de l'existant ; document de données | Demande d'Alex ; pas de base de données |
 | 2026-10-31 | Section Projets : scènes épinglées en CSS `sticky`, informations qui émergent sur place, fond de points en canvas 2D comme indicateur ; GSAP retiré | Garder GSAP (pin + scrub) ; cartes empilées sans pin ; carrousel horizontal ; vague de progression globale ; indicateur qui descend dans la scène | Alex : le lecteur ne doit pas se décaler dans un projet, le fond sert d'indicateur par projet ; moins de dépendances et plus de bug de pin ; maquette validée par Alex (artefact « Portfolio Dossier ») |
 | 2026-11-01 | Aperçus des projets en MP4 H.264 muet (bureau + mobile en incrustation) lus uniquement pour le projet actif | GIF (3 à 10 fois plus lourds) ; WebM en plus (non nécessaire) ; lecture permanente de toutes les vidéos | Poids, CPU, accessibilité |
+| 2026-11-01 | Code d'accès en clair dans `AUTH_CODE` (comparaison en temps constant) et limite de 5 échecs par IP pendant 15 minutes, compteur dans Blobs | Garder le hash bcrypt ; service de limitation externe ; blocage global de tous les visiteurs ; `X-Forwarded-For` pour l'IP | Alex est seul sur le site : le hash ajoutait une étape à chaque changement de code et ne protège que d'une fuite de la variable ; Blobs est déjà utilisé ; un blocage global permettrait de verrouiller l'enseignant dehors ; `X-Forwarded-For` est falsifiable |
 | 2026-11-01 | Lot FAQ : Compétences remplacées par une FAQ (données uniques HTML + JSON-LD), section CV et email retirés du site, liens « Suite » supprimés, marque « korrighed.dev » | Garder Compétences ; FAQ écrite deux fois (HTML et JSON-LD) ; formulaire de contact dans ce lot | Demande d'Alex ; une seule source évite la divergence entre texte et données structurées |
 
 ## 10. Dette et risques connus
 
 | Risque | Gravité | Effort | Conséquence si ignoré |
 |---|---|---|---|
-| Login sans limite de tentatives (T-04) | Moyenne | Moyen | Force brute possible |
+| Compteur de connexion non atomique (lecture puis écriture) et sans nettoyage des anciennes entrées ; Blobs indisponible = plus de limite | Faible | Faible | Quelques essais en trop au plus ; entrées d'une trentaine d'octets par IP |
 | Cookie ou corps malformé donne un 500 (T-01, T-02) | Moyenne | Faible | Erreurs serveur, bruit dans les logs |
 | Aucun en-tête de sécurité ni `Cache-Control` (T-05, T-06) | Moyenne | Faible | Exposition au cadrage et à la mise en cache |
 | CDN sans SRI, Three.js 0.134.0 de 2021 (T-08) | Moyenne | Faible | Script tiers modifiable ; poids du hero non mesuré |
@@ -197,6 +202,5 @@ Cause constatée : la session Netlify est expirée (`netlify status` : « Your s
 ## 11. Questions ouvertes
 
 - Faut-il continuer à versionner `public/index.html` ? Recommandation : l'ignorer dans git (Netlify le régénère, `predev` aussi). Risque : lancer `npx vite` seul sans build préalable donne un accueil absent.
-- Mécanisme de limitation des tentatives de connexion : compteur dans Blobs, ou service externe ?
 - Faut-il introduire un linter et un formateur (le CV annonce Prettier) ?
 - Version de Node à épingler côté Netlify : 24 comme en local ?
