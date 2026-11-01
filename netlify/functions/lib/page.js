@@ -1,5 +1,4 @@
-// En-tete commun aux pages protegees (fiches reflexives) : meme marque que l'accueil,
-// lien(s) de retour + formulaire de deconnexion. Styles : nav.css + fiches.css.
+// En-tete commun aux pages protegees : marque de l'accueil, lien(s) de retour et deconnexion.
 export function renderNav(links = []) {
   const linkItems = links.map((l) => `<li><a href="${l.href}">${l.label}</a></li>`).join('\n            ');
 
@@ -23,7 +22,6 @@ export function renderNav(links = []) {
     </header>`;
 }
 
-// Pied de page clair des pages protegees. Styles : footer.css (site-footer--light) + fiches.css.
 export function renderFooter() {
   return `<footer class="site-footer site-footer--light">
       <div class="site-footer__inner">

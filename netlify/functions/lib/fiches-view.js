@@ -15,7 +15,6 @@ function renderPanel(fiche, index, total) {
   const links = fiche.links
     .map((link) => `<a class="fiche__link" href="${escapeHtml(link.href)}" target="_blank" rel="noopener">${escapeHtml(link.label)} ↗</a>`)
     .join('');
-  // Action principale de la page : le PDF de la fiche, en grand bouton sous le sous-titre.
   const pdf = fiche.file
     ? `<a class="fiche__cta" href="/api/pdf/${escapeHtml(fiche.id)}" target="_blank" rel="noopener">
                 <svg class="fiche__cta-icon" aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>

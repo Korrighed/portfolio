@@ -18,7 +18,6 @@ function digest(value) {
   return createHash('sha256').update(value).digest();
 }
 
-// Code d'acces unique, lu en clair dans AUTH_CODE (.env local, variables Netlify).
 export function verifyCode(code) {
   const expected = process.env.AUTH_CODE;
   if (!expected) return false;

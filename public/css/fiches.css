@@ -69,12 +69,10 @@ body.espace {
   outline-offset: 3px;
 }
 
-/* Pied de page clair et compact */
 .espace .site-footer__inner {
   padding-block: var(--space-sm);
 }
 
-/* En-tete de la scene : auteur et formation */
 .fiches__author {
   margin: 0;
   font-size: 0.9375rem;
@@ -96,7 +94,6 @@ body.espace {
   height: 4.5rem;
 }
 
-/* Panneau d'une fiche */
 .fiche__sub {
   margin: 0;
   font-size: 1rem;
@@ -105,7 +102,6 @@ body.espace {
   color: var(--faq-muted);
 }
 
-/* Action principale de la page : ouvrir le PDF de la fiche */
 .fiche__cta {
   display: inline-flex;
   align-items: center;
