@@ -7,6 +7,11 @@ const templatePath = join(root, 'src', 'index.template.html');
 const sectionsDir = join(root, 'src', 'sections');
 const outPath = join(root, 'public', 'index.html');
 const faqPath = join(root, 'src', 'data', 'faq.json');
+const sitemapPath = join(root, 'public', 'sitemap.xml');
+const robotsPath = join(root, 'public', 'robots.txt');
+
+// Domaine du site : variable SITE_URL (variables Netlify) ; domaine Netlify par defaut, sans barre finale.
+const SITE_URL = (process.env.SITE_URL || 'https://kaporfolio.netlify.app').replace(/\/+$/, '');
 
 // Sous Windows (core.autocrlf), les sources de src/ sont en CRLF dans la copie
 // de travail. Le depot stocke du LF : on genere du LF pour que git ne voie
@@ -51,6 +56,16 @@ export function renderFaqJsonLd(items) {
   return `<script type="application/ld+json">\n${json}\n  </script>`;
 }
 
+export function renderSitemap(siteUrl) {
+  const pages = ['/', '/mentions-legales.html'];
+  const urls = pages.map((page) => `  <url><loc>${siteUrl}${page}</loc></url>`).join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
+}
+
+export function renderRobots(siteUrl) {
+  return `User-agent: *\nDisallow: /api/\n\nSitemap: ${siteUrl}/sitemap.xml\n`;
+}
+
 // Marqueurs <!-- faq:xxx --> : chacun doit exister dans les sources, une seule fois.
 const faqSlots = { tabs: renderFaqTabs, panels: renderFaqPanels, jsonld: renderFaqJsonLd };
 
@@ -67,12 +82,15 @@ export function buildIndex() {
       if (!faqSlots[key]) throw new Error(`Marqueur inconnu : faq:${key}`);
       seen.add(key);
       return faqSlots[key](faq);
-    });
+    })
+    .replace(/%SITE_URL%/g, SITE_URL);
 
   const missing = Object.keys(faqSlots).filter((key) => !seen.has(key));
   if (missing.length > 0) throw new Error(`Marqueur absent des sources : ${missing.map((key) => 'faq:' + key).join(', ')}`);
 
   writeFileSync(outPath, html);
+  writeFileSync(sitemapPath, renderSitemap(SITE_URL));
+  writeFileSync(robotsPath, renderRobots(SITE_URL));
   return outPath;
 }
 
@@ -81,5 +99,5 @@ export function buildIndex() {
 const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
 if (isMain) {
   buildIndex();
-  console.log('public/index.html genere depuis src/');
+  console.log('public/index.html, sitemap.xml et robots.txt generes depuis src/');
 }
