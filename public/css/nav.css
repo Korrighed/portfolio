@@ -93,3 +93,10 @@
     padding: var(--space-sm) 0;
   }
 }
+
+/* Logo de l'IUT devant « Espace enseignant » (remplace le carre du pied de page) */
+.private-link__logo {
+  display: block;
+  width: auto;
+  height: 1.5rem;
+}
