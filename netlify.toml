@@ -7,10 +7,8 @@
   NODE_VERSION = "24"
 
 # Pages et assets statiques. Les reponses des fonctions n'heritent pas de ces
-# en-tetes (cf. Cache-Control dans netlify/functions/lib/auth.js).
-# 'unsafe-inline' en script-src : init Vanta inline dans l'accueil et script
-# d'erreur de login.html, et script de la section Projets (classe js). jsdelivr
-# heberge Three.js et Vanta.
+# en-tetes (cf. lib/security-headers.js).
+# script-src et style-src 'self' : aucun script ni style en ligne, aucun CDN (Three.js et Vanta sont dans public/vendor/).
 [[headers]]
   for = "/*"
   [headers.values]
@@ -18,7 +16,7 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Frame-Options = "DENY"
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
 
 [dev]
   command = "vite"

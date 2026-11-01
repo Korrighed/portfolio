@@ -16,7 +16,7 @@ Couvre : PRD F-01 … F-23, NF-01 … NF-13
 | Code d'accès | Variable `AUTH_CODE` ; `crypto.timingSafeEqual` (Node) | — | Un seul code, comparaison en temps constant ; `bcryptjs` retiré le 2026-11-01 |
 | Fichiers | `@netlify/blobs` | ^10.7.10 | Stockage des PDF hors dépôt |
 | Animation des projets | Aucune bibliothèque : `position: sticky`, canvas 2D, `matchMedia`, transitions CSS | — | Scènes épinglées ; GSAP retiré le 2026-10-31 (voir §9) |
-| Hero | Three.js + Vanta (dots), via CDN | 0.134.0 / 0.5.24 | Fond animé |
+| Hero | Three.js + Vanta (dots), hébergés dans `public/vendor/` | 0.134.0 / 0.5.24 | Fond animé ; plus de CDN depuis le 2026-11-01 |
 | Polices | Libre Caslon Text, Inria Serif (TTF locaux) | — | Voir `DESIGN-BRIEF.md` |
 
 ## 2. Architecture
@@ -75,7 +75,6 @@ flowchart TD
 | Service | Usage | Auth | Limites, erreurs connues |
 |---|---|---|---|
 | Netlify Blobs | Lecture des PDF (`getStore('fiches-reflexives')`, `connectLambda(event)`) ; compteur d'échecs de connexion (`getStore('login-attempts')`) | Contexte Netlify | PDF lus en entier en mémoire (pas de stream) ; échec = 404 générique, détail dans les logs. Compteur : si Blobs est indisponible, la connexion reste possible et l'erreur est journalisée |
-| jsDelivr | Three.js, Vanta (hero) | Aucune | Pas de SRI ; CDN indisponible = fond du hero absent. La section Projets n'en dépend plus |
 | API Netlify (CLI) | Variables d'environnement et état du site au `netlify dev` | Session `netlify login` | Session expirée : appels réseau lents (voir §10) |
 
 ```mermaid
@@ -104,10 +103,10 @@ sequenceDiagram
 | T-02 | `verifyCode` refuse tout `code` qui n'est pas une chaîne non vide (corps vide ou ancien format : 302 vers `/login.html?error=1`, jamais 500) | NF-02, F-10 | `curl -X POST /api/login` sans corps renvoie 302 vers `/login.html?error=1` |
 | T-03 | Comparaison du code en temps constant : `crypto.timingSafeEqual` sur les empreintes SHA-256 du code reçu et de `AUTH_CODE` (longueurs égales, durée indépendante du nombre de caractères justes) | NF-03 | Code juste, faux, plus court, plus long, vide, `null` : `true` seulement pour le code juste ; `AUTH_CODE` absent : `false` |
 | T-04 | Limitation des tentatives : `lib/rate-limit.js` compte les échecs par IP (en-tête `x-nf-client-connection-ip`, posé par Netlify) dans le store Blobs `login-attempts` ; 5 échecs bloquent 15 minutes à partir du premier de la série, même avec le bon code (302 vers `/login.html?error=2`) ; un succès supprime le compteur ; Blobs indisponible : connexion permise, erreur journalisée | NF-03 | 5 codes faux : `error=1` ; 6e tentative : `error=2`, même avec le bon code ; une autre IP n'est pas touchée ; un succès remet à zéro |
-| T-05 | En-têtes de sécurité des pages statiques via `[[headers]]` dans `netlify.toml` : `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `X-Frame-Options: DENY`, `Permissions-Policy`, CSP complète autorisant jsDelivr. Les réponses des fonctions n'héritant pas des `[[headers]]`, `lib/security-headers.js` (`secure`) pose le même jeu (CSP sans jsDelivr) sur toutes les réponses de `login`, `logout`, `fiche-list`, `fiche-detail` et `pdf` | NF-04 | `curl -I` sur `/`, `/login.html`, `/fiches-reflexives` et `/api/pdf/:id` : les cinq en-têtes sont présents |
+| T-05 | En-têtes de sécurité des pages statiques via `[[headers]]` dans `netlify.toml` : `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `X-Frame-Options: DENY`, `Permissions-Policy`, CSP stricte (`script-src 'self'; style-src 'self'`, aucun CDN). Les réponses des fonctions n'héritant pas des `[[headers]]`, `lib/security-headers.js` (`secure`) pose le même jeu (même CSP) sur toutes les réponses de `login`, `logout`, `fiche-list`, `fiche-detail` et `pdf` | NF-04 | `curl -I` sur `/`, `/login.html`, `/fiches-reflexives` et `/api/pdf/:id` : les cinq en-têtes sont présents |
 | T-06 | `Cache-Control: private, no-store` sur `fiche-list`, `fiche-detail`, `pdf` (posé par `withAuth`, prioritaire sur `secure`) | NF-04, NF-11 | `curl -I` avec cookie valide |
 | T-07 | `Secure` posé dès que la connexion est HTTPS (ne plus dépendre de `CONTEXT === 'production'`), y compris sur le cookie de déconnexion | NF-01 | Test sur un deploy-preview |
-| T-08 | Scripts CDN : version exacte conservée, ajout de `integrity` et `crossorigin="anonymous"` | NF-05 | Inspection de `index.template.html` ; console sans erreur SRI |
+| T-08 | Aucun script tiers : Three.js et Vanta sont copiés tels quels dans `public/vendor/` (`LICENSES.md` : version, licence, source) ; les quatre scripts en ligne (drapeau `js`, init Vanta, deux de `login.html`) sont des fichiers de `public/js/` ; CSP `script-src 'self'; style-src 'self'` | NF-05 | Aucun `<script>` sans `src` ni `cdn.jsdelivr` dans `src/` et `login.html` ; 0 violation de CSP à l'accueil, sur `login.html` et sur la page des fiches |
 | T-09 | Médias : GIF Twitch (`<img loading="lazy">`) ; autres projets en `<video muted loop playsinline preload="none" poster>` MP4 H.264 sans piste audio (0,1 à 1,1 Mo, `media-src 'self'`). `projets-scroll.js` ne joue que la vidéo du projet actif, section visible et onglet affiché, précharge la suivante, ne démarre rien sous `prefers-reduced-motion` ; bouton Pause / Lecture (WCAG 2.2.2) | F-05, NF-06 | Onglet Réseau : aucune vidéo chargée avant d'approcher de la section ; une seule vidéo en lecture |
 | T-10 | Sous `prefers-reduced-motion` ou sans JS : pas de `sticky`, pas de masquage des informations (les règles sont sous `@media (prefers-reduced-motion: no-preference)` et la classe `js`) ; le fond de points est dessiné une fois, sans boucle | F-16 | Émulation de la préférence : toutes les informations visibles par projet, aucun pin |
 | T-11 | Une information non révélée est `inert` (JS) et `visibility: hidden` (CSS) ; en mode lecture normale (`is-flow`), plus rien n'est masqué | NF-07 | Parcours Tab : aucun lien invisible focalisé |
@@ -126,7 +125,7 @@ sequenceDiagram
 | T-28 | Page statique `public/mentions-legales.html` + `public/css/legal.css` ; lien dans `src/sections/footer.html` et `renderFooter` | F-23 | La page répond 200, cinq `h2`, aucun `@` ni `mailto:` |
 | T-29 | Logos des tags : 16 SVG de Simple Icons (CC0) dans `public/img/tech/`, un chemin rempli à la couleur de marque ; Angular en `#DD0031` et Three.js en `#FFFFFF` (leur couleur de marque, quasi noire, serait invisible sur le fond sombre) ; balisage `<img class="tag__icon" alt="" width="14" height="14">` dans `src/sections/projets.html`, `.tag` en `inline-flex` | F-24 | 19 `tag__icon`, 19 réponses 200 sur `/img/tech/*`, aucune erreur console |
 | T-30 | `SITE_URL` (variable d'environnement, défaut `https://kaporfolio.netlify.app`, sans barre finale) : `scripts/build-index.js` remplace `%SITE_URL%` dans le gabarit (`canonical`, `og:url`) et génère `public/sitemap.xml` (accueil, mentions légales) et `public/robots.txt` (`Disallow: /api/`, ligne `Sitemap:`) à chaque build ; changer de domaine = poser `SITE_URL` dans les variables Netlify | NF-09 | `SITE_URL=https://exemple.test/ npm run build` : trois fichiers au nouveau domaine, sans double barre ; sans variable : domaine par défaut |
-| T-12 | Garde sur l'initialisation de Vanta (`typeof VANTA`) et respect de `prefers-reduced-motion` | NF-10 | CDN bloqué : aucune erreur console bloquante |
+| T-12 | Garde sur l'initialisation de Vanta (`typeof VANTA`, dans `hero-vanta.js`) ; respect de `prefers-reduced-motion` : à faire | NF-10 | Script `vendor/` bloqué : aucune erreur console bloquante |
 | T-13 | Échappement HTML des champs interpolés dans `page.js` et `fiche-*.js` | F-11, F-12 | Titre contenant `<` rendu en texte |
 | T-14 | `[dev] command` de `netlify.toml` lance Vite sans `npx` ; documenter `netlify login` ou `--offline` | NF-12 | Chronométrer `npm run dev` jusqu'à « Local dev server ready » |
 | T-15 | Retirer `PDF_STORAGE_DIR` du `.env` local (variable orpheline depuis la migration Blobs ; absente du dépôt et de `.env.example`) | NF-11 | Le CLI n'affiche plus `PDF_STORAGE_DIR` dans « Injected .env file env vars » |
@@ -144,14 +143,14 @@ sequenceDiagram
 | `SESSION_SECRET` absent ou court | Erreur serveur explicite dans les logs |
 | JavaScript absent ou en échec | La classe `js` n'est pas posée : aucune information masquée, scènes non épinglées, tout lisible |
 | Scène plus haute que l'écran | Le projet passe en lecture normale (`is-flow`) : pas de pin, tout visible, rien de coupé |
-| Vanta absent | Fond uni Ink Black (garde à ajouter, T-12) |
+| Vanta absent | Fond uni Ink Black (garde `typeof VANTA` en place) |
 
 ## 7. Sécurité et vie privée
 
 - Le code d'accès est lu en clair dans `AUTH_CODE` (`.env` local, variables Netlify), jamais dans le dépôt. Sans identifiant, il est le seul secret : au moins 12 caractères. Une fuite de la variable donne l'accès (le hash bcrypt a été retiré le 2026-11-01, voir §9). Les tentatives sont limitées par adresse IP (T-04).
 - Le cookie est scellé par `iron-session` ; sa lecture échoue proprement si le secret change.
 - `.env` est ignoré par git. `.env.example` donne les noms attendus. Les mêmes variables doivent exister côté Netlify : `SESSION_SECRET`, `AUTH_CODE`, `PDF_BLOB_STORE` (optionnel) ; `AUTH_PASSWORD_HASH` et `AUTH_USERNAME` ne sont plus utilisées et se suppriment une fois ce lot déployé.
-- Menaces connues : force brute sur le login (limitée par T-04, contournable avec plusieurs adresses IP : d'où le code long), contenu tiers non vérifié (T-08), mise en cache d'une page protégée par un intermédiaire (T-06), XSS latent si la liste devient dynamique (T-13).
+- Menaces connues : force brute sur le login (limitée par T-04, contournable avec plusieurs adresses IP : d'où le code long), mise en cache d'une page protégée par un intermédiaire (T-06), XSS latent si la liste devient dynamique (T-13).
 
 ## 8. Qualité
 
@@ -173,6 +172,7 @@ sequenceDiagram
 | 2026-10-26 | PRD = état cible ; pas de `DATA-MODEL` ; `APP-FLOW` réduit à des schémas ; direction artistique déplacée dans `DESIGN-BRIEF` | PRD de l'existant ; document de données | Demande d'Alex ; pas de base de données |
 | 2026-10-31 | Section Projets : scènes épinglées en CSS `sticky`, informations qui émergent sur place, fond de points en canvas 2D comme indicateur ; GSAP retiré | Garder GSAP (pin + scrub) ; cartes empilées sans pin ; carrousel horizontal ; vague de progression globale ; indicateur qui descend dans la scène | Alex : le lecteur ne doit pas se décaler dans un projet, le fond sert d'indicateur par projet ; moins de dépendances et plus de bug de pin ; maquette validée par Alex (artefact « Portfolio Dossier ») |
 | 2026-11-01 | Aperçus des projets en MP4 H.264 muet (bureau + mobile en incrustation) lus uniquement pour le projet actif | GIF (3 à 10 fois plus lourds) ; WebM en plus (non nécessaire) ; lecture permanente de toutes les vidéos | Poids, CPU, accessibilité |
+| 2026-11-01 | Three.js et Vanta hébergés dans `public/vendor/`, scripts en ligne déplacés dans `public/js/`, CSP sans `unsafe-inline` ni jsDelivr ; `og:image` = capture du hero ; pas de `twitter:card` | Garder jsDelivr avec SRI ; garder `unsafe-inline` ; image conçue à part | Plus de dépendance à un CDN, CSP stricte, 617 Ko de plus dans le dépôt ; Alex n'a pas de compte Twitter |
 | 2026-11-01 | Code d'accès en clair dans `AUTH_CODE` (comparaison en temps constant) et limite de 5 échecs par IP pendant 15 minutes, compteur dans Blobs | Garder le hash bcrypt ; service de limitation externe ; blocage global de tous les visiteurs ; `X-Forwarded-For` pour l'IP | Alex est seul sur le site : le hash ajoutait une étape à chaque changement de code et ne protège que d'une fuite de la variable ; Blobs est déjà utilisé ; un blocage global permettrait de verrouiller l'enseignant dehors ; `X-Forwarded-For` est falsifiable |
 | 2026-11-01 | Espace enseignant : en-tête et pied de page clairs, PDF en bouton principal ; hero en flux ; mentions légales ; périodes retirées des projets ; fiche « yozora » renommée « twitch » (`fiche-twitch.pdf`) ; PDF déposés dans Blobs depuis `storage/fiches-reflexives/` (ignoré par git) | Garder les pixels absolus du hero ; contenu des mentions légales sur l'accueil (fenêtre) ; PDF servis depuis `public/` | Le hero cassait de 768 px à 320 px ; une page statique suffit et se partage ; NF-11 interdit les PDF sous `public/` |
 | 2026-11-01 | Lot FAQ : Compétences remplacées par une FAQ (données uniques HTML + JSON-LD), section CV et email retirés du site, liens « Suite » supprimés, marque « korrighed.dev » | Garder Compétences ; FAQ écrite deux fois (HTML et JSON-LD) ; formulaire de contact dans ce lot | Demande d'Alex ; une seule source évite la divergence entre texte et données structurées |
@@ -181,10 +181,9 @@ sequenceDiagram
 
 | Risque | Gravité | Effort | Conséquence si ignoré |
 |---|---|---|---|
-| `script-src 'unsafe-inline'` (script inline de Vanta et de `login.html`) et scripts jsDelivr sans `integrity` (Three.js 0.134 de 2021, Vanta) | Moyenne | Moyen | CSP affaiblie ; script tiers modifiable si le CDN est compromis. Parade : héberger les deux fichiers dans `public/vendor/`, déplacer les scripts inline, retirer `'unsafe-inline'` et jsDelivr de la CSP |
+| Three.js 0.134.0 (2021) et Vanta 0.5.24 hébergés tels quels : aucune mise à jour automatique | Faible | Faible | Failles éventuelles non corrigées ; vérifier les versions de temps en temps (`public/vendor/LICENSES.md`) |
 | Compteur de connexion non atomique (lecture puis écriture) et sans nettoyage des anciennes entrées ; Blobs indisponible = plus de limite | Faible | Faible | Quelques essais en trop au plus ; entrées d'une trentaine d'octets par IP |
 | Cookie ou corps malformé donne un 500 (T-01, T-02) | Moyenne | Faible | Erreurs serveur, bruit dans les logs |
-| CDN sans SRI, Three.js 0.134.0 de 2021 (T-08) | Moyenne | Faible | Script tiers modifiable ; poids du hero non mesuré |
 | `public/index.html` généré mais versionné | Moyenne | Faible | Deux sources de vérité ; 2 resynchronisations déjà nécessaires (a8e7f5f, c9fa098) |
 | `npm run dev` lent (voir ci-dessous) | Moyenne | Faible | Perte de temps à chaque session |
 | Aucun test, lint ni CI | Moyenne | Moyen | Régressions non détectées |

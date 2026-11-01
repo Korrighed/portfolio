@@ -13,6 +13,11 @@
   <meta property="og:description" content="Portfolio d'Alex, développeur full stack applicatif : projets, profil et réponses aux questions fréquentes." />
   <meta property="og:site_name" content="korrighed.dev" />
   <meta property="og:url" content="https://kaporfolio.netlify.app/" />
+  <meta property="og:image" content="https://kaporfolio.netlify.app/img/og-image.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Alex, développeur full stack : points animés sur fond sombre, « Créateur d'application »" />
   <link rel="canonical" href="https://kaporfolio.netlify.app/" />
   <meta name="theme-color" content="#f0f4ef" />
   <script type="application/ld+json">
@@ -120,8 +125,7 @@
   </section>
 
   <section id="projets" aria-label="Projets">
-    <!-- Pose avant le premier projet : les etapes ne sont masquees que si le JS tourne. -->
-    <script>document.documentElement.classList.add('js');</script>
+    <script src="/js/js-flag.js"></script>
     <canvas id="projets-bg" class="projets-bg" aria-hidden="true"></canvas>
 
     <section class="project" id="projet-1" aria-labelledby="projet-1-titre" data-short="Vitrine Twitch">
@@ -450,26 +454,9 @@
 
   <script type="module" src="/js/login-dialog.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js"></script>
-  <script>
-    VANTA.DOTS({
-      el: '#hero',
-      mouseControls: true,
-      touchControls: true,
-      gyroControls: false,
-      minHeight: 200.0,
-      minWidth: 200.0,
-      scale: 1.0,
-      scaleMobile: 1.0,
-      color: 0xb4cded, // Powder Blue
-      color2: 0x344966, // Yale Blue
-      backgroundColor: 0x0d1821, // Ink Black
-      size: 6.3,
-      spacing: 34.0,
-      showLines: false,
-    });
-  </script>
+  <script src="/vendor/three.min.js"></script>
+  <script src="/vendor/vanta.dots.min.js"></script>
+  <script src="/js/hero-vanta.js"></script>
 </body>
 
 </html>
